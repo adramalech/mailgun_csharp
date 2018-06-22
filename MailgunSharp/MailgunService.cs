@@ -112,7 +112,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetIPsAsync(bool onlyShowDedicated = false, CancellationToken ct = default(CancellationToken))
     {
-      return this.httpClient.GetAsync($"ips?dedicated={boolToString(onlyShowDedicated)}", ct);
+      return this.httpClient.GetAsync($"ips?dedicated={onlyShowDedicated.ToString()}", ct);
     }
 
     public Task<HttpResponseMessage> GetIPDetailsAsync(string ipV4Address, CancellationToken ct = default(CancellationToken))
@@ -330,11 +330,6 @@ namespace MailgunSharp
     private bool checkStringIfNullOrEmpty(string str)
     {
       return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
-    }
-
-    private string boolToString(bool flag)
-    {
-      return (flag) ? "true" : "false";
     }
   }
 }

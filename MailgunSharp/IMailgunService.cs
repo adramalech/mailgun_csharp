@@ -30,9 +30,14 @@ namespace MailgunSharp
     Task<HttpResponseMessage> GetStatTotals(CancellationToken ct = default(CancellationToken));
     Task<HttpResponseMessage> GetBounces(int limit = 100, CancellationToken ct = default(CancellationToken));
     Task<HttpResponseMessage> GetBounce(string address, CancellationToken ct = default(CancellationToken));
-    Task<HttpResponseMessage> AddBounce(IBounceRecord bounceRecord, CancellationToken ct = default(CancellationToken));
-    Task<HttpResponseMessage> AddBounces(ICollection<IBounceRecord> bounceRecords, CancellationToken ct = default(CancellationToken));
+    Task<HttpResponseMessage> AddBounce(IBounceRequest bounce, CancellationToken ct = default(CancellationToken));
+    Task<HttpResponseMessage> AddBounces(ICollection<IBounceRequest> bounces, CancellationToken ct = default(CancellationToken));
     Task<HttpResponseMessage> DeleteBounce(string address, CancellationToken ct = default(CancellationToken));
     Task<HttpResponseMessage> DeleteBounces(CancellationToken ct = default(CancellationToken));
+    Task<HttpResponseMessage> GetUnsubscribers(int limit = 100, CancellationToken ct = default(CancellationToken));
+    Task<HttpResponseMessage> GetUnsubscriber(string address, CancellationToken ct = default(CancellationToken));
+    Task<HttpResponseMessage> AddUnsubscriber(IUnsubscriberRequest unsubscriber, CancellationToken ct = default(CancellationToken));
+    Task<HttpResponseMessage> AddUnsubscribers(ICollection<IUnsubscriberRequest> unsubscribers, CancellationToken ct = default(CancellationToken));
+    Task<HttpResponseMessage> DeleteUnsubscriber(string address, string tag = "", CancellationToken ct = default(CancellationToken));
   }
 }

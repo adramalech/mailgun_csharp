@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using MailgunSharp.Messages;
 using MailgunSharp.Supression;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MailgunSharp
 {
@@ -17,19 +18,19 @@ namespace MailgunSharp
   {
     private readonly string companyDomain;
     private const int MAX_ADDRESS_LENGTH = 8000;
-    private const int MAX_BOUNCED_RECORDS_RETURNED = 10000;
-    private const int MAX_BOUNCED_RECORDS = 1000;
+    private const int MAX_RECORD_LIMIT = 10000;
+    private const int MAX_JSON_OBJECTS = 1000;
     private const string MAILGUN_BASE_URL = @"https://api.mailgun.net/v3/";
     private HttpClient httpClient;
 
     public MailgunService(string companyDomain, string apiKey, HttpClient httpClient = null)
     {
-      if (checkStringIfNullOrEmpty(companyDomain))
+      if (checkStringIfNullEmptyWhitespace(companyDomain))
       {
         throw new ArgumentNullException("Company domain cannot be null!");
       }
 
-      if (checkStringIfNullOrEmpty(apiKey))
+      if (checkStringIfNullEmptyWhitespace(apiKey))
       {
         throw new ArgumentNullException("Api key cannot be null!");
       }
@@ -152,7 +153,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (checkStringIfNullOrEmpty(tagName))
+      if (checkStringIfNullEmptyWhitespace(tagName))
       {
         throw new ArgumentNullException("Tag name cannot be null or empty!");
       }
@@ -162,7 +163,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> UpdateTagDescription(string tagName, string description, CancellationToken ct = default(CancellationToken))
     {
-      if (checkStringIfNullOrEmpty(tagName))
+      if (checkStringIfNullEmptyWhitespace(tagName))
       {
         throw new ArgumentNullException("Tag name cannot be null or empty!");
       }
@@ -176,7 +177,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> DeleteTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (checkStringIfNullOrEmpty(tagName))
+      if (checkStringIfNullEmptyWhitespace(tagName))
       {
         throw new ArgumentNullException("Tag name cannot be null or empty!");
       }
@@ -186,7 +187,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetTagStats(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (checkStringIfNullOrEmpty(tagName))
+      if (checkStringIfNullEmptyWhitespace(tagName))
       {
         throw new ArgumentNullException("Tag name cannot be null or empty!");
       }
@@ -196,7 +197,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetListCountriesStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (checkStringIfNullOrEmpty(tagName))
+      if (checkStringIfNullEmptyWhitespace(tagName))
       {
         throw new ArgumentNullException("Tag name cannot be null or empty!");
       }
@@ -206,7 +207,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetListEmailProviderStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (checkStringIfNullOrEmpty(tagName))
+      if (checkStringIfNullEmptyWhitespace(tagName))
       {
         throw new ArgumentNullException("Tag name cannot be null or empty!");
       }
@@ -216,7 +217,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetListDeviceStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (checkStringIfNullOrEmpty(tagName))
+      if (checkStringIfNullEmptyWhitespace(tagName))
       {
         throw new ArgumentNullException("Tag name cannot be null or empty!");
       }
@@ -231,7 +232,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetBounces(int limit = 100, CancellationToken ct = default(CancellationToken))
     {
-      if (limit > MAX_BOUNCED_RECORDS_RETURNED)
+      if (limit > MAX_RECORD_LIMIT)
       {
         throw new ArgumentOutOfRangeException("Limit of records returned has a maximum limit of 10,000 records!");
       }
@@ -241,78 +242,43 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetBounce(string address, CancellationToken ct = default(CancellationToken))
     {
-      var emailAddress = new System.Net.Mail.MailAddress(address);
+      var emailAddress = new MailAddress(address);
 
       return this.httpClient.GetAsync($"{this.companyDomain}/bounces/{address}", ct);
     }
 
-    public Task<HttpResponseMessage> AddBounce(IBounceRecord bounceRecord, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> AddBounce(IBounceRequest bounce, CancellationToken ct = default(CancellationToken))
     {
-      var emailAddress = new MailAddress(bounceRecord.Address);
-
-      var code = (int)bounceRecord.Code;
-
-      var content = new List<KeyValuePair<string, string>>()
+      if (bounce == null)
       {
-        new KeyValuePair<string, string>("address", bounceRecord.Address),
-        new KeyValuePair<string, string>("code", code.ToString())
-      };
-
-      if (!checkStringIfNullOrEmpty(bounceRecord.Error))
-      {
-        content.Add(new KeyValuePair<string, string>("error", bounceRecord.Error));
+        throw new ArgumentNullException("Bounce object cannot be null or empty!");
       }
 
-      if (bounceRecord.CreatedAt != null && bounceRecord.CreatedAt.HasValue)
-      {
-        content.Add(new KeyValuePair<string, string>("created_at", ((DateTimeOffset)bounceRecord.CreatedAt.Value).ToUnixTimeSeconds().ToString()));
-      }
-
-      var formContent = new FormUrlEncodedContent(content);
+      var formContent = new FormUrlEncodedContent(bounce.ToFormContent());
 
       return this.httpClient.PostAsync($"{this.companyDomain}/bounces", formContent, ct);
     }
 
-    public Task<HttpResponseMessage> AddBounces(ICollection<IBounceRecord> bounceRecords, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> AddBounces(ICollection<IBounceRequest> bounces, CancellationToken ct = default(CancellationToken))
     {
-      if (bounceRecords == null)
+      if (bounces == null)
       {
         throw new ArgumentNullException("Bounce records cannot be null or empty!");
       }
 
-      if (bounceRecords.Count > MAX_BOUNCED_RECORDS)
+      if (bounces.Count > MAX_JSON_OBJECTS)
       {
         throw new ArgumentNullException("Bounce Records cannot exceed maximum limit of 1,000 records!");
       }
 
-      var resultList = new List<BounceRecordRequest>();
+      var json = new JArray();
 
-      foreach (var bounceRecord in bounceRecords)
+      foreach(var bounce in bounces)
       {
-        var emailAddress = new MailAddress(bounceRecord.Address);
-
-        var code = (int)bounceRecord.Code;
-
-        var bounceRecordRequestObj = new BounceRecordRequest()
-        {
-          code = (int)bounceRecord.Code,
-          address = bounceRecord.Address
-        };
-
-        if (!checkStringIfNullOrEmpty(bounceRecord.Error))
-        {
-          bounceRecordRequestObj.error = bounceRecord.Error;
-        }
-
-        if (bounceRecord.CreatedAt != null && bounceRecord.CreatedAt.HasValue)
-        {
-          bounceRecordRequestObj.created_at = ((DateTimeOffset)bounceRecord.CreatedAt.Value).ToUnixTimeSeconds();
-        }
-
-        resultList.Add(bounceRecordRequestObj);
+        json.Add(bounce.ToJson());
       }
 
-      return this.httpClient.PostAsync($"{this.companyDomain}/bounces", new StringContent(JsonConvert.SerializeObject(resultList), Encoding.UTF8, "application/json"), ct);
+      return this.httpClient.PostAsync($"{this.companyDomain}/bounces", new StringContent(json.ToString(), Encoding.UTF8, "application/json"), ct);
     }
 
     public Task<HttpResponseMessage> DeleteBounce(string address, CancellationToken ct = default(CancellationToken))
@@ -327,7 +293,65 @@ namespace MailgunSharp
       return this.httpClient.DeleteAsync($"{this.companyDomain}/bounces", ct);
     }
 
-    private bool checkStringIfNullOrEmpty(string str)
+    public Task<HttpResponseMessage> GetUnsubscribers(int limit = 100, CancellationToken ct = default(CancellationToken))
+    {
+      if (limit > MAX_RECORD_LIMIT)
+      {
+        throw new ArgumentOutOfRangeException("Limit of records returned has a maximum limit of 10,000 records!");
+      }
+
+      return this.httpClient.GetAsync($"{this.companyDomain}/unsubscribes", ct);
+    }
+
+    public Task<HttpResponseMessage> GetUnsubscriber(string address, CancellationToken ct = default(CancellationToken))
+    {
+      var emailAddress = new MailAddress(address);
+
+      return this.httpClient.GetAsync($"{this.companyDomain}/unsubscribes/{address}", ct);
+    }
+
+    public Task<HttpResponseMessage> AddUnsubscriber(IUnsubscriberRequest unsubscriber, CancellationToken ct = default(CancellationToken))
+    {
+      if (unsubscriber == null)
+      {
+        throw new ArgumentNullException("Unsubscriber object cannot be null or empty!");
+      }
+
+      var formContent = new FormUrlEncodedContent(unsubscriber.ToFormContent());
+
+      return this.httpClient.PostAsync($"{this.companyDomain}/unsubscribes", formContent, ct);
+    }
+
+    public Task<HttpResponseMessage> AddUnsubscribers(ICollection<IUnsubscriberRequest> unsubscribers, CancellationToken ct = default(CancellationToken))
+    {
+      if (unsubscribers == null)
+      {
+        throw new ArgumentNullException("Unsubscribers object cannot be null or empty!");
+      }
+
+      if (unsubscribers.Count > MAX_JSON_OBJECTS)
+      {
+        throw new ArgumentNullException("Unsubscribers object cannot exceed maximum limit of 1,000 records!");
+      }
+
+      var json = new JArray();
+
+      foreach(var unsubscriber in unsubscribers)
+      {
+        json.Add(unsubscriber.ToJson());
+      }
+
+      return this.httpClient.PostAsync($"{this.companyDomain}/unsubscribers", new StringContent(json.ToString(), Encoding.UTF8, "application/json"), ct);
+    }
+
+    public Task<HttpResponseMessage> DeleteUnsubscriber(string address, string tag = "", CancellationToken ct = default(CancellationToken))
+    {
+      var emailAddress = new MailAddress(address);
+
+      return this.httpClient.DeleteAsync($"{this.companyDomain}/unsubscribers/{address}", ct);
+    }
+
+    private bool checkStringIfNullEmptyWhitespace(string str)
     {
       return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
     }

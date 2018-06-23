@@ -1,13 +1,11 @@
-using System.Collections.Generic;
+using System.Net.Mail;
 using Newtonsoft.Json.Linq;
 
 namespace MailgunSharp.Messages
 {
   public interface IRecipient
   {
-    string Name { get; }
-    string Address { get; }
+    MailAddress Address { get; }
     JObject Variables { get; }
-    string ToFormattedNameAddress();
   }
 }

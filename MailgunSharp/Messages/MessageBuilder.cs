@@ -1,4 +1,5 @@
 using System;
+using System.Net.Mail;
 using System.IO;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
@@ -76,7 +77,7 @@ namespace MailgunSharp.Messages
       return this;
     }
 
-    public IMessageBuilder AddBcc(IRecipient bcc)
+    public IMessageBuilder AddBcc(MailAddress bcc)
     {
       if (bcc == null)
       {
@@ -84,7 +85,7 @@ namespace MailgunSharp.Messages
       }
 
       if (message.Bcc == null) {
-        message.Bcc = new Collection<IRecipient>();
+        message.Bcc = new Collection<MailAddress>();
       }
 
       message.Bcc.Add(bcc);
@@ -92,7 +93,7 @@ namespace MailgunSharp.Messages
       return this;
     }
 
-    public IMessageBuilder AddCc(IRecipient cc)
+    public IMessageBuilder AddCc(MailAddress cc)
     {
       if (cc == null)
       {
@@ -100,7 +101,7 @@ namespace MailgunSharp.Messages
       }
 
       if (message.Cc == null) {
-        message.Cc = new Collection<IRecipient>();
+        message.Cc = new Collection<MailAddress>();
       }
 
       message.Cc.Add(cc);
@@ -239,7 +240,7 @@ namespace MailgunSharp.Messages
       return this;
     }
 
-    public IMessageBuilder SetFrom(IRecipient sender)
+    public IMessageBuilder SetFrom(MailAddress sender)
     {
       if (sender == null)
       {
@@ -443,7 +444,7 @@ namespace MailgunSharp.Messages
       return this;
     }
 
-    public IMessageBuilder SetReplyTo(IRecipient replyTo)
+    public IMessageBuilder SetReplyTo(MailAddress replyTo)
     {
       if (replyTo == null)
       {
@@ -455,7 +456,7 @@ namespace MailgunSharp.Messages
         message.CustomHeaders = new Dictionary<string, string>();
       }
 
-      message.CustomHeaders.Add("Reply-To", replyTo.ToFormattedNameAddress());
+      message.CustomHeaders.Add("Reply-To", replyTo.Address);
 
       return this;
     }

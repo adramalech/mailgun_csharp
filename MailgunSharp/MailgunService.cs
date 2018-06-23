@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using System.Text;
 using System.Net;
 using System.Net.Mail;
@@ -54,9 +55,14 @@ namespace MailgunSharp
       return this.httpClient.PostAsync($"{this.companyDomain}/messages", message.AsFormContent(), ct);
     }
 
-    public Task<HttpResponseMessage> ValidateEmailAddressAsync(string address, bool validateMailbox, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> ValidateEmailAddressAsync(MailAddress address, bool validateMailbox, CancellationToken ct = default(CancellationToken))
     {
-      return this.httpClient.GetAsync($"address/private/validate?address={address}&mailbox_verification={validateMailbox.ToString()}", ct);
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
+
+      return this.httpClient.GetAsync($"address/private/validate?address={address.Address}&mailbox_verification={validateMailbox.ToString()}", ct);
     }
 
     public Task<HttpResponseMessage> ParseEmailAddressAsync(IRecipient recipient, bool syntaxOnly = true, CancellationToken ct = default(CancellationToken))
@@ -66,7 +72,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Recipients cannot be null or empty!");
       }
 
-      var address = recipient.ToFormattedNameAddress();
+      var address = recipient.Address.ToString();
 
       return parseAddressesAsync(address, syntaxOnly, ct);
     }
@@ -84,7 +90,7 @@ namespace MailgunSharp
 
       foreach(var recipient in recipients)
       {
-        var str = recipient.ToFormattedNameAddress();
+        var str = recipient.Address.ToString();
 
         if (i < totalMinusLast)
         {
@@ -118,7 +124,10 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetIPDetailsAsync(string ipV4Address, CancellationToken ct = default(CancellationToken))
     {
-      var ipAddress = IPAddress.Parse(ipV4Address);
+      if (!isIPv4AddressValid(ipV4Address))
+      {
+        throw new FormatException("IP V4 Address is incorrectly formatted, must be in the format ###.###.###.###!");
+      }
 
       return this.httpClient.GetAsync($"ips/{ipV4Address}", ct);
     }
@@ -130,7 +139,10 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> AddIpAsync(string ipV4Address, CancellationToken ct = default(CancellationToken))
     {
-      var ipAddress = IPAddress.Parse(ipV4Address);
+      if (!isIPv4AddressValid(ipV4Address))
+      {
+        throw new FormatException("IP V4 Address is incorrectly formatted, must be in the format ###.###.###.###!");
+      }
 
       var contents = new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>("ip", ipV4Address) };
 
@@ -141,7 +153,10 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> DeleteIpAsync(string ipV4Address, CancellationToken ct = default(CancellationToken))
     {
-      var ipAddress = IPAddress.Parse(ipV4Address);
+      if (!isIPv4AddressValid(ipV4Address))
+      {
+        throw new FormatException("IP V4 Address is incorrectly formatted, must be in the format ###.###.###.###!");
+      }
 
       return this.httpClient.DeleteAsync($"{this.companyDomain}/ips/{ipV4Address}", ct);
     }
@@ -240,11 +255,14 @@ namespace MailgunSharp
       return this.httpClient.GetAsync($"{this.companyDomain}/bounces?limit={limit}", ct);
     }
 
-    public Task<HttpResponseMessage> GetBounce(string address, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> GetBounce(MailAddress address, CancellationToken ct = default(CancellationToken))
     {
-      var emailAddress = new MailAddress(address);
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
 
-      return this.httpClient.GetAsync($"{this.companyDomain}/bounces/{address}", ct);
+      return this.httpClient.GetAsync($"{this.companyDomain}/bounces/{address.Address}", ct);
     }
 
     public Task<HttpResponseMessage> AddBounce(IBounceRequest bounce, CancellationToken ct = default(CancellationToken))
@@ -281,11 +299,14 @@ namespace MailgunSharp
       return this.httpClient.PostAsync($"{this.companyDomain}/bounces", new StringContent(json.ToString(), Encoding.UTF8, "application/json"), ct);
     }
 
-    public Task<HttpResponseMessage> DeleteBounce(string address, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> DeleteBounce(MailAddress address, CancellationToken ct = default(CancellationToken))
     {
-      var emailAddress = new MailAddress(address);
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
 
-      return this.httpClient.DeleteAsync($"{this.companyDomain}/bounces/{address}", ct);
+      return this.httpClient.DeleteAsync($"{this.companyDomain}/bounces/{address.Address}", ct);
     }
 
     public Task<HttpResponseMessage> DeleteBounces(CancellationToken ct = default(CancellationToken))
@@ -303,9 +324,12 @@ namespace MailgunSharp
       return this.httpClient.GetAsync($"{this.companyDomain}/unsubscribes", ct);
     }
 
-    public Task<HttpResponseMessage> GetUnsubscriber(string address, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> GetUnsubscriber(MailAddress address, CancellationToken ct = default(CancellationToken))
     {
-      var emailAddress = new MailAddress(address);
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/unsubscribes/{address}", ct);
     }
@@ -344,16 +368,88 @@ namespace MailgunSharp
       return this.httpClient.PostAsync($"{this.companyDomain}/unsubscribers", new StringContent(json.ToString(), Encoding.UTF8, "application/json"), ct);
     }
 
-    public Task<HttpResponseMessage> DeleteUnsubscriber(string address, string tag = "", CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> DeleteUnsubscriber(MailAddress address, string tag = "", CancellationToken ct = default(CancellationToken))
     {
-      var emailAddress = new MailAddress(address);
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
 
-      return this.httpClient.DeleteAsync($"{this.companyDomain}/unsubscribers/{address}", ct);
+      return this.httpClient.DeleteAsync($"{this.companyDomain}/unsubscribers/{address.Address}", ct);
+    }
+
+    public Task<HttpResponseMessage> GetComplaints(int limit = 100, CancellationToken ct = default(CancellationToken))
+    {
+      if (limit > MAX_RECORD_LIMIT)
+      {
+        throw new ArgumentOutOfRangeException("Limit of records returned has a maximum limit of 10,000 records!");
+      }
+
+      return this.httpClient.GetAsync($"{this.companyDomain}/complaints", ct);
+    }
+
+    public Task<HttpResponseMessage> GetComplaint(MailAddress address, CancellationToken ct = default(CancellationToken))
+    {
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
+
+      return this.httpClient.GetAsync($"{this.companyDomain}/complaints/{address.Address}", ct);
+    }
+
+    public Task<HttpResponseMessage> AddComplaint(IComplaintRequest complaint, CancellationToken ct = default(CancellationToken))
+    {
+      if (complaint == null)
+      {
+        throw new ArgumentNullException("Unsubscriber object cannot be null or empty!");
+      }
+
+      var formContent = new FormUrlEncodedContent(complaint.ToFormContent());
+
+      return this.httpClient.PostAsync($"{this.companyDomain}/complaints", formContent, ct);
+    }
+
+    public Task<HttpResponseMessage> AddComplaints(ICollection<IComplaintRequest> complaints, CancellationToken ct = default(CancellationToken))
+    {
+      if (complaints == null)
+      {
+        throw new ArgumentNullException("Complaints object cannot be null or empty!");
+      }
+
+      if (complaints.Count > MAX_JSON_OBJECTS)
+      {
+        throw new ArgumentNullException("Complaints object cannot exceed maximum limit of 1,000 records!");
+      }
+
+      var json = new JArray();
+
+      foreach(var complaint in complaints)
+      {
+        json.Add(complaint.ToJson());
+      }
+
+      return this.httpClient.PostAsync($"{this.companyDomain}/complaints", new StringContent(json.ToString(), Encoding.UTF8, "application/json"), ct);
+    }
+
+    public Task<HttpResponseMessage> DeleteComplaint(MailAddress address, CancellationToken ct = default(CancellationToken))
+    {
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
+
+      return this.httpClient.DeleteAsync($"{this.companyDomain}/complaints/{address.Address}", ct);
     }
 
     private bool checkStringIfNullEmptyWhitespace(string str)
     {
       return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
+    }
+
+    private bool isIPv4AddressValid(string ipV4Address)
+    {
+      return Regex.IsMatch(ipV4Address, @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
     }
   }
 }

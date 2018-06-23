@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Net.Mail;
 using System.Net.Http;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
@@ -8,10 +9,10 @@ namespace MailgunSharp.Messages
 {
   public interface IMessage
   {
-    IRecipient From { get; set; }
+    MailAddress From { get; set; }
     ICollection<IRecipient> To { get; set; }
-    ICollection<IRecipient> Cc { get; set; }
-    ICollection<IRecipient> Bcc { get; set; }
+    ICollection<MailAddress> Cc { get; set; }
+    ICollection<MailAddress> Bcc { get; set; }
     string Subject { get; set; }
     string Text { get; set; }
     string Html { get; set; }

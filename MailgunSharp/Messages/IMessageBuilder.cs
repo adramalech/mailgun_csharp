@@ -1,4 +1,5 @@
 using System;
+using System.Net.Mail;
 using System.IO;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
@@ -8,12 +9,12 @@ namespace MailgunSharp.Messages
   public interface IMessageBuilder
   {
     IMessageBuilder SetTestMode(bool testMode);
-    IMessageBuilder SetFrom(IRecipient sender);
+    IMessageBuilder SetFrom(MailAddress sender);
     IMessageBuilder AddRecipient(IRecipient recipient);
     IMessageBuilder AddRecipients(ICollection<IRecipient> recipients);
-    IMessageBuilder AddCc(IRecipient cc);
-    IMessageBuilder AddBcc(IRecipient bcc);
-    IMessageBuilder SetReplyTo(IRecipient replyTo);
+    IMessageBuilder AddCc(MailAddress cc);
+    IMessageBuilder AddBcc(MailAddress bcc);
+    IMessageBuilder SetReplyTo(MailAddress replyTo);
     IMessageBuilder SetSubject(string subject);
     IMessageBuilder SetTextContentBody(string text);
     IMessageBuilder SetHtmlContentBody(string html);

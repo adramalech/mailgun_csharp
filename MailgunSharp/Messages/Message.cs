@@ -1,4 +1,5 @@
 using System;
+using System.Net.Mail;
 using System.Text;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,10 +12,10 @@ namespace MailgunSharp.Messages
 {
   public sealed class Message : IMessage
   {
-    public IRecipient From { get; set; }
+    public MailAddress From { get; set; }
     public ICollection<IRecipient> To { get; set; }
-    public ICollection<IRecipient> Cc { get; set; }
-    public ICollection<IRecipient> Bcc { get; set; }
+    public ICollection<MailAddress> Cc { get; set; }
+    public ICollection<MailAddress> Bcc { get; set; }
     public string Subject { get; set; }
     public string Text { get; set; }
     public string Html { get; set; }
@@ -37,7 +38,6 @@ namespace MailgunSharp.Messages
     public bool SendSecure { get; set; }
 
     private const long MAX_TOTAL_MESSAGE_SIZE = 25000000;
-
     private const int MAX_RECIPIENT_SIZE = 1000;
 
     public HttpContent AsFormContent()
@@ -108,7 +108,7 @@ namespace MailgunSharp.Messages
 
       var content = new Collection<KeyValuePair<string, string>>()
       {
-        new KeyValuePair<string, string>("from", this.From.ToFormattedNameAddress()),
+        new KeyValuePair<string, string>("from", this.From.Address.ToString()),
         new KeyValuePair<string, string>("o:testmode", boolAsYesNo(this.TestMode)),
         new KeyValuePair<string, string>("o:tracking", boolAsYesNo(this.Tracking)),
         new KeyValuePair<string, string>("o:tracking-clicks", boolAsYesNo(this.TrackingClicks)),
@@ -118,16 +118,23 @@ namespace MailgunSharp.Messages
         new KeyValuePair<string, string>("o:dkim", boolAsYesNo(this.Dkim))
       };
 
-      content.Add(new KeyValuePair<string, string>("to", generateCommaDelimenatedRecipientList(this.To)));
+      var addressList = new Collection<MailAddress>();
+
+      foreach (var t in this.To)
+      {
+        addressList.Add(t.Address);
+      }
+
+      content.Add(new KeyValuePair<string, string>("to", generateCommaDelimenatedList(addressList)));
 
       if (this.Cc != null)
       {
-        content.Add(new KeyValuePair<string, string>("cc", generateCommaDelimenatedRecipientList(this.Cc)));
+        content.Add(new KeyValuePair<string, string>("cc", generateCommaDelimenatedList(this.Cc)));
       }
 
       if (this.Bcc != null)
       {
-        content.Add(new KeyValuePair<string, string>("bcc", generateCommaDelimenatedRecipientList(this.Bcc)));
+        content.Add(new KeyValuePair<string, string>("bcc", generateCommaDelimenatedList(this.Bcc)));
       }
 
       if (!isStringNullOrEmpty(this.Subject))
@@ -197,29 +204,29 @@ namespace MailgunSharp.Messages
       return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
     }
 
-    private string generateCommaDelimenatedRecipientList(ICollection<IRecipient> content)
+    private string generateCommaDelimenatedList(ICollection<MailAddress> addresses)
     {
-      var recipents = new StringBuilder();
+      var addressList = new StringBuilder();
+
       var i = 1;
-      var totalMinusLast = this.To.Count - 1;
+      var total = addresses.Count;
 
       var str = "";
 
-      foreach(var to in this.To)
+      foreach (var address in addresses)
       {
-        str = to.ToFormattedNameAddress();
+        str = address.ToString();
 
-        if (i < totalMinusLast)
+        if (i < total)
         {
           str += ",";
         }
 
-        recipents.Append(str);
-
+        addressList.Append(str);
         i++;
       }
 
-      return recipents.ToString();
+      return addressList.ToString();
     }
   }
 }

@@ -8,15 +8,7 @@ namespace MailgunSharp.Supression
 {
   public sealed class ComplaintRequest : IComplaintRequest
   {
-    public ComplaintRequest(string address, DateTime? createdAt = null)
-    {
-      var emailAddress = new MailAddress(address);
-
-      this.address = address;
-      this.createdAt = createdAt;
-    }
-
-    private string address;
+    private readonly string address;
     public string Address
     {
       get
@@ -25,13 +17,21 @@ namespace MailgunSharp.Supression
       }
     }
 
-    private DateTime? createdAt;
+    private readonly DateTime? createdAt;
     public DateTime? CreatedAt
     {
       get
       {
         return createdAt;
       }
+    }
+
+    public ComplaintRequest(string address, DateTime? createdAt = null)
+    {
+      var emailAddress = new MailAddress(address);
+
+      this.address = address;
+      this.createdAt = createdAt;
     }
 
     public ICollection<KeyValuePair<string, string>> ToFormContent()

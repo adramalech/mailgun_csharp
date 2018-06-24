@@ -8,7 +8,7 @@ namespace MailgunSharp.Supression
 {
   public sealed class BounceRequest : IBounceRequest
   {
-    private string address;
+    private readonly string address;
     public string Address
     {
       get
@@ -17,7 +17,7 @@ namespace MailgunSharp.Supression
       }
     }
 
-    private SmtpErrorCode code;
+    private readonly SmtpErrorCode code;
     public SmtpErrorCode Code
     {
       get
@@ -26,7 +26,7 @@ namespace MailgunSharp.Supression
       }
     }
 
-    private string error;
+    private readonly string error;
     public string Error
     {
       get
@@ -35,7 +35,7 @@ namespace MailgunSharp.Supression
       }
     }
 
-    private DateTime? createdAt;
+    private readonly DateTime? createdAt;
     public DateTime? CreatedAt
     {
       get

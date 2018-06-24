@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MailgunSharp.Messages;
 using MailgunSharp.Supression;
+using MailgunSharp.MailingLists;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -17,12 +18,13 @@ namespace MailgunSharp
 {
   public sealed class MailgunService : IMailgunService
   {
-    private readonly string companyDomain;
     private const int MAX_ADDRESS_LENGTH = 8000;
     private const int MAX_RECORD_LIMIT = 10000;
     private const int MAX_JSON_OBJECTS = 1000;
     private const string MAILGUN_BASE_URL = @"https://api.mailgun.net/v3/";
-    private HttpClient httpClient;
+
+    private readonly string companyDomain;
+    private readonly HttpClient httpClient;
 
     public MailgunService(string companyDomain, string apiKey, HttpClient httpClient = null)
     {
@@ -296,7 +298,7 @@ namespace MailgunSharp
         json.Add(bounce.ToJson());
       }
 
-      return this.httpClient.PostAsync($"{this.companyDomain}/bounces", new StringContent(json.ToString(), Encoding.UTF8, "application/json"), ct);
+      return this.httpClient.PostAsync($"{this.companyDomain}/bounces", new StringContent(json.ToString(Formatting.None), Encoding.UTF8, "application/json"), ct);
     }
 
     public Task<HttpResponseMessage> DeleteBounce(MailAddress address, CancellationToken ct = default(CancellationToken))
@@ -321,7 +323,7 @@ namespace MailgunSharp
         throw new ArgumentOutOfRangeException("Limit of records returned has a maximum limit of 10,000 records!");
       }
 
-      return this.httpClient.GetAsync($"{this.companyDomain}/unsubscribes", ct);
+      return this.httpClient.GetAsync($"{this.companyDomain}/unsubscribes?limit={limit}", ct);
     }
 
     public Task<HttpResponseMessage> GetUnsubscriber(MailAddress address, CancellationToken ct = default(CancellationToken))
@@ -365,7 +367,7 @@ namespace MailgunSharp
         json.Add(unsubscriber.ToJson());
       }
 
-      return this.httpClient.PostAsync($"{this.companyDomain}/unsubscribers", new StringContent(json.ToString(), Encoding.UTF8, "application/json"), ct);
+      return this.httpClient.PostAsync($"{this.companyDomain}/unsubscribers", new StringContent(json.ToString(Formatting.None), Encoding.UTF8, "application/json"), ct);
     }
 
     public Task<HttpResponseMessage> DeleteUnsubscriber(MailAddress address, string tag = "", CancellationToken ct = default(CancellationToken))
@@ -385,7 +387,7 @@ namespace MailgunSharp
         throw new ArgumentOutOfRangeException("Limit of records returned has a maximum limit of 10,000 records!");
       }
 
-      return this.httpClient.GetAsync($"{this.companyDomain}/complaints", ct);
+      return this.httpClient.GetAsync($"{this.companyDomain}/complaints?limit={limit}", ct);
     }
 
     public Task<HttpResponseMessage> GetComplaint(MailAddress address, CancellationToken ct = default(CancellationToken))
@@ -429,7 +431,7 @@ namespace MailgunSharp
         json.Add(complaint.ToJson());
       }
 
-      return this.httpClient.PostAsync($"{this.companyDomain}/complaints", new StringContent(json.ToString(), Encoding.UTF8, "application/json"), ct);
+      return this.httpClient.PostAsync($"{this.companyDomain}/complaints", new StringContent(json.ToString(Formatting.None), Encoding.UTF8, "application/json"), ct);
     }
 
     public Task<HttpResponseMessage> DeleteComplaint(MailAddress address, CancellationToken ct = default(CancellationToken))
@@ -442,6 +444,175 @@ namespace MailgunSharp
       return this.httpClient.DeleteAsync($"{this.companyDomain}/complaints/{address.Address}", ct);
     }
 
+    public Task<HttpResponseMessage> GetMailingLists(int limit = 100, CancellationToken ct = default(CancellationToken))
+    {
+      return this.httpClient.GetAsync($"lists/pages?limit={limit}", ct);
+    }
+
+    public Task<HttpResponseMessage> GetMailingList(MailAddress address, CancellationToken ct = default(CancellationToken))
+    {
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
+
+      return this.httpClient.DeleteAsync($"lists/{address.Address}", ct);
+    }
+
+    public Task<HttpResponseMessage> AddMailingList(IMailingList mailingList, CancellationToken ct = default(CancellationToken))
+    {
+      if (mailingList == null)
+      {
+        throw new ArgumentNullException("Mailing List object cannot be null or empty!");
+      }
+
+      var formContent = new FormUrlEncodedContent(mailingList.ToFormContent());
+
+      return this.httpClient.PostAsync("lists", formContent, ct);
+    }
+
+    public Task<HttpResponseMessage> UpdateMailingList(MailAddress address, IMailingList mailingList, CancellationToken ct = default(CancellationToken))
+    {
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
+
+      if (mailingList == null)
+      {
+        throw new ArgumentNullException("Mailing List object cannot be null or empty!");
+      }
+
+      var formContent = new FormUrlEncodedContent(mailingList.ToFormContent());
+
+      return this.httpClient.PutAsync($"lists/{address.Address}", formContent, ct);
+    }
+
+    public Task<HttpResponseMessage> DeleteMailingList(MailAddress address, CancellationToken ct = default(CancellationToken))
+    {
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
+
+      return this.httpClient.DeleteAsync($"lists/{address.Address}", ct);
+    }
+
+    public Task<HttpResponseMessage> GetMailingListMembers(MailAddress address, int limit = 100, bool? subscribed = null, CancellationToken ct = default(CancellationToken))
+    {
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
+
+      var subbed = (subscribed.HasValue) ? boolToYesNo(subscribed.Value) : "";
+
+      var url = (checkStringIfNullEmptyWhitespace(subbed)) ? $"lists/{address.Address}/members/pages?limit={limit}" : $"lists/{address.Address}/members/pages?limit={limit}&subscribed={subbed}";
+
+      return this.httpClient.GetAsync(url, ct);
+    }
+
+    public Task<HttpResponseMessage> GetMailingListMembers(MailAddress mailingListAddress, MailAddress memberAddress, CancellationToken ct = default(CancellationToken))
+    {
+      if (mailingListAddress == null)
+      {
+        throw new ArgumentNullException("Mailing List Address cannot be null or empty!");
+      }
+
+      if (memberAddress == null)
+      {
+        throw new ArgumentNullException("Member Address cannot be null or empty!");
+      }
+
+      return this.httpClient.GetAsync($"lists/{mailingListAddress.Address}/members/{memberAddress.Address}", ct);
+    }
+
+    public Task<HttpResponseMessage> AddMailingListMember(MailAddress address, IMember member, CancellationToken ct = default(CancellationToken))
+    {
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
+
+      if (member == null)
+      {
+        throw new ArgumentNullException("Member object cannot be null or empty!");
+      }
+
+      var formContent = new FormUrlEncodedContent(member.ToFormContent());
+
+      return this.httpClient.PostAsync($"lists/{address}/members", formContent, ct);
+    }
+
+    public Task<HttpResponseMessage> AddMailingListMembers(MailAddress address, ICollection<IMember> members, bool upsert, CancellationToken ct = default(CancellationToken))
+    {
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
+
+      if (members == null)
+      {
+        throw new ArgumentNullException("Members object cannot be null or empty!");
+      }
+
+      if (members.Count > MAX_JSON_OBJECTS)
+      {
+        throw new ArgumentNullException("Members object cannot exceed maximum limit of 1,000 records!");
+      }
+
+      var json = new JObject();
+
+      var jsonArray = new JArray();
+
+      foreach(var member in members)
+      {
+        jsonArray.Add(member.ToJson());
+      }
+
+      json["members"] = jsonArray.ToString(Formatting.None);
+      json["upsert"] = boolToYesNo(upsert);
+
+      return this.httpClient.PostAsync($"lists/{address}/members", new StringContent(json.ToString(Formatting.None), Encoding.UTF8, "application/json"), ct);
+    }
+
+    public Task<HttpResponseMessage> UpdateMailingListMember(MailAddress mailingListAddress, MailAddress memberAddress, IMember member, CancellationToken ct = default(CancellationToken))
+    {
+      if (mailingListAddress == null)
+      {
+        throw new ArgumentNullException("Mailing List Address cannot be null or empty!");
+      }
+
+      if (memberAddress == null)
+      {
+        throw new ArgumentNullException("Member Address cannot be null or empty!");
+      }
+
+      if (member == null)
+      {
+        throw new ArgumentNullException("Member object cannot be null or empty!");
+      }
+
+      var formContent = new FormUrlEncodedContent(member.ToFormContent());
+
+      return this.httpClient.PutAsync($"lists/{mailingListAddress.Address}/members/{memberAddress.Address}", formContent, ct);
+    }
+
+    public Task<HttpResponseMessage> DeleteMailingListMember(MailAddress mailingListAddress, MailAddress memberAddress, CancellationToken ct = default(CancellationToken))
+    {
+      if (mailingListAddress == null)
+      {
+        throw new ArgumentNullException("Mailing List Address cannot be null or empty!");
+      }
+
+      if (memberAddress == null)
+      {
+        throw new ArgumentNullException("Member Address cannot be null or empty!");
+      }
+
+      return this.httpClient.DeleteAsync($"lists/{mailingListAddress.Address}/members/{memberAddress.Address}", ct);
+    }
+
     private bool checkStringIfNullEmptyWhitespace(string str)
     {
       return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
@@ -450,6 +621,11 @@ namespace MailgunSharp
     private bool isIPv4AddressValid(string ipV4Address)
     {
       return Regex.IsMatch(ipV4Address, @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+    }
+
+    private string boolToYesNo(bool flag)
+    {
+      return (flag) ? "yes" : "no";
     }
   }
 }

@@ -8,7 +8,7 @@ namespace MailgunSharp.Supression
 {
   public sealed class UnsubscriberRequest : IUnsubscriberRequest
   {
-    private string address;
+    private readonly string address;
     public string Address
     {
       get
@@ -17,7 +17,7 @@ namespace MailgunSharp.Supression
       }
     }
 
-    private string tag;
+    private readonly string tag;
     public string Tag
     {
       get
@@ -26,7 +26,7 @@ namespace MailgunSharp.Supression
       }
     }
 
-    private DateTime? createdAt;
+    private readonly DateTime? createdAt;
     public DateTime? CreatedAt
     {
       get

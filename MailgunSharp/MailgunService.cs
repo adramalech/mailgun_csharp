@@ -377,7 +377,9 @@ namespace MailgunSharp
         throw new ArgumentNullException("Address cannot be null or empty!");
       }
 
-      return this.httpClient.DeleteAsync($"{this.companyDomain}/unsubscribers/{address.Address}", ct);
+      var url = (checkStringIfNullEmptyWhitespace(tag)) ? $"{this.companyDomain}/unsubscribers/{address.Address}" : $"{this.companyDomain}/unsubscribers/{address.Address}?tag={tag}";
+
+      return this.httpClient.DeleteAsync(url, ct);
     }
 
     public Task<HttpResponseMessage> GetComplaints(int limit = 100, CancellationToken ct = default(CancellationToken))

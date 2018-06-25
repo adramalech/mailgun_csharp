@@ -8,8 +8,8 @@ namespace MailgunSharp.Supression
 {
   public sealed class ComplaintRequest : IComplaintRequest
   {
-    private readonly string address;
-    public string Address
+    private readonly MailAddress address;
+    public MailAddress Address
     {
       get
       {
@@ -26,9 +26,12 @@ namespace MailgunSharp.Supression
       }
     }
 
-    public ComplaintRequest(string address, DateTime? createdAt = null)
+    public ComplaintRequest(MailAddress address, DateTime? createdAt = null)
     {
-      var emailAddress = new MailAddress(address);
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
 
       this.address = address;
       this.createdAt = createdAt;
@@ -38,7 +41,7 @@ namespace MailgunSharp.Supression
     {
       var content = new Collection<KeyValuePair<string, string>>()
       {
-        new KeyValuePair<string, string>("address", this.address),
+        new KeyValuePair<string, string>("address", this.address.Address),
         new KeyValuePair<string, string>("created_at", ((!this.createdAt.HasValue) ? ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() : ((DateTimeOffset)this.createdAt.Value).ToUnixTimeSeconds()).ToString())
       };
 
@@ -49,7 +52,7 @@ namespace MailgunSharp.Supression
     {
       var jsonObject = new JObject();
 
-      jsonObject["address"] = this.address;
+      jsonObject["address"] = this.address.Address;
       jsonObject["created_at"] = ((!this.createdAt.HasValue) ? ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() : ((DateTimeOffset)this.createdAt.Value).ToUnixTimeSeconds()).ToString();
 
       return jsonObject;

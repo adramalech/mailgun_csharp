@@ -8,8 +8,8 @@ namespace MailgunSharp.Supression
 {
   public sealed class UnsubscriberRequest : IUnsubscriberRequest
   {
-    private readonly string address;
-    public string Address
+    private readonly MailAddress address;
+    public MailAddress Address
     {
       get
       {
@@ -35,9 +35,12 @@ namespace MailgunSharp.Supression
       }
     }
 
-    public UnsubscriberRequest(string address, string tag = "*", DateTime? createdAt = null)
+    public UnsubscriberRequest(MailAddress address, string tag = "*", DateTime? createdAt = null)
     {
-      var emailAddress = new MailAddress(address);
+      if (address == null) 
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
 
       this.address = address;
       this.tag = tag;
@@ -48,7 +51,7 @@ namespace MailgunSharp.Supression
     {
       var jsonObject = new JObject();
 
-      jsonObject["address"] = this.address;
+      jsonObject["address"] = this.address.Address;
       jsonObject["tag"] = this.tag;
       jsonObject["created_at"] = ((!this.createdAt.HasValue) ? ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() : ((DateTimeOffset)this.createdAt.Value).ToUnixTimeSeconds()).ToString();
 
@@ -59,7 +62,7 @@ namespace MailgunSharp.Supression
     {
       var content = new Collection<KeyValuePair<string, string>>()
       {
-        new KeyValuePair<string, string>("address", this.address),
+        new KeyValuePair<string, string>("address", this.address.Address),
         new KeyValuePair<string, string>("tag", this.tag),
         new KeyValuePair<string, string>("created_at", ((!this.createdAt.HasValue) ? ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() : ((DateTimeOffset)this.createdAt.Value).ToUnixTimeSeconds()).ToString())
       };

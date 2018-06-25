@@ -8,8 +8,8 @@ namespace MailgunSharp.Supression
 {
   public sealed class BounceRequest : IBounceRequest
   {
-    private readonly string address;
-    public string Address
+    private readonly MailAddress address;
+    public MailAddress Address
     {
       get
       {
@@ -44,9 +44,12 @@ namespace MailgunSharp.Supression
       }
     }
 
-    public BounceRequest(string address, SmtpErrorCode statusCode = SmtpErrorCode.MAILBOX_UNAVAILABLE, string error = "", DateTime? createdAt = null)
+    public BounceRequest(MailAddress address, SmtpErrorCode statusCode = SmtpErrorCode.MAILBOX_UNAVAILABLE, string error = "", DateTime? createdAt = null)
     {
-      var emailAddress = new MailAddress(address);
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or emtpy!");
+      }
 
       this.address = address;
       this.code = statusCode;
@@ -58,7 +61,7 @@ namespace MailgunSharp.Supression
     {
       var jsonObject = new JObject();
 
-      jsonObject["address"] = this.address;
+      jsonObject["address"] = this.address.Address;
       jsonObject["code"] = ((int)this.code).ToString();
       jsonObject["error"] = this.error;
       jsonObject["created_at"] = ((!this.createdAt.HasValue) ? ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() : ((DateTimeOffset)this.createdAt.Value).ToUnixTimeSeconds()).ToString();
@@ -70,7 +73,7 @@ namespace MailgunSharp.Supression
     {
       var content = new Collection<KeyValuePair<string, string>>()
       {
-        new KeyValuePair<string, string>("address", this.address),
+        new KeyValuePair<string, string>("address", this.address.ToString()),
         new KeyValuePair<string, string>("code", ((int)this.code).ToString()),
         new KeyValuePair<string, string>("error", this.error),
         new KeyValuePair<string, string>("created_at", ((!this.createdAt.HasValue) ? ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() : ((DateTimeOffset)this.createdAt.Value).ToUnixTimeSeconds()).ToString())

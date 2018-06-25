@@ -11,7 +11,7 @@ This was a fork of [bringking/mailgun_csharp](https://github.com/bringking/mailg
 Mailgun HTTP API for easy use in C# applications.
 
 ## TODO
-Currently adding a few things-
+Currently adding a few things:
 
 * Write tests
 * Write documentation

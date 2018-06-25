@@ -13,6 +13,7 @@ using MailgunSharp.Supression;
 using MailgunSharp.MailingLists;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using MailgunSharp.Domains;
 
 namespace MailgunSharp
 {
@@ -249,6 +250,11 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetBounces(int limit = 100, CancellationToken ct = default(CancellationToken))
     {
+      if (limit < 1)
+      {
+        throw new ArgumentOutOfRangeException("Limit cannot be an integer value less than 1!");
+      }
+      
       if (limit > MAX_RECORD_LIMIT)
       {
         throw new ArgumentOutOfRangeException("Limit of records returned has a maximum limit of 10,000 records!");
@@ -318,6 +324,11 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetUnsubscribers(int limit = 100, CancellationToken ct = default(CancellationToken))
     {
+      if (limit < 1)
+      {
+        throw new ArgumentOutOfRangeException("Limit cannot be an integer value less than 1!");
+      }
+
       if (limit > MAX_RECORD_LIMIT)
       {
         throw new ArgumentOutOfRangeException("Limit of records returned has a maximum limit of 10,000 records!");
@@ -384,6 +395,11 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetComplaints(int limit = 100, CancellationToken ct = default(CancellationToken))
     {
+      if (limit < 1)
+      {
+        throw new ArgumentOutOfRangeException("Limit cannot be an integer value less than 1!");
+      }
+
       if (limit > MAX_RECORD_LIMIT)
       {
         throw new ArgumentOutOfRangeException("Limit of records returned has a maximum limit of 10,000 records!");
@@ -613,6 +629,96 @@ namespace MailgunSharp
       }
 
       return this.httpClient.DeleteAsync($"lists/{mailingListAddress.Address}/members/{memberAddress.Address}", ct);
+    }
+
+    public Task<HttpResponseMessage> GetDomains(int limit = 100, int skip = 0, CancellationToken ct = default(CancellationToken))
+    {
+      if (limit < 1)
+      {
+        throw new ArgumentOutOfRangeException("Limit cannot be an integer value less than 1!");
+      }
+
+      if (skip < 0)
+      {
+        throw new ArgumentOutOfRangeException("Skip cannot be an integer value less than 0!");
+      }
+
+      return this.httpClient.GetAsync($"/domains?limit={limit}&skip={skip}", ct);
+    }
+
+    public Task<HttpResponseMessage> GetDomain(Uri name, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> GetAndVerifyDomain(Uri name, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> AddDomain(IDomainRequest domain, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> DeleteDomain(Uri name, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> GetDomainCredentials(Uri name, int limit = 100, int skip = 0, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> AddDomainCredential(Uri name, NetworkCredential credential, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> UpdateDomainCredentialPassword(Uri name, string username, string password, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> DeleteDomainCredential(Uri name, string username, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> GetDomainDeliveryConnectionSettings(Uri name, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> UpdateDomainDeliveryConnectionSettings(Uri name, bool requireTLS = false, bool skipVerification = false, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> GetDomainTrackingSettings(Uri name, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> UpdateDomainOpenTrackingSettings(Uri name, bool active, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> UpdateDomainClickTrackingSettings(Uri name, DomainClickTracking active, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> UpdateDomainUnsubscribeTrackingSettings(Uri name, bool active, string customHtmlFooter, string customTextFooter, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> ChangeDomainDKIMAuthority(Uri name, bool self, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
     }
 
     private bool checkStringIfNullEmptyWhitespace(string str)

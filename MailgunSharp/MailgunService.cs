@@ -28,9 +28,9 @@ namespace MailgunSharp
     private readonly string companyDomain;
     private readonly HttpClient httpClient;
 
-    public MailgunService(string companyDomain, string apiKey, HttpClient httpClient = null)
+    public MailgunService(Uri companyDomain, string apiKey, HttpClient httpClient = null)
     {
-      if (checkStringIfNullEmptyWhitespace(companyDomain))
+      if (companyDomain == null)
       {
         throw new ArgumentNullException("Company domain cannot be null!");
       }
@@ -42,7 +42,9 @@ namespace MailgunSharp
 
       this.httpClient = (httpClient == null) ? new HttpClient() : httpClient;
 
-      this.companyDomain = companyDomain;
+      var hostname = 
+
+      this.companyDomain = getHostname(companyDomain);
 
       this.httpClient.BaseAddress = new Uri(MAILGUN_BASE_URL);
 

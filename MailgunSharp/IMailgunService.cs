@@ -75,5 +75,6 @@ namespace MailgunSharp
     Task<HttpResponseMessage> UpdateDomainClickTrackingSettings(Uri name, DomainClickTrackingActive active, CancellationToken ct = default(CancellationToken));
     Task<HttpResponseMessage> UpdateDomainUnsubscribeTrackingSettings(Uri name, bool active, string customHtmlFooter, string customTextFooter, CancellationToken ct = default(CancellationToken));
     Task<HttpResponseMessage> ChangeDomainDKIMAuthority(Uri name, bool self, CancellationToken ct = default(CancellationToken));
+    Task<HttpResponseMessage> GetStatsTotal(Uri name, TimeResolution resolution, int duration, ICollection<EventType> events, DateTime? start = null, DateTime? end = null, CancellationToken ct = default(CancellationToken));
   }
 }

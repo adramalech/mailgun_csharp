@@ -932,6 +932,11 @@ namespace MailgunSharp
       return this.httpClient.PutAsync($"/domains/{hostname}/dkim_authority", formContent, ct);
     }
 
+    public Task<HttpResponseMessage> GetStatsTotal(Uri name, TimeResolution resolution, int duration, ICollection<EventType> events, DateTime? start = null, DateTime? end = null, CancellationToken ct = default(CancellationToken))
+    {
+      throw new NotImplementedException();
+    }
+
     private bool checkStringIfNullEmptyWhitespace(string str)
     {
       return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
@@ -980,6 +985,70 @@ namespace MailgunSharp
 
         case DomainClickTrackingActive.YES:
           name = "yes";
+          break;
+      }
+
+      return name;
+    }
+
+    private string getEventTypeName(EventType eventType)
+    {
+      var name = "";
+
+      switch (eventType)
+      {
+        case EventType.ACCEPTED:
+          name = "accepted";
+          break;
+        
+        case EventType.CLICKED:
+          name = "clicked";
+          break;
+        
+        case EventType.COMPLAINED:
+          name = "complained";
+          break;
+        
+        case EventType.DELIVERED:
+          name = "delivered";
+          break;
+        
+        case EventType.FAILED:
+          name = "failed";
+          break;
+        
+        case EventType.OPENED:
+          name = "opened";
+          break;
+        
+        case EventType.STORED:
+          name = "stored";
+          break;
+        
+        case EventType.UNSUBSCRIBED:
+          name = "unsubscribed";
+          break;
+      }
+
+      return name;
+    }
+    
+    private string getTimeResolutionName(TimeResolution resolution)
+    {
+      var name = "";
+
+      switch (resolution)
+      {
+        case TimeResolution.HOUR:
+          name = "h";
+          break;
+
+        case TimeResolution.DAY:
+          name = "d";
+          break;
+
+        case TimeResolution.MONTH:
+          name = "m";
           break;
       }
 

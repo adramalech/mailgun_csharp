@@ -254,7 +254,7 @@ namespace MailgunSharp
       {
         throw new ArgumentOutOfRangeException("Limit cannot be an integer value less than 1!");
       }
-      
+
       if (limit > MAX_RECORD_LIMIT)
       {
         throw new ArgumentOutOfRangeException("Limit of records returned has a maximum limit of 10,000 records!");
@@ -648,12 +648,26 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetDomain(Uri name, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (name == null)
+      {
+        throw new ArgumentNullException("Name cannot be null or empty!");
+      }
+
+      var hostname = getHostname(name);
+
+      return this.httpClient.GetAsync($"/domains/{hostname}", ct);
     }
 
     public Task<HttpResponseMessage> GetAndVerifyDomain(Uri name, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (name == null)
+      {
+        throw new ArgumentNullException("Name cannot be null or empty!");
+      }
+
+      var hostname = getHostname(name);
+
+      return this.httpClient.GetAsync($"/domains/{hostname}/verify", ct);
     }
 
     public Task<HttpResponseMessage> AddDomain(IDomainRequest domain, CancellationToken ct = default(CancellationToken))
@@ -734,6 +748,16 @@ namespace MailgunSharp
     private string boolToYesNo(bool flag)
     {
       return (flag) ? "yes" : "no";
+    }
+
+    private string getHostname(Uri uri)
+    {
+      if (uri == null)
+      {
+        return string.Empty;
+      }
+
+      return uri.Host.Replace("https://", string.Empty).Replace("http://", string.Empty).Replace("www.", string.Empty);
     }
   }
 }

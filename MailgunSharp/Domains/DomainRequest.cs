@@ -77,9 +77,7 @@ namespace MailgunSharp.Domains
     {
       var jsonObject = new JObject();
 
-      var domainName = this.name.Host.Replace("www.", String.Empty);
-
-      jsonObject["name"] = domainName;
+      jsonObject["name"] = getHostname(this.name);
       jsonObject["smtp_password"] = this.smtpPassword.Password;
       jsonObject["spam_action"] = getSpamActionName(this.spamAction);
       jsonObject["wildcard"] = this.wildcard;
@@ -90,12 +88,9 @@ namespace MailgunSharp.Domains
 
     public ICollection<KeyValuePair<string, string>> ToFormContent()
     {
-      var domainName = this.name.Host.Replace("www.", String.Empty);
-
-
       var content = new Collection<KeyValuePair<string, string>>()
       {
-        new KeyValuePair<string, string>("name", domainName),
+        new KeyValuePair<string, string>("name", getHostname(this.name)),
         new KeyValuePair<string, string>("smtp_password", this.smtpPassword.Password),
         new KeyValuePair<string, string>("spam_action", getSpamActionName(this.spamAction)),
         new KeyValuePair<string, string>("wildcard", this.wildcard.ToString().ToLower()),
@@ -130,6 +125,16 @@ namespace MailgunSharp.Domains
       }
 
       return name;
+    }
+
+    private string getHostname(Uri uri)
+    {
+      if (uri == null)
+      {
+        return string.Empty;
+      }
+
+      return uri.Host.Replace("https://", string.Empty).Replace("http://", string.Empty).Replace("www.", string.Empty);
     }
   }
 }

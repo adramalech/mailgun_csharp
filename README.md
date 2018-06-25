@@ -13,7 +13,7 @@ Mailgun HTTP API for easy use in C# applications.
 ## TODO
 Currently adding a few things-
 
-* Adding in tests to get larger coverage
+* Write tests
 * Writing documentation
 * Implement Events API
 * Implement Stats API

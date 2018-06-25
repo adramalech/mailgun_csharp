@@ -6,6 +6,7 @@ using System.Net.Mail;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using MailgunSharp.Messages;
@@ -672,67 +673,261 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> AddDomain(IDomainRequest domain, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (domain == null)
+      {
+        throw new ArgumentNullException("Domain cannot be null or empty!");
+      }
+
+      var formContent = new FormUrlEncodedContent(domain.ToFormContent());
+
+      return this.httpClient.PostAsync("/domains", formContent, ct);
     }
 
     public Task<HttpResponseMessage> DeleteDomain(Uri name, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (name == null)
+      {
+        throw new ArgumentNullException("Name cannot be null or empty!");
+      }
+
+      var hostname = getHostname(name);
+
+      return this.httpClient.DeleteAsync($"/domains/{hostname}", ct);
     }
 
     public Task<HttpResponseMessage> GetDomainCredentials(Uri name, int limit = 100, int skip = 0, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (name == null)
+      {
+        throw new ArgumentNullException("Name cannot be null or empty!");
+      }
+
+      if (limit < 1)
+      {
+        throw new ArgumentOutOfRangeException("Limit cannot be an integer value less than 1!");
+      }
+
+      if (skip < 0)
+      {
+        throw new ArgumentOutOfRangeException("Skip cannot be an integer value less than 0!");
+      }
+
+      var hostname = getHostname(name);
+
+      return this.httpClient.GetAsync($"/domains/{hostname}/credentials?limit={limit}&skip={skip}", ct);
     }
 
     public Task<HttpResponseMessage> AddDomainCredential(Uri name, NetworkCredential credential, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (name == null)
+      {
+        throw new ArgumentNullException("Name cannot be null or empty!");
+      }
+
+      if (credential == null)
+      {
+        throw new ArgumentNullException("Credential cannot be null or empty!");
+      }
+
+      if (checkStringIfNullEmptyWhitespace(credential.UserName))
+      {
+        throw new ArgumentNullException("Username cannot be null or empty!");
+      }
+
+      if (checkStringIfNullEmptyWhitespace(credential.Password))
+      {
+        throw new ArgumentNullException("Password cannot be null or empty!");
+      }
+
+      var length = credential.Password.Length;
+
+
+      if (checkPasswordLengthRequirement(credential.Password))
+      {
+        throw new ArgumentOutOfRangeException("Password must have a minimum length of 5, and maximum length of 32!");
+      }
+
+      var hostname = getHostname(name);
+
+      var content = new Collection<KeyValuePair<string, string>>()
+      {
+        new KeyValuePair<string, string>("login", credential.UserName),
+        new KeyValuePair<string, string>("password", credential.Password)
+      };
+
+      var formContent = new FormUrlEncodedContent(content);
+
+      return this.httpClient.PostAsync($"/domains/{hostname}/credentials", formContent, ct);
     }
 
     public Task<HttpResponseMessage> UpdateDomainCredentialPassword(Uri name, string username, string password, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (name == null)
+      {
+        throw new ArgumentNullException("Name cannot be null or empty!");
+      }
+
+      if (checkStringIfNullEmptyWhitespace(username))
+      {
+        throw new ArgumentNullException("Username cannot be null or empty!");
+      }
+
+      if (checkStringIfNullEmptyWhitespace(password))
+      {
+        throw new ArgumentNullException("Password cannot be null or empty!");
+      }
+
+      if (checkPasswordLengthRequirement(password))
+      {
+        throw new ArgumentOutOfRangeException("Password must have a minimum length of 5, and maximum length of 32!");
+      }
+
+      var hostname = getHostname(name);
+
+      var content = new Collection<KeyValuePair<string, string>>()
+      {
+        new KeyValuePair<string, string>("password", password)
+      };
+
+      var formContent = new FormUrlEncodedContent(content);
+
+      return this.httpClient.PutAsync($"/domains/{hostname}/credentials/{username}", formContent, ct);
     }
 
     public Task<HttpResponseMessage> DeleteDomainCredential(Uri name, string username, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (name == null)
+      {
+        throw new ArgumentNullException("Name cannot be null or empty!");
+      }
+
+      var hostname = getHostname(name);
+
+      return this.httpClient.DeleteAsync($"/domains/{hostname}/credentials/{username}", ct);
     }
 
     public Task<HttpResponseMessage> GetDomainDeliveryConnectionSettings(Uri name, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (name == null)
+      {
+        throw new ArgumentNullException("Name cannot be null or empty!");
+      }
+
+      var hostname = getHostname(name);
+
+      return this.httpClient.GetAsync($"/domains/{hostname}/connection", ct);
     }
 
     public Task<HttpResponseMessage> UpdateDomainDeliveryConnectionSettings(Uri name, bool requireTLS = false, bool skipVerification = false, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (name == null)
+      {
+        throw new ArgumentNullException("Name cannot be null or empty!");
+      }
+
+      var hostname = getHostname(name);
+      
+      var content = new Collection<KeyValuePair<string, string>>()
+      {
+        new KeyValuePair<string, string>("require_tls", requireTLS.ToString().ToLower()),
+        new KeyValuePair<string, string>("skip_verification", skipVerification.ToString().ToLower())
+      };
+
+      var formContent = new FormUrlEncodedContent(content);
+
+      return this.httpClient.PutAsync($"/domains/{hostname}/connection", formContent, ct);
     }
 
     public Task<HttpResponseMessage> GetDomainTrackingSettings(Uri name, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (name == null)
+      {
+        throw new ArgumentNullException("Name cannot be null or empty!");
+      }
+
+      var hostname = getHostname(name);
+
+      return this.httpClient.GetAsync($"/domains/{hostname}/tracking", ct);
     }
 
     public Task<HttpResponseMessage> UpdateDomainOpenTrackingSettings(Uri name, bool active, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (name == null)
+      {
+        throw new ArgumentNullException("Name cannot be null or empty!");
+      }
+
+      var hostname = getHostname(name);
+
+      var content = new Collection<KeyValuePair<string, string>>()
+      {
+        new KeyValuePair<string, string>("active", boolToYesNo(active)),
+      };
+
+      var formContent = new FormUrlEncodedContent(content);
+
+      return this.httpClient.GetAsync($"/domains/{hostname}/tracking/open", ct);
     }
 
-    public Task<HttpResponseMessage> UpdateDomainClickTrackingSettings(Uri name, DomainClickTracking active, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> UpdateDomainClickTrackingSettings(Uri name, DomainClickTrackingActive active, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (name == null)
+      {
+        throw new ArgumentNullException("Name cannot be null or empty!");
+      }
+
+      var hostname = getHostname(name);
+
+      var activeName = getDomainClickTrackingActiveName(active);
+
+      var content = new Collection<KeyValuePair<string, string>>()
+      {
+        new KeyValuePair<string, string>("active", activeName)
+      };
+
+      var formContent = new FormUrlEncodedContent(content);
+
+      return this.httpClient.PutAsync($"/domains/{hostname}/tracking/click", formContent, ct);
     }
 
     public Task<HttpResponseMessage> UpdateDomainUnsubscribeTrackingSettings(Uri name, bool active, string customHtmlFooter, string customTextFooter, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (name == null)
+      {
+        throw new ArgumentNullException("Name cannot be null or empty!");
+      }
+
+      var hostname = getHostname(name);
+
+      var content = new Collection<KeyValuePair<string, string>>()
+      {
+        new KeyValuePair<string, string>("active", active.ToString().ToLower()),
+        new KeyValuePair<string, string>("html_footer", customHtmlFooter),
+        new KeyValuePair<string, string>("text_footer", customTextFooter)
+      };
+
+      var formContent = new FormUrlEncodedContent(content);
+
+      return this.httpClient.PutAsync($"/domains/{hostname}/tracking/unsubscribe", formContent, ct);
     }
 
     public Task<HttpResponseMessage> ChangeDomainDKIMAuthority(Uri name, bool self, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (name == null)
+      {
+        throw new ArgumentNullException("Name cannot be null or empty!");
+      }
+
+      var hostname = getHostname(name);
+
+      var content = new Collection<KeyValuePair<string, string>>()
+      {
+        new KeyValuePair<string, string>("self", self.ToString().ToLower())
+      };
+
+      var formContent = new FormUrlEncodedContent(content);
+
+      return this.httpClient.PutAsync($"/domains/{hostname}/dkim_authority", formContent, ct);
     }
 
     private bool checkStringIfNullEmptyWhitespace(string str)
@@ -758,6 +953,35 @@ namespace MailgunSharp
       }
 
       return uri.Host.Replace("https://", string.Empty).Replace("http://", string.Empty).Replace("www.", string.Empty);
+    }
+
+    private bool checkPasswordLengthRequirement(string password)
+    {
+      var length = password.Length;
+
+      return (length > 4 && length < 33);
+    }
+
+    private string getDomainClickTrackingActiveName(DomainClickTrackingActive active)
+    {
+      var name = "";
+
+      switch (active)
+      {
+        case DomainClickTrackingActive.HTML_ONLY:
+          name = "htmlonly";
+          break;
+
+        case DomainClickTrackingActive.NO:
+          name = "no";
+          break;
+
+        case DomainClickTrackingActive.YES:
+          name = "yes";
+          break;
+      }
+
+      return name;
     }
   }
 }

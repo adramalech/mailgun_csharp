@@ -1,6 +1,6 @@
 namespace MailgunSharp
 {
-  public enum DomainClickTracking
+  public enum DomainClickTrackingActive
   {
     YES,
     NO,

@@ -5,9 +5,9 @@ using Newtonsoft.Json.Linq;
 
 namespace MailgunSharp.Domains
 {
-  public class DomainCredentialRequest : IDomainCredentialRequest
+  public sealed class DomainCredentialRequest : IDomainCredentialRequest
   {
-    private string username;  
+    private readonly string username;  
     public string Username 
     { 
       get 
@@ -16,7 +16,7 @@ namespace MailgunSharp.Domains
       } 
     }
 
-    private string password;
+    private readonly string password;
     public string Password 
     { 
       get 

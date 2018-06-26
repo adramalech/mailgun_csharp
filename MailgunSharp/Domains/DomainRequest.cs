@@ -1,5 +1,4 @@
 using System;
-using System.Security;
 using System.Net;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,8 +17,8 @@ namespace MailgunSharp.Domains
       }
     }
 
-    private readonly NetworkCredential smtpPassword;
-    public NetworkCredential SmtpPassword
+    private readonly string smtpPassword;
+    public string SmtpPassword
     {
       get
       {
@@ -67,7 +66,7 @@ namespace MailgunSharp.Domains
       }
 
       this.name = name;
-      this.smtpPassword = new NetworkCredential(string.Empty, smtpPassword);
+      this.smtpPassword = smtpPassword;
       this.spamAction = spamAction;
       this.wildcard = wildcard;
       this.forceDKIMAuthority = forceDKIMAuthority;
@@ -78,7 +77,7 @@ namespace MailgunSharp.Domains
       var jsonObject = new JObject();
 
       jsonObject["name"] = getHostname(this.name);
-      jsonObject["smtp_password"] = this.smtpPassword.Password;
+      jsonObject["smtp_password"] = this.smtpPassword;
       jsonObject["spam_action"] = getSpamActionName(this.spamAction);
       jsonObject["wildcard"] = this.wildcard;
       jsonObject["force_dkim_authority"] = this.forceDKIMAuthority;
@@ -91,7 +90,7 @@ namespace MailgunSharp.Domains
       var content = new Collection<KeyValuePair<string, string>>()
       {
         new KeyValuePair<string, string>("name", getHostname(this.name)),
-        new KeyValuePair<string, string>("smtp_password", this.smtpPassword.Password),
+        new KeyValuePair<string, string>("smtp_password", this.smtpPassword),
         new KeyValuePair<string, string>("spam_action", getSpamActionName(this.spamAction)),
         new KeyValuePair<string, string>("wildcard", this.wildcard.ToString().ToLower()),
         new KeyValuePair<string, string>("force_dkim_authority", this.forceDKIMAuthority.ToString().ToLower()) 

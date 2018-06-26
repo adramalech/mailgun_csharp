@@ -1,7 +1,142 @@
+using System;
+using System.Net.Mail;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+
 namespace MailgunSharp.Events
 {
   public sealed class EventRequestBuilder : IEventRequestBuilder
   {
+    private const int MAX_EVENT_RESULT_LIMIT = 300;
+    
     private IEventRequest eventRequest;
+
+    public EventRequestBuilder()
+    {
+      this.eventRequest = new EventRequest();
+    }
+
+    public IEventRequestBuilder AddStartTimeRange(DateTime dateTime)
+    {
+      this.eventRequest.Begin = dateTime;
+
+      return this;
+    }
+
+    public IEventRequestBuilder AddEndTimeRange(DateTime dateTime)
+    {
+      this.eventRequest.End = dateTime;
+
+      return this;
+    }
+
+    public IEventRequestBuilder SortAscendingTimeRange(bool sortAscending)
+    {
+      this.eventRequest.Ascending = sortAscending;
+
+      return this;
+    }
+
+    public IEventRequestBuilder AddResultLimit(int limit)
+    {
+      if (limit > MAX_EVENT_RESULT_LIMIT)
+      {
+        throw new ArgumentOutOfRangeException("Limit of resulting events cannot exceed a maximum integer value of 300!");
+      }
+
+      this.eventRequest.Limit = limit;
+
+      return this;
+    }
+
+    public IEventRequestBuilder AddAttachmentFilename(string name)
+    {
+      if (checkStringIfNullEmptyWhitespace(name))
+      {
+        throw new ArgumentNullException("Attachment Filename cannot be null or empty!");
+      }
+
+      this.eventRequest.AttachmentFileName = name;
+
+      return this;
+    }
+
+    public IEventRequestBuilder AddRecipient(MailAddress address)
+    {
+      if (address == null)
+      {
+        throw new ArgumentNullException("Recipient address cannot be null or empty!");
+      }
+
+      this.eventRequest.Recipient = address;
+
+      return this;
+    }
+
+    public IEventRequestBuilder AddTo(MailAddress address)
+    {
+      if (address == null)
+      {
+        throw new ArgumentNullException("Recipient address cannot be null or empty!");
+      }
+
+      this.eventRequest.To = address;
+
+      return this;
+    }
+
+    public IEventRequestBuilder AddMessageId(string id)
+    {
+      if (checkStringIfNullEmptyWhitespace(id))
+      {
+        throw new ArgumentNullException("Message Id cannot be null or empty!");
+      }
+
+      this.eventRequest.MessageId = id;
+
+      return this;
+    }
+
+    public IEventRequestBuilder AddSeverity(Severity severity)
+    {
+      this.eventRequest.Severity = severity;
+
+      return this;
+    }
+
+    public IEventRequestBuilder AddEventType(EventType eventType)
+    {
+      if (this.eventRequest.EventTypes == null)
+      {
+        this.eventRequest.EventTypes = new Collection<EventType>();
+      }
+
+      this.eventRequest.EventTypes.Add(eventType);
+
+      return this;
+    }
+
+    public IEventRequestBuilder AddTagName(string tagName)
+    {
+      if (this.eventRequest.Tags == null)
+      {
+        this.eventRequest.Tags = new Collection<string>();
+      }
+
+      this.eventRequest.Tags.Add(tagName);
+
+      return this;
+    }
+
+    public IEventRequest Build()
+    {
+      return this.eventRequest;
+    }
+
+    private bool checkStringIfNullEmptyWhitespace(string str)
+    {
+      return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
+    }
   }
 }

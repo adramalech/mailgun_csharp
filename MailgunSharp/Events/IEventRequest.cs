@@ -16,7 +16,7 @@ namespace MailgunSharp.Events
     string AttachmentFileName { get; set; }
     string MessageId { get; set; }
     string Subject { get; set; }
-    string To { get; set; }
+    MailAddress To { get; set; }
     MailAddress Recipient { get; set; }
     ICollection<string> Tags { get; set; }
     Severity? Severity { get; set; }

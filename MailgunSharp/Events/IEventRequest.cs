@@ -13,9 +13,7 @@ namespace MailgunSharp.Events
     DateTime? End { get; set; }
     bool? Ascending { get; set; }
     int? Limit { get; set; }
-
     int? Size { get; set; }
-
     ICollection<EventType> EventTypes { get; set; }
     string AttachmentFileName { get; set; }
     string MessageId { get; set; }

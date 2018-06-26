@@ -15,6 +15,7 @@ using MailgunSharp.MailingLists;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using MailgunSharp.Domains;
+using MailgunSharp.Events;
 
 namespace MailgunSharp
 {
@@ -911,6 +912,28 @@ namespace MailgunSharp
     public Task<HttpResponseMessage> GetStatsTotal(Uri name, TimeResolution resolution, int duration, ICollection<EventType> events, DateTime? start = null, DateTime? end = null, CancellationToken ct = default(CancellationToken))
     {
       throw new NotImplementedException();
+    }
+
+    public Task<HttpResponseMessage> GetEvents(IEventRequest eventRequest, CancellationToken ct = default(CancellationToken))
+    {
+      if (eventRequest == null)
+      {
+        throw new ArgumentNullException("Event Request object cannot be null or empty!");
+      }
+
+      return this.httpClient.GetAsync($"/{this.companyDomain}/events?{eventRequest.ToQueryString()}", ct);
+    }
+
+    public Task<HttpResponseMessage> GetPage(Uri uri, CancellationToken ct = default(CancellationToken))
+    {
+      if (uri == null)
+      {
+        throw new ArgumentNullException("Uri of page cannot be null or empty!");
+      }
+
+      var url = uri.ToString().Replace($"{MAILGUN_BASE_URL}/{this.companyDomain}", "");
+
+      return this.httpClient.GetAsync(url, ct);
     }
 
     private bool checkStringIfNullEmptyWhitespace(string str)

@@ -50,6 +50,18 @@ namespace MailgunSharp.Events
       return this;
     }
 
+    public IEventRequestBuilder AddMessageSize(int size)
+    {
+      if (size < 1)
+      {
+        throw new ArgumentOutOfRangeException("Message size cannot be less than 1 byte!");
+      }
+
+      this.eventRequest.Size = size;
+
+      return this;
+    }
+
     public IEventRequestBuilder AddAttachmentFilename(string name)
     {
       if (checkStringIfNullEmptyWhitespace(name))

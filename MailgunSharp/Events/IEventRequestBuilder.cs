@@ -12,6 +12,7 @@ namespace MailgunSharp.Events
     IEventRequestBuilder AddEndTimeRange(DateTime dateTime);
     IEventRequestBuilder SortAscendingTimeRange(bool sortAscending);
     IEventRequestBuilder AddResultLimit(int limit);
+    IEventRequestBuilder AddMessageSize(int size);
     IEventRequestBuilder AddAttachmentFilename(string name);
     IEventRequestBuilder AddMessageId(string id);
     IEventRequestBuilder AddSeverity(Severity severity);

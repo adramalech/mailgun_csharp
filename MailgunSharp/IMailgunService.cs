@@ -9,6 +9,7 @@ using MailgunSharp.Messages;
 using MailgunSharp.Supression;
 using MailgunSharp.MailingLists;
 using MailgunSharp.Domains;
+using MailgunSharp.Events;
 
 namespace MailgunSharp
 {
@@ -76,5 +77,7 @@ namespace MailgunSharp
     Task<HttpResponseMessage> UpdateDomainUnsubscribeTrackingSettings(Uri name, bool active, string customHtmlFooter, string customTextFooter, CancellationToken ct = default(CancellationToken));
     Task<HttpResponseMessage> ChangeDomainDKIMAuthority(Uri name, bool self, CancellationToken ct = default(CancellationToken));
     Task<HttpResponseMessage> GetStatsTotal(Uri name, TimeResolution resolution, int duration, ICollection<EventType> events, DateTime? start = null, DateTime? end = null, CancellationToken ct = default(CancellationToken));
+    Task<HttpResponseMessage> GetEvents(IEventRequest eventRequest, CancellationToken ct = default(CancellationToken));
+    Task<HttpResponseMessage> GetPage(Uri uri, CancellationToken ct = default(CancellationToken));
   }
 }

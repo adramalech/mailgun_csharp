@@ -719,7 +719,7 @@ namespace MailgunSharp
       return this.httpClient.GetAsync($"/domains/{hostname}/credentials?limit={limit}&skip={skip}", ct);
     }
 
-    public Task<HttpResponseMessage> AddDomainCredential(Uri name, NetworkCredential credential, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> AddDomainCredential(Uri name, IDomainCredentialRequest credential, CancellationToken ct = default(CancellationToken))
     {
       if (name == null)
       {
@@ -731,33 +731,9 @@ namespace MailgunSharp
         throw new ArgumentNullException("Credential cannot be null or empty!");
       }
 
-      if (checkStringIfNullEmptyWhitespace(credential.UserName))
-      {
-        throw new ArgumentNullException("Username cannot be null or empty!");
-      }
-
-      if (checkStringIfNullEmptyWhitespace(credential.Password))
-      {
-        throw new ArgumentNullException("Password cannot be null or empty!");
-      }
-
-      var length = credential.Password.Length;
-
-
-      if (checkPasswordLengthRequirement(credential.Password))
-      {
-        throw new ArgumentOutOfRangeException("Password must have a minimum length of 5, and maximum length of 32!");
-      }
-
       var hostname = getHostname(name);
 
-      var content = new Collection<KeyValuePair<string, string>>()
-      {
-        new KeyValuePair<string, string>("login", credential.UserName),
-        new KeyValuePair<string, string>("password", credential.Password)
-      };
-
-      var formContent = new FormUrlEncodedContent(content);
+      var formContent = new FormUrlEncodedContent(credential.ToFormContent());
 
       return this.httpClient.PostAsync($"/domains/{hostname}/credentials", formContent, ct);
     }

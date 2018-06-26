@@ -65,7 +65,7 @@ namespace MailgunSharp
     Task<HttpResponseMessage> AddDomain(IDomainRequest domain, CancellationToken ct = default(CancellationToken));
     Task<HttpResponseMessage> DeleteDomain(Uri name, CancellationToken ct = default(CancellationToken));
     Task<HttpResponseMessage> GetDomainCredentials(Uri name, int limit = 100, int skip = 0, CancellationToken ct = default(CancellationToken));
-    Task<HttpResponseMessage> AddDomainCredential(Uri name, NetworkCredential credential, CancellationToken ct = default(CancellationToken));
+    Task<HttpResponseMessage> AddDomainCredential(Uri name, IDomainCredentialRequest credential, CancellationToken ct = default(CancellationToken));
     Task<HttpResponseMessage> UpdateDomainCredentialPassword(Uri name, string username, string password, CancellationToken ct = default(CancellationToken));
     Task<HttpResponseMessage> DeleteDomainCredential(Uri name, string username, CancellationToken ct = default(CancellationToken));
     Task<HttpResponseMessage> GetDomainDeliveryConnectionSettings(Uri name, CancellationToken ct = default(CancellationToken));

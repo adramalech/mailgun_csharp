@@ -8,7 +8,7 @@ namespace MailgunSharp.Events
 {
   public sealed class EventRequestBuilder : IEventRequestBuilder
   {
-    private const int MAX_EVENT_RESULT_LIMIT = 300;
+    private const int MAX_RESULT_LIMIT = 300;
     
     private IEventRequest eventRequest;
 
@@ -40,7 +40,7 @@ namespace MailgunSharp.Events
 
     public IEventRequestBuilder AddResultLimit(int limit)
     {
-      if (limit > MAX_EVENT_RESULT_LIMIT)
+      if (limit > MAX_RESULT_LIMIT)
       {
         throw new ArgumentOutOfRangeException("Limit of resulting events cannot exceed a maximum integer value of 300!");
       }
@@ -110,9 +110,9 @@ namespace MailgunSharp.Events
       return this;
     }
 
-    public IEventRequestBuilder AddSeverity(Severity severity)
+    public IEventRequestBuilder AddSeverityType(Severity severityType)
     {
-      this.eventRequest.Severity = severity;
+      this.eventRequest.SeverityType = severityType;
 
       return this;
     }
@@ -137,6 +137,25 @@ namespace MailgunSharp.Events
       }
 
       this.eventRequest.Tags.Add(tagName);
+
+      return this;
+    }
+
+    public IEventRequestBuilder MakePretty(bool pretty)
+    {
+      this.eventRequest.Pretty = pretty;
+
+      return this;
+    }
+
+    public IEventRequestBuilder AddFrom(MailAddress address)
+    {
+      if (address == null)
+      {
+        throw new ArgumentNullException("Address cannot be null or empty!");
+      }
+
+      this.eventRequest.From = address;
 
       return this;
     }

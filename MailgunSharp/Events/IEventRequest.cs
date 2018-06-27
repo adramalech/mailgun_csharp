@@ -12,16 +12,18 @@ namespace MailgunSharp.Events
     DateTime? Begin { get; set; }
     DateTime? End { get; set; }
     bool? Ascending { get; set; }
-    int? Limit { get; set; }
+    bool? Pretty { get; set; }
+    int Limit { get; set; }
     int? Size { get; set; }
     ICollection<EventType> EventTypes { get; set; }
     string AttachmentFileName { get; set; }
     string MessageId { get; set; }
     string Subject { get; set; }
     MailAddress To { get; set; }
+    MailAddress From { get; set; }
     MailAddress Recipient { get; set; }
     ICollection<string> Tags { get; set; }
-    Severity? Severity { get; set; }
+    Severity? SeverityType { get; set; }
 
     string ToQueryString();
   }

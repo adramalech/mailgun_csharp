@@ -15,9 +15,11 @@ namespace MailgunSharp.Events
     IEventRequestBuilder AddMessageSize(int size);
     IEventRequestBuilder AddAttachmentFilename(string name);
     IEventRequestBuilder AddMessageId(string id);
-    IEventRequestBuilder AddSeverity(Severity severity);
+    IEventRequestBuilder AddSeverityType(Severity severity);
     IEventRequestBuilder AddEventType(EventType eventType);
     IEventRequestBuilder AddTagName(string tagName);
+    IEventRequestBuilder MakePretty(bool pretty);
+    IEventRequestBuilder AddFrom(MailAddress address);
 
     IEventRequest Build();
   }

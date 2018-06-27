@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Net.Mail;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,69 +32,53 @@ namespace MailgunSharp.Events
     {
       var collection = new NameValueCollection();
 
-      if (this.Begin.HasValue) 
-      {
-        collection["begin"] = ((DateTimeOffset)this.Begin.Value).ToUnixTimeSeconds().ToString();
-      }
-
-      if (this.End.HasValue)
-      {
-        collection["end"] = ((DateTimeOffset)this.Begin.Value).ToUnixTimeSeconds().ToString();
-      }
-
-      if (this.Ascending.HasValue)
-      {
-        collection["ascending"] = boolToYesNo(this.Ascending.Value);
-      }
-
-      if (this.Pretty.HasValue)
-      {
-        collection["pretty"] = boolToYesNo(this.Pretty.Value);
-      }
+      var strBuilder = new StringBuilder();
 
       if (this.Limit < 1 || this.Limit > MAX_RESULT_LIMIT)
       {
         throw new ArgumentOutOfRangeException("Limit has to be provided and cannot be less than 1!");
       }
-      else 
+
+      strBuilder.Append($"limit={this.Limit}");
+
+      if (this.Begin.HasValue)
       {
-        collection["limit"] = this.Limit.ToString();
+        strBuilder.Append($"&begin={((DateTimeOffset)this.Begin.Value).ToUnixTimeSeconds()}");
+      }
+
+      if (this.End.HasValue)
+      {
+        strBuilder.Append($"&end={((DateTimeOffset)this.End.Value).ToUnixTimeSeconds()}");
+      }
+
+      if (this.Ascending.HasValue)
+      {
+        strBuilder.Append($"&ascending={boolToYesNo(this.Ascending.Value)}");
+      }
+
+      if (this.Pretty.HasValue)
+      {
+        strBuilder.Append($"&pretty={boolToYesNo(this.Pretty.Value)}");
       }
 
       if (this.Size.HasValue)
       {
-        collection["size"] = this.Size.ToString();
-      }
-
-      if (this.EventTypes != null)
-      {
-        foreach (var type in this.EventTypes)
-        {
-          collection["event"] = getEventTypeName(type);
-        }
-      }
-
-      if (this.Tags != null)
-      {
-        foreach (var tag in Tags)
-        {
-          collection["tag"] = tag;
-        }
+        strBuilder.Append($"size={this.Size}");
       }
 
       if (!checkStringIfNullEmptyWhitespace(this.MessageId))
       {
-        collection["message-id"] = this.MessageId;
+        strBuilder.Append($"&message-id={this.MessageId}");
       }
 
       if (this.Recipient != null)
       {
-        collection["recipient"] = this.Recipient.Address;
+        strBuilder.Append($"&recipient={this.Recipient.Address}");
       }
 
       if (this.To != null)
       {
-        collection["to"] = this.To.Address;
+        strBuilder.Append($"&to={this.To.Address}");
       }
 
       if (this.Size.HasValue)
@@ -103,27 +88,93 @@ namespace MailgunSharp.Events
           throw new ArgumentOutOfRangeException("Message size cannot be less than 1 byte!");
         }
 
-        collection["size"] = this.Size.ToString();
+        strBuilder.Append($"&size={this.Size}");
       }
 
       if (!checkStringIfNullEmptyWhitespace(this.AttachmentFileName))
       {
-        collection["attachment"] = this.AttachmentFileName;
+        strBuilder.Append($"&attachment={this.AttachmentFileName}");
       }
 
       if (this.From != null)
       {
-        collection["from"] = this.From.Address;
+        strBuilder.Append($"&from={this.From.Address}");
       }
 
       if (!checkStringIfNullEmptyWhitespace(this.Subject))
       {
-        collection["subject"] = this.Subject;
+        strBuilder.Append($"&subject={this.Subject}");
+      }
+
+      var eventTypeCount = this.EventTypes.Count;
+
+      if (this.EventTypes != null && eventTypeCount > 0)
+      {
+        if (eventTypeCount == 1)
+        {
+          strBuilder.Append("&event=");
+        }
+        else
+        {
+          strBuilder.Append("&event=(");
+        }
+
+        var i = 0;
+
+        foreach (var type in this.EventTypes)
+        {
+          strBuilder.Append(getEventTypeName(type));
+
+          i++;
+
+          if (eventTypeCount > 1 && i >= eventTypeCount)
+          {
+            strBuilder.Append(" or ");
+          }
+        }
+
+        if (eventTypeCount > 1)
+        {
+          strBuilder.Append(")");
+        }
       }
 
       if (this.SeverityType.HasValue)
       {
-        collection["severity"] = getSeverityTypeName(this.SeverityType.Value);
+        strBuilder.Append($"&severity={getSeverityTypeName(this.SeverityType.Value)}");
+      }
+
+      var tagCount = this.EventTypes.Count;
+
+      if (this.Tags != null && tagCount > 0)
+      {
+        if (tagCount == 1)
+        {
+          strBuilder.Append("&tags=");
+        }
+        else
+        {
+          strBuilder.Append("&tags=(");
+        }
+
+        var i = 0;
+
+        foreach (var tag in this.Tags)
+        {
+          strBuilder.Append(tag);
+
+          i++;
+
+          if (tagCount > 1 && i >= tagCount)
+          {
+            strBuilder.Append(" or ");
+          }
+        }
+
+        if (tagCount > 1)
+        {
+          strBuilder.Append(")");
+        }
       }
 
       return collection.ToString();
@@ -138,10 +189,10 @@ namespace MailgunSharp.Events
         case EventType.ACCEPTED:
           name = "accepted";
           break;
-                
+
         case EventType.CLICKED:
           name = "clicked";
-          break;  
+          break;
 
         case EventType.COMPLAINED:
           name = "complained";

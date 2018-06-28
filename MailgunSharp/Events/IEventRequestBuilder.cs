@@ -8,18 +8,18 @@ namespace MailgunSharp.Events
 {
   public interface IEventRequestBuilder
   {
-    IEventRequestBuilder AddStartTimeRange(DateTime dateTime);
-    IEventRequestBuilder AddEndTimeRange(DateTime dateTime);
-    IEventRequestBuilder SortAscendingTimeRange(bool sortAscending);
-    IEventRequestBuilder AddResultLimit(int limit);
-    IEventRequestBuilder AddMessageSize(int size);
-    IEventRequestBuilder AddAttachmentFilename(string name);
-    IEventRequestBuilder AddMessageId(string id);
-    IEventRequestBuilder AddSeverityType(Severity severity);
+    IEventRequestBuilder SetStartTimeRange(DateTime dateTime);
+    IEventRequestBuilder SetEndTimeRange(DateTime dateTime);
+    IEventRequestBuilder SetSortByAscendingTimeRange(bool sortAscending);
+    IEventRequestBuilder SetResultLimit(int limit);
+    IEventRequestBuilder SetMessageSize(int size);
+    IEventRequestBuilder SetAttachmentFilename(string name);
+    IEventRequestBuilder SetMessageId(string id);
+    IEventRequestBuilder SetSeverityType(Severity severity);
     IEventRequestBuilder AddEventType(EventType eventType);
     IEventRequestBuilder AddTagName(string tagName);
     IEventRequestBuilder MakePretty(bool pretty);
-    IEventRequestBuilder AddFrom(MailAddress address);
+    IEventRequestBuilder SetFrom(MailAddress address);
 
     IEventRequest Build();
   }

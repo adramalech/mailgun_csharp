@@ -9,13 +9,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using MailgunSharp.Messages;
 using MailgunSharp.Supression;
 using MailgunSharp.MailingLists;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using MailgunSharp.Domains;
 using MailgunSharp.Events;
+using MailgunSharp.Stats;
 
 namespace MailgunSharp
 {
@@ -43,7 +44,7 @@ namespace MailgunSharp
 
       this.httpClient = (httpClient == null) ? new HttpClient() : httpClient;
 
-      var hostname = 
+      var hostname =
 
       this.companyDomain = getHostname(companyDomain);
 
@@ -805,7 +806,7 @@ namespace MailgunSharp
       }
 
       var hostname = getHostname(name);
-      
+
       var content = new Collection<KeyValuePair<string, string>>()
       {
         new KeyValuePair<string, string>("require_tls", requireTLS.ToString().ToLower()),
@@ -909,9 +910,14 @@ namespace MailgunSharp
       return this.httpClient.PutAsync($"/domains/{hostname}/dkim_authority", formContent, ct);
     }
 
-    public Task<HttpResponseMessage> GetStatsTotal(Uri name, TimeResolution resolution, int duration, ICollection<EventType> events, DateTime? start = null, DateTime? end = null, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> GetStatsTotal(IStatsRequest statsRequest, CancellationToken ct = default(CancellationToken))
     {
-      throw new NotImplementedException();
+      if (statsRequest == null)
+      {
+        throw new ArgumentNullException("Stats Request object cannot be null or empty!");
+      }
+
+      return this.httpClient.GetAsync($"/{this.companyDomain}/stats/total?{statsRequest.ToQueryString()}", ct);
     }
 
     public Task<HttpResponseMessage> GetEvents(IEventRequest eventRequest, CancellationToken ct = default(CancellationToken))
@@ -999,31 +1005,31 @@ namespace MailgunSharp
         case EventType.ACCEPTED:
           name = "accepted";
           break;
-        
+
         case EventType.CLICKED:
           name = "clicked";
           break;
-        
+
         case EventType.COMPLAINED:
           name = "complained";
           break;
-        
+
         case EventType.DELIVERED:
           name = "delivered";
           break;
-        
+
         case EventType.FAILED:
           name = "failed";
           break;
-        
+
         case EventType.OPENED:
           name = "opened";
           break;
-        
+
         case EventType.STORED:
           name = "stored";
           break;
-        
+
         case EventType.UNSUBSCRIBED:
           name = "unsubscribed";
           break;
@@ -1031,7 +1037,7 @@ namespace MailgunSharp
 
       return name;
     }
-    
+
     private string getTimeResolutionName(TimeResolution resolution)
     {
       var name = "";

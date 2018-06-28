@@ -30,8 +30,6 @@ namespace MailgunSharp.Events
 
     public string ToQueryString()
     {
-      var collection = new NameValueCollection();
-
       var strBuilder = new StringBuilder();
 
       if (this.Limit < 1 || this.Limit > MAX_RESULT_LIMIT)
@@ -177,7 +175,7 @@ namespace MailgunSharp.Events
         }
       }
 
-      return collection.ToString();
+      return strBuilder.ToString();
     }
 
     private string getEventTypeName(EventType eventType)

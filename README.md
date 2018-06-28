@@ -15,6 +15,5 @@ Currently adding a few things:
 
 * Write tests
 * Write documentation
-* Implement Events API
-* Implement Stats API
-* Impelment Routes API
+* Implement complex functionality for Event API
+* Implement Routes API

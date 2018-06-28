@@ -9,7 +9,7 @@ namespace MailgunSharp.Events
   public sealed class EventRequestBuilder : IEventRequestBuilder
   {
     private const int MAX_RESULT_LIMIT = 300;
-    
+
     private IEventRequest eventRequest;
 
     public EventRequestBuilder()
@@ -17,28 +17,28 @@ namespace MailgunSharp.Events
       this.eventRequest = new EventRequest();
     }
 
-    public IEventRequestBuilder AddStartTimeRange(DateTime dateTime)
+    public IEventRequestBuilder SetStartTimeRange(DateTime dateTime)
     {
       this.eventRequest.Begin = dateTime;
 
       return this;
     }
 
-    public IEventRequestBuilder AddEndTimeRange(DateTime dateTime)
+    public IEventRequestBuilder SetEndTimeRange(DateTime dateTime)
     {
       this.eventRequest.End = dateTime;
 
       return this;
     }
 
-    public IEventRequestBuilder SortAscendingTimeRange(bool sortAscending)
+    public IEventRequestBuilder SetSortByAscendingTimeRange(bool sortAscending)
     {
       this.eventRequest.Ascending = sortAscending;
 
       return this;
     }
 
-    public IEventRequestBuilder AddResultLimit(int limit)
+    public IEventRequestBuilder SetResultLimit(int limit)
     {
       if (limit > MAX_RESULT_LIMIT)
       {
@@ -50,7 +50,7 @@ namespace MailgunSharp.Events
       return this;
     }
 
-    public IEventRequestBuilder AddMessageSize(int size)
+    public IEventRequestBuilder SetMessageSize(int size)
     {
       if (size < 1)
       {
@@ -62,7 +62,7 @@ namespace MailgunSharp.Events
       return this;
     }
 
-    public IEventRequestBuilder AddAttachmentFilename(string name)
+    public IEventRequestBuilder SetAttachmentFilename(string name)
     {
       if (checkStringIfNullEmptyWhitespace(name))
       {
@@ -74,7 +74,7 @@ namespace MailgunSharp.Events
       return this;
     }
 
-    public IEventRequestBuilder AddRecipient(MailAddress address)
+    public IEventRequestBuilder SetRecipient(MailAddress address)
     {
       if (address == null)
       {
@@ -86,7 +86,7 @@ namespace MailgunSharp.Events
       return this;
     }
 
-    public IEventRequestBuilder AddTo(MailAddress address)
+    public IEventRequestBuilder SetTo(MailAddress address)
     {
       if (address == null)
       {
@@ -98,7 +98,7 @@ namespace MailgunSharp.Events
       return this;
     }
 
-    public IEventRequestBuilder AddMessageId(string id)
+    public IEventRequestBuilder SetMessageId(string id)
     {
       if (checkStringIfNullEmptyWhitespace(id))
       {
@@ -110,7 +110,7 @@ namespace MailgunSharp.Events
       return this;
     }
 
-    public IEventRequestBuilder AddSeverityType(Severity severityType)
+    public IEventRequestBuilder SetSeverityType(Severity severityType)
     {
       this.eventRequest.SeverityType = severityType;
 
@@ -148,7 +148,7 @@ namespace MailgunSharp.Events
       return this;
     }
 
-    public IEventRequestBuilder AddFrom(MailAddress address)
+    public IEventRequestBuilder SetFrom(MailAddress address)
     {
       if (address == null)
       {

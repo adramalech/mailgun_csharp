@@ -44,8 +44,6 @@ namespace MailgunSharp
 
       this.httpClient = (httpClient == null) ? new HttpClient() : httpClient;
 
-      var hostname =
-
       this.companyDomain = getHostname(companyDomain);
 
       this.httpClient.BaseAddress = new Uri(MAILGUN_BASE_URL);

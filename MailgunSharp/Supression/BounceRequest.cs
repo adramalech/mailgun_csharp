@@ -9,6 +9,10 @@ namespace MailgunSharp.Supression
 {
   public sealed class BounceRequest : IBounceRequest
   {
+    /// <summary>
+    /// A valid email address.
+    /// </summary>
+    /// <value>System.Net.Mail.MailAddress</value>
     private readonly MailAddress address;
     public MailAddress Address
     {
@@ -18,6 +22,10 @@ namespace MailgunSharp.Supression
       }
     }
 
+    /// <summary>
+    /// SMTP Error code.
+    /// </summary>
+    /// <value>SmtpErrorCode type.</value>
     private readonly SmtpErrorCode code;
     public SmtpErrorCode Code
     {
@@ -27,6 +35,10 @@ namespace MailgunSharp.Supression
       }
     }
 
+    /// <summary>
+    /// Error description.
+    /// </summary>
+    /// <value>string</value>
     private readonly string error;
     public string Error
     {
@@ -36,6 +48,10 @@ namespace MailgunSharp.Supression
       }
     }
 
+    /// <summary>
+    /// Timestamp of a bounce event.
+    /// </summary>
+    /// <value>DateTime</value>
     private readonly DateTime? createdAt;
     public DateTime? CreatedAt
     {
@@ -45,6 +61,13 @@ namespace MailgunSharp.Supression
       }
     }
 
+    /// <summary>
+    /// Create an instance of the bounce request class.
+    /// </summary>
+    /// <param name="address">The valid email address.</param>
+    /// <param name="statusCode">The STMP Error status code.  Defaults to 550, Mailbox Unavailable.</param>
+    /// <param name="error">The error description. Defaults to empty string.</param>
+    /// <param name="createdAt">Timestamp of the bounced event. Defaults to current time UTC.</param>
     public BounceRequest(MailAddress address, SmtpErrorCode statusCode = SmtpErrorCode.MAILBOX_UNAVAILABLE, string error = "", DateTime? createdAt = null)
     {
       if (address == null)
@@ -58,6 +81,10 @@ namespace MailgunSharp.Supression
       this.createdAt = createdAt;
     }
 
+    /// <summary>
+    /// Get the Bounce request object as json to be used in an http request.
+    /// </summary>
+    /// <returns>Json object</returns>
     public JObject ToJson()
     {
       var jsonObject = new JObject();
@@ -70,6 +97,10 @@ namespace MailgunSharp.Supression
       return jsonObject;
     }
 
+    /// <summary>
+    /// Get the Bounce request object as form content list key-value string pair to be used in an http request.
+    /// </summary>
+    /// <returns>List key-value string pair</returns>
     public ICollection<KeyValuePair<string, string>> ToFormContent()
     {
       var content = new Collection<KeyValuePair<string, string>>()

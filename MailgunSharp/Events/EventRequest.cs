@@ -29,6 +29,12 @@ namespace MailgunSharp.Events
     public ICollection<string> Tags { get; set; }
     public Severity? SeverityType { get; set; }
 
+    public EventRequest()
+    {
+      this.EventTypes = new Collection<EventType>();
+      this.Tags = new Collection<string>();
+    }
+
     public string ToQueryString()
     {
       var strBuilder = new StringBuilder();

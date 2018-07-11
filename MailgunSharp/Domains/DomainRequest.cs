@@ -9,6 +9,10 @@ namespace MailgunSharp.Domains
 {
   public sealed class DomainRequest
   {
+    /// <summary>
+    /// The domain name.
+    /// </summary>
+    /// <value>System.Net.Uri</value>
     private readonly Uri name;
     public Uri Name
     {
@@ -18,6 +22,10 @@ namespace MailgunSharp.Domains
       }
     }
 
+    /// <summary>
+    /// Password for SMTP authentication.
+    /// </summary>
+    /// <value>System.Net.NetworkCredential</value>
     private readonly string smtpPassword;
     public string SmtpPassword
     {
@@ -27,6 +35,10 @@ namespace MailgunSharp.Domains
       }
     }
 
+    /// <summary>
+    /// The action the domain will have for handling spam.
+    /// </summary>
+    /// <value>SpamAction type.</value>
     private readonly SpamAction spamAction;
     public SpamAction SpamAction
     {
@@ -36,6 +48,10 @@ namespace MailgunSharp.Domains
       }
     }
 
+    /// <summary>
+    /// Determines wherether the domain will accept email for sub-domains.
+    /// </summary>
+    /// <value>boolean</value>
     private readonly bool wildcard;
     public bool Wildcard
     {
@@ -45,6 +61,14 @@ namespace MailgunSharp.Domains
       }
     }
 
+    /// <summary>
+    /// Is the domain the DKIM authority for itself,
+    /// or does it inherit the same DKIM Authority of the root domain registered.
+    /// </summary>
+    /// <value>
+    /// True, the domain will be DKIM authority for itself;
+    /// false, will be the same DKIM Authority as the root domain registered.
+    /// </value>
     private readonly bool forceDKIMAuthority;
     public bool ForceDKIMAuthority
     {
@@ -54,6 +78,14 @@ namespace MailgunSharp.Domains
       }
     }
 
+    /// <summary>
+    /// Create an instance of the domain request.
+    /// </summary>
+    /// <param name="name">The domain name.</param>
+    /// <param name="smtpPassword">The password for SMTP authentication.</param>
+    /// <param name="spamAction">The action the domain will have when handling spam.</param>
+    /// <param name="wildcard">Will the domain accept email for sub-domains.</param>
+    /// <param name="forceDKIMAuthority">Is the domain itself the DKIM Authority, or will it inherit DKIM Authority from root registered domain.</param>
     public DomainRequest(Uri name, string smtpPassword, SpamAction spamAction = SpamAction.DISABLED, bool wildcard = false, bool forceDKIMAuthority = false)
     {
       if (name == null)
@@ -73,6 +105,10 @@ namespace MailgunSharp.Domains
       this.forceDKIMAuthority = forceDKIMAuthority;
     }
 
+    /// <summary>
+    /// Get a json object representation of the domain request object.
+    /// </summary>
+    /// <returns>Json object</returns>
     public JObject ToJson()
     {
       var jsonObject = new JObject();
@@ -86,6 +122,10 @@ namespace MailgunSharp.Domains
       return jsonObject;
     }
 
+    /// <summary>
+    /// Get a form content representation of the domain request object.
+    /// </summary>
+    /// <returns>List of key-value string pairs.</returns>
     public ICollection<KeyValuePair<string, string>> ToFormContent()
     {
       var content = new Collection<KeyValuePair<string, string>>()

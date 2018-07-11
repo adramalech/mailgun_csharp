@@ -3,11 +3,12 @@ using System.Net;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
+using MailgunSharp.Enums;
 
 namespace MailgunSharp.Domains
 {
   public interface IDomainRequest
-  { 
+  {
     Uri Name { get; }
     NetworkCredential SmtpPassword { get; }
     SpamAction SpamAction { get; }

@@ -1,4 +1,5 @@
 using System;
+using MailgunSharp.Enums;
 
 namespace MailgunSharp.Stats
 {

@@ -1,4 +1,4 @@
-namespace MailgunSharp
+namespace MailgunSharp.Enums
 {
   /// <summary>
   /// Severity of Failure only used in Event type Failed.

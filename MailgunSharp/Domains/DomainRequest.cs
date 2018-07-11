@@ -3,13 +3,14 @@ using System.Net;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
+using MailgunSharp.Enums;
 
 namespace MailgunSharp.Domains
 {
   public sealed class DomainRequest
   {
     private readonly Uri name;
-    public Uri Name 
+    public Uri Name
     {
       get
       {
@@ -27,7 +28,7 @@ namespace MailgunSharp.Domains
     }
 
     private readonly SpamAction spamAction;
-    public SpamAction SpamAction 
+    public SpamAction SpamAction
     {
       get
       {
@@ -93,7 +94,7 @@ namespace MailgunSharp.Domains
         new KeyValuePair<string, string>("smtp_password", this.smtpPassword),
         new KeyValuePair<string, string>("spam_action", getSpamActionName(this.spamAction)),
         new KeyValuePair<string, string>("wildcard", this.wildcard.ToString().ToLower()),
-        new KeyValuePair<string, string>("force_dkim_authority", this.forceDKIMAuthority.ToString().ToLower()) 
+        new KeyValuePair<string, string>("force_dkim_authority", this.forceDKIMAuthority.ToString().ToLower())
       };
 
       return content;
@@ -113,11 +114,11 @@ namespace MailgunSharp.Domains
         case SpamAction.BLOCKED:
           name = "blocked";
           break;
-        
+
         case SpamAction.DISABLED:
           name = "disabled";
           break;
-        
+
         case SpamAction.TAG:
           name = "tag";
           break;

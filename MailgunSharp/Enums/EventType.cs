@@ -1,4 +1,4 @@
-namespace MailgunSharp
+namespace MailgunSharp.Enums
 {
   /// <summary>
   /// A type of Mailgun Event that occurs throughout the Mailgun System.

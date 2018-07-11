@@ -1,4 +1,4 @@
-namespace MailgunSharp
+namespace MailgunSharp.Enums
 {
   /// <summary>
   /// Mailing Lists have access levels that define how users can interact with the mailing list.

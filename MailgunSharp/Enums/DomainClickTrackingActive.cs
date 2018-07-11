@@ -1,4 +1,4 @@
-namespace MailgunSharp
+namespace MailgunSharp.Enums
 {
   /// <summary>
   /// Click tracking settings for a Domain.

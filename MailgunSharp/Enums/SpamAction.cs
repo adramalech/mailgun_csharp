@@ -1,4 +1,4 @@
-namespace MailgunSharp
+namespace MailgunSharp.Enums
 {
   /// <summary>
   /// The types of spam filter on a domain account.

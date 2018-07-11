@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Net.Mail;
 using Newtonsoft.Json.Linq;
+using MailgunSharp.Enums;
 
 namespace MailgunSharp.Supression
 {

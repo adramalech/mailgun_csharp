@@ -17,6 +17,7 @@ using MailgunSharp.MailingLists;
 using MailgunSharp.Domains;
 using MailgunSharp.Events;
 using MailgunSharp.Stats;
+using MailgunSharp.Enums;
 
 namespace MailgunSharp
 {

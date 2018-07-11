@@ -10,6 +10,10 @@ namespace MailgunSharp.MailingLists
 {
   public sealed class Member : IMember
   {
+    /// <summary>
+    /// The email address of the mailing list member.
+    /// </summary>
+    /// <value>System.Net.Mail.MailAddress</value>
     private readonly MailAddress address;
     public MailAddress Address
     {
@@ -19,6 +23,10 @@ namespace MailgunSharp.MailingLists
       }
     }
 
+    /// <summary>
+    /// The name of the mailing list member.
+    /// </summary>
+    /// <value>string</value>
     private readonly string name;
     public string Name
     {
@@ -28,6 +36,10 @@ namespace MailgunSharp.MailingLists
       }
     }
 
+    /// <summary>
+    /// JSON-encoded dictionary string with arbitrary parameters.
+    /// </summary>
+    /// <value>Json Object</value>
     private readonly JObject vars;
     public JObject Vars
     {
@@ -37,6 +49,10 @@ namespace MailgunSharp.MailingLists
       }
     }
 
+    /// <summary>
+    /// Is the member subscribed to the mailing list or not.
+    /// </summary>
+    /// <value>boolean</value>
     private readonly bool subscribed;
     public bool Subscribed
     {
@@ -46,6 +62,15 @@ namespace MailgunSharp.MailingLists
       }
     }
 
+    /// <summary>
+    /// Update the member if present in the mailing list, or
+    /// raise an error if duplicate member found in the list.
+    ///
+    ///   True - allow member to be updated if duplicate member found.
+    ///
+    ///   False - raise error if duplicate member found. (default)
+    /// </summary>
+    /// <value>boolean</value>
     private readonly bool upsert;
     public bool Upsert
     {
@@ -55,7 +80,15 @@ namespace MailgunSharp.MailingLists
       }
     }
 
-    public Member(MailAddress address, string name = "", JObject vars = null,  bool subscribed = false, bool upsert = false)
+    /// <summary>
+    /// Create an instance of the member class.
+    /// </summary>
+    /// <param name="address">The email address of the member.</param>
+    /// <param name="name">The optional name of the member.</param>
+    /// <param name="vars">The optional custom variables as a json object.</param>
+    /// <param name="subscribed">Is the member subscribed to the mailing list. defaults to true.</param>
+    /// <param name="upsert">True, update duplicate member found in list; false, raise an error if duplicate member found in list. Default false.</param>
+    public Member(MailAddress address, string name = "", JObject vars = null,  bool subscribed = true, bool upsert = false)
     {
       if (this.address == null)
       {
@@ -69,6 +102,10 @@ namespace MailgunSharp.MailingLists
       this.upsert = upsert;
     }
 
+    /// <summary>
+    /// Get the Member object as a json object to submit in an http request.
+    /// </summary>
+    /// <returns>json object</returns>
     public JObject ToJson()
     {
       var jsonObject = new JObject();
@@ -82,6 +119,10 @@ namespace MailgunSharp.MailingLists
       return jsonObject;
     }
 
+    /// <summary>
+    /// Get the Member object as a form content to submit in an http request.
+    /// </summary>
+    /// <returns>List of key-value pairs of strings.</returns>
     public ICollection<KeyValuePair<string, string>> ToFormContent()
     {
       var content = new Collection<KeyValuePair<string, string>>()
@@ -96,6 +137,11 @@ namespace MailgunSharp.MailingLists
       return content;
     }
 
+    /// <summary>
+    /// Takes in a boolean and returns an all lower-case "yes" for true or "no" for false.
+    /// </summary>
+    /// <param name="flag">the boolean input value.</param>
+    /// <returns>a string representing true or false as yes or no.</returns>
     private string boolToYesNo(bool flag)
     {
       return (flag) ? "yes" : "no";

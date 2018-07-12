@@ -7,11 +7,12 @@ namespace MailgunSharp.Domains
 {
   public sealed class DomainCredentialRequest : IDomainCredentialRequest
   {
+    private readonly string username;
+
     /// <summary>
     /// The username for the smtp domain credentials.
     /// </summary>
     /// <value>string</value>
-    private readonly string username;
     public string Username
     {
       get
@@ -20,11 +21,12 @@ namespace MailgunSharp.Domains
       }
     }
 
+    private readonly string password;
+
     /// <summary>
     /// The password for the smtp domain credentials.
     /// </summary>
     /// <value>string</value>
-    private readonly string password;
     public string Password
     {
       get

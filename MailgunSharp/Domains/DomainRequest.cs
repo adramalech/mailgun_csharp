@@ -9,11 +9,12 @@ namespace MailgunSharp.Domains
 {
   public sealed class DomainRequest
   {
+    private readonly Uri name;
+
     /// <summary>
     /// The domain name.
     /// </summary>
     /// <value>System.Net.Uri</value>
-    private readonly Uri name;
     public Uri Name
     {
       get
@@ -22,11 +23,12 @@ namespace MailgunSharp.Domains
       }
     }
 
+    private readonly string smtpPassword;
+
     /// <summary>
     /// Password for SMTP authentication.
     /// </summary>
     /// <value>System.Net.NetworkCredential</value>
-    private readonly string smtpPassword;
     public string SmtpPassword
     {
       get
@@ -35,11 +37,12 @@ namespace MailgunSharp.Domains
       }
     }
 
+    private readonly SpamAction spamAction;
+
     /// <summary>
     /// The action the domain will have for handling spam.
     /// </summary>
     /// <value>SpamAction type.</value>
-    private readonly SpamAction spamAction;
     public SpamAction SpamAction
     {
       get
@@ -48,11 +51,12 @@ namespace MailgunSharp.Domains
       }
     }
 
+    private readonly bool wildcard;
+
     /// <summary>
     /// Determines wherether the domain will accept email for sub-domains.
     /// </summary>
     /// <value>boolean</value>
-    private readonly bool wildcard;
     public bool Wildcard
     {
       get
@@ -60,6 +64,8 @@ namespace MailgunSharp.Domains
         return wildcard;
       }
     }
+
+    private readonly bool forceDKIMAuthority;
 
     /// <summary>
     /// Is the domain the DKIM authority for itself,
@@ -69,7 +75,6 @@ namespace MailgunSharp.Domains
     /// True, the domain will be DKIM authority for itself;
     /// false, will be the same DKIM Authority as the root domain registered.
     /// </value>
-    private readonly bool forceDKIMAuthority;
     public bool ForceDKIMAuthority
     {
       get
@@ -140,11 +145,21 @@ namespace MailgunSharp.Domains
       return content;
     }
 
+    /// <summary>
+    /// Check if the string only is null, empty, or whitespace.
+    /// </summary>
+    /// <param name="str">The string to check.</param>
+    /// <returns>True, if the string is only null, empty, or whitespace; false, if it isn't null, empty, or whitespace.</returns>
     private bool checkIfStringIsNullEmptyWhitespace(string str)
     {
       return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="spamAction"></param>
+    /// <returns></returns>
     private string getSpamActionName(SpamAction spamAction)
     {
       var name = "";
@@ -167,6 +182,11 @@ namespace MailgunSharp.Domains
       return name;
     }
 
+    /// <summary>
+    /// Get the minimal hostname from a URI.
+    /// </summary>
+    /// <param name="uri">The valid uri of the domain name.</param>
+    /// <returns>String representing just the minimal hostname.</returns>
     private string getHostname(Uri uri)
     {
       if (uri == null)

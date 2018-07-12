@@ -10,11 +10,12 @@ namespace MailgunSharp.MailingLists
 {
   public sealed class Member : IMember
   {
+    private readonly MailAddress address;
+
     /// <summary>
     /// The email address of the mailing list member.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    private readonly MailAddress address;
     public MailAddress Address
     {
       get
@@ -23,11 +24,12 @@ namespace MailgunSharp.MailingLists
       }
     }
 
+    private readonly string name;
+
     /// <summary>
     /// The name of the mailing list member.
     /// </summary>
     /// <value>string</value>
-    private readonly string name;
     public string Name
     {
       get
@@ -36,11 +38,12 @@ namespace MailgunSharp.MailingLists
       }
     }
 
+    private readonly JObject vars;
+
     /// <summary>
     /// JSON-encoded dictionary string with arbitrary parameters.
     /// </summary>
     /// <value>Json Object</value>
-    private readonly JObject vars;
     public JObject Vars
     {
       get
@@ -49,11 +52,12 @@ namespace MailgunSharp.MailingLists
       }
     }
 
+    private readonly bool subscribed;
+
     /// <summary>
     /// Is the member subscribed to the mailing list or not.
     /// </summary>
     /// <value>boolean</value>
-    private readonly bool subscribed;
     public bool Subscribed
     {
       get
@@ -61,6 +65,8 @@ namespace MailgunSharp.MailingLists
         return subscribed;
       }
     }
+
+    private readonly bool upsert;
 
     /// <summary>
     /// Update the member if present in the mailing list, or
@@ -71,7 +77,6 @@ namespace MailgunSharp.MailingLists
     ///   False - raise error if duplicate member found. (default)
     /// </summary>
     /// <value>boolean</value>
-    private readonly bool upsert;
     public bool Upsert
     {
       get

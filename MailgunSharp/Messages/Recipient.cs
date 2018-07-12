@@ -8,11 +8,12 @@ namespace MailgunSharp.Messages
 {
   public sealed class Recipient : IRecipient
   {
+    private readonly MailAddress address;
+
     /// <summary>
     /// A valid email address of a recipient to send a message to.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    private readonly MailAddress address;
     public MailAddress Address
     {
       get
@@ -21,11 +22,12 @@ namespace MailgunSharp.Messages
       }
     }
 
+    private readonly JObject variables;
+
     /// <summary>
     /// A set of variables to be referenced in the message template.
     /// </summary>
     /// <value>Json object</value>
-    private readonly JObject variables;
     public JObject Variables
     {
       get

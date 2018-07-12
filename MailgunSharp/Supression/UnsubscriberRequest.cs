@@ -8,11 +8,12 @@ namespace MailgunSharp.Supression
 {
   public sealed class UnsubscriberRequest : IUnsubscriberRequest
   {
+    private readonly MailAddress address;
+
     /// <summary>
     /// A valid email address.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    private readonly MailAddress address;
     public MailAddress Address
     {
       get
@@ -21,13 +22,14 @@ namespace MailgunSharp.Supression
       }
     }
 
+    private readonly string tag;
+
     /// <summary>
     /// Unsubscribe from a specific tag.
     ///
     /// Use "*", to unsubscribe an address from all domain's correspondence.
     /// </summary>
     /// <value>string</value>
-    private readonly string tag;
     public string Tag
     {
       get
@@ -36,11 +38,12 @@ namespace MailgunSharp.Supression
       }
     }
 
+    private readonly DateTime? createdAt;
+
     /// <summary>
     /// Timestamp of an unsubscribe event.
     /// </summary>
     /// <value>DateTime</value>
-    private readonly DateTime? createdAt;
     public DateTime? CreatedAt
     {
       get

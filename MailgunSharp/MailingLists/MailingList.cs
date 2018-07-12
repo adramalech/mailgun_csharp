@@ -11,11 +11,12 @@ namespace MailgunSharp.MailingLists
 {
   public sealed class MailingList
   {
+    private readonly MailAddress address;
+
     /// <summary>
     /// A valid email address for the mailing list.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    private readonly MailAddress address;
     public MailAddress Address
     {
       get
@@ -24,11 +25,12 @@ namespace MailgunSharp.MailingLists
       }
     }
 
+    private readonly string name;
+
     /// <summary>
     /// The name of the mailing list.
     /// </summary>
     /// <value>String</value>
-    private readonly string name;
     public string Name
     {
       get
@@ -37,11 +39,12 @@ namespace MailgunSharp.MailingLists
       }
     }
 
+    private readonly string description;
+
     /// <summary>
     /// A description of the mailing list.
     /// </summary>
     /// <value>String</value>
-    private readonly string description;
     public string Description
     {
       get
@@ -50,11 +53,12 @@ namespace MailgunSharp.MailingLists
       }
     }
 
+    private readonly AccessLevel accessLevel;
+
     /// <summary>
     /// The level of access for a user to interface with this mailing list.
     /// </summary>
     /// <value>Access Level type.</value>
-    private readonly AccessLevel accessLevel;
     public AccessLevel AccessLevel
     {
       get

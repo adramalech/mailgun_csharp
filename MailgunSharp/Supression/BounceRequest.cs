@@ -9,11 +9,12 @@ namespace MailgunSharp.Supression
 {
   public sealed class BounceRequest : IBounceRequest
   {
+    private readonly MailAddress address;
+
     /// <summary>
     /// A valid email address.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    private readonly MailAddress address;
     public MailAddress Address
     {
       get
@@ -22,11 +23,12 @@ namespace MailgunSharp.Supression
       }
     }
 
+    private readonly SmtpErrorCode code;
+
     /// <summary>
     /// SMTP Error code.
     /// </summary>
     /// <value>SmtpErrorCode type.</value>
-    private readonly SmtpErrorCode code;
     public SmtpErrorCode Code
     {
       get
@@ -35,11 +37,12 @@ namespace MailgunSharp.Supression
       }
     }
 
+    private readonly string error;
+
     /// <summary>
     /// Error description.
     /// </summary>
     /// <value>string</value>
-    private readonly string error;
     public string Error
     {
       get
@@ -48,11 +51,12 @@ namespace MailgunSharp.Supression
       }
     }
 
+    private readonly DateTime? createdAt;
+
     /// <summary>
     /// Timestamp of a bounce event.
     /// </summary>
     /// <value>DateTime</value>
-    private readonly DateTime? createdAt;
     public DateTime? CreatedAt
     {
       get

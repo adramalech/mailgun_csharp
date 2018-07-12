@@ -8,11 +8,12 @@ namespace MailgunSharp.Supression
 {
   public sealed class ComplaintRequest : IComplaintRequest
   {
+    private readonly MailAddress address;
+
     /// <summary>
     /// Valid email address.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    private readonly MailAddress address;
     public MailAddress Address
     {
       get
@@ -21,11 +22,12 @@ namespace MailgunSharp.Supression
       }
     }
 
+    private readonly DateTime? createdAt;
+
     /// <summary>
     /// Timestamp of a complaint event.
     /// </summary>
     /// <value>DateTime</value>
-    private readonly DateTime? createdAt;
     public DateTime? CreatedAt
     {
       get
@@ -67,7 +69,7 @@ namespace MailgunSharp.Supression
     /// <summary>
     /// Get Complaint Request object represented as key-value string pair form content for http request.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>List of key-value string pairs.</returns>
     public ICollection<KeyValuePair<string, string>> ToFormContent()
     {
       var content = new Collection<KeyValuePair<string, string>>()

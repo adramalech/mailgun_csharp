@@ -8,6 +8,10 @@ namespace MailgunSharp.Supression
 {
   public sealed class ComplaintRequest : IComplaintRequest
   {
+    /// <summary>
+    /// Valid email address.
+    /// </summary>
+    /// <value>System.Net.Mail.MailAddress</value>
     private readonly MailAddress address;
     public MailAddress Address
     {
@@ -17,6 +21,10 @@ namespace MailgunSharp.Supression
       }
     }
 
+    /// <summary>
+    /// Timestamp of a complaint event.
+    /// </summary>
+    /// <value>DateTime</value>
     private readonly DateTime? createdAt;
     public DateTime? CreatedAt
     {
@@ -26,6 +34,11 @@ namespace MailgunSharp.Supression
       }
     }
 
+    /// <summary>
+    /// Create an instance of complaint request class.
+    /// </summary>
+    /// <param name="address">A valid email address.</param>
+    /// <param name="createdAt">Timestamp as datetime UTC.</param>
     public ComplaintRequest(MailAddress address, DateTime? createdAt = null)
     {
       if (address == null)
@@ -37,6 +50,24 @@ namespace MailgunSharp.Supression
       this.createdAt = createdAt;
     }
 
+    /// <summary>
+    /// Get Complaint Request object represented as json object for http request.
+    /// </summary>
+    /// <returns>Json object</returns>
+    public JObject ToJson()
+    {
+      var jsonObject = new JObject();
+
+      jsonObject["address"] = this.address.Address;
+      jsonObject["created_at"] = ((!this.createdAt.HasValue) ? ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() : ((DateTimeOffset)this.createdAt.Value).ToUnixTimeSeconds()).ToString();
+
+      return jsonObject;
+    }
+
+    /// <summary>
+    /// Get Complaint Request object represented as key-value string pair form content for http request.
+    /// </summary>
+    /// <returns></returns>
     public ICollection<KeyValuePair<string, string>> ToFormContent()
     {
       var content = new Collection<KeyValuePair<string, string>>()
@@ -46,16 +77,6 @@ namespace MailgunSharp.Supression
       };
 
       return content;
-    }
-
-    public JObject ToJson()
-    {
-      var jsonObject = new JObject();
-
-      jsonObject["address"] = this.address.Address;
-      jsonObject["created_at"] = ((!this.createdAt.HasValue) ? ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() : ((DateTimeOffset)this.createdAt.Value).ToUnixTimeSeconds()).ToString();
-
-      return jsonObject;
     }
   }
 }

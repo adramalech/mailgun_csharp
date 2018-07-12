@@ -8,6 +8,10 @@ namespace MailgunSharp.Supression
 {
   public sealed class UnsubscriberRequest : IUnsubscriberRequest
   {
+    /// <summary>
+    /// A valid email address.
+    /// </summary>
+    /// <value>System.Net.Mail.MailAddress</value>
     private readonly MailAddress address;
     public MailAddress Address
     {
@@ -17,6 +21,12 @@ namespace MailgunSharp.Supression
       }
     }
 
+    /// <summary>
+    /// Unsubscribe from a specific tag.
+    ///
+    /// Use "*", to unsubscribe an address from all domain's correspondence.
+    /// </summary>
+    /// <value>string</value>
     private readonly string tag;
     public string Tag
     {
@@ -26,6 +36,10 @@ namespace MailgunSharp.Supression
       }
     }
 
+    /// <summary>
+    /// Timestamp of an unsubscribe event.
+    /// </summary>
+    /// <value>DateTime</value>
     private readonly DateTime? createdAt;
     public DateTime? CreatedAt
     {
@@ -35,9 +49,15 @@ namespace MailgunSharp.Supression
       }
     }
 
+    /// <summary>
+    /// Create an instance of unsubscriber request class.
+    /// </summary>
+    /// <param name="address">A valid email address.</param>
+    /// <param name="tag">A specific tag to unsubscribe from, will default to "*" which will unsubscribe an address from all domain's correspondence.</param>
+    /// <param name="createdAt">Timestamp of an unsubscribe event.</param>
     public UnsubscriberRequest(MailAddress address, string tag = "*", DateTime? createdAt = null)
     {
-      if (address == null) 
+      if (address == null)
       {
         throw new ArgumentNullException("Address cannot be null or empty!");
       }
@@ -47,6 +67,10 @@ namespace MailgunSharp.Supression
       this.createdAt = createdAt;
     }
 
+    /// <summary>
+    /// Get Unsubscriber request object represented as a json object for http request.
+    /// </summary>
+    /// <returns>Json object</returns>
     public JObject ToJson()
     {
       var jsonObject = new JObject();
@@ -58,6 +82,10 @@ namespace MailgunSharp.Supression
       return jsonObject;
     }
 
+    /// <summary>
+    /// Get Unsubscriber request object represented as a key-value string pair form content for http request.
+    /// </summary>
+    /// <returns>List key-value string pairs</returns>
     public ICollection<KeyValuePair<string, string>> ToFormContent()
     {
       var content = new Collection<KeyValuePair<string, string>>()

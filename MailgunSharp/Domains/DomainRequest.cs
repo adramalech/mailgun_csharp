@@ -156,10 +156,10 @@ namespace MailgunSharp.Domains
     }
 
     /// <summary>
-    ///
+    /// Get the spam action name description.
     /// </summary>
-    /// <param name="spamAction"></param>
-    /// <returns></returns>
+    /// <param name="spamAction">The spam action type to get the description of.</param>
+    /// <returns>string</returns>
     private string getSpamActionName(SpamAction spamAction)
     {
       var name = "";

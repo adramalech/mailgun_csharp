@@ -23,7 +23,6 @@ namespace MailgunSharp.Messages
     IMessageBuilder AddAttachment(FileInfo attachment);
     IMessageBuilder AddInlineImage(FileInfo image);
     IMessageBuilder AddInlineImage(IFileAttachment image);
-    IMessageBuilder AddCampaignId(string id);
     IMessageBuilder AddTag(string tag);
     IMessageBuilder SetTracking(bool enable);
     IMessageBuilder SetOpenTracking(bool enable);

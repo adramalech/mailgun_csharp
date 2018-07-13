@@ -311,18 +311,6 @@ namespace MailgunSharp.Messages
       return this;
     }
 
-    public IMessageBuilder AddCampaignId(string id)
-    {
-      if (checkStringIfNullOrEmpty(id))
-      {
-        throw new ArgumentNullException("CampaignID cannot be null!");
-      }
-
-      message.CampaignId = id;
-
-      return this;
-    }
-
     public IMessageBuilder AddTag(string tag)
     {
       if (checkStringIfNullOrEmpty(tag))

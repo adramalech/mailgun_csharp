@@ -12,34 +12,189 @@ namespace MailgunSharp.Messages
 {
   public sealed class Message : IMessage
   {
+    /// <summary>
+    /// The valid email address of the sender.
+    /// </summary>
+    /// <value>System.Net.Mail.MailAddress</value>
     public MailAddress From { get; set; }
+
+    /// <summary>
+    /// The email address and custom template variables of the recipients.
+    /// </summary>
+    /// <value>List of Recipients</value>
     public ICollection<IRecipient> To { get; set; }
+
+    /// <summary>
+    /// List of valid email addresses for recipients of the carbon copy list.
+    /// </summary>
+    /// <value>List of System.Net.Mail.MailAddress</value>
     public ICollection<MailAddress> Cc { get; set; }
+
+    /// <summary>
+    /// List of valid email addresses for recipients of the blind carbon copy list.
+    /// </summary>
+    /// <value>List of System.Net.Mail.MailAddress</value>
     public ICollection<MailAddress> Bcc { get; set; }
+
+    /// <summary>
+    /// The subject of the message.
+    /// </summary>
+    /// <value>string</value>
     public string Subject { get; set; }
+
+    /// <summary>
+    /// The text-formatted message body.
+    /// </summary>
+    /// <value>string</value>
     public string Text { get; set; }
+
+    /// <summary>
+    /// The html-formatted message body.
+    /// </summary>
+    /// <value>string</value>
     public string Html { get; set; }
+
+    /// <summary>
+    /// List of file attachments for the message.
+    /// </summary>
+    /// <value>File Attachment object.</value>
     public ICollection<IFileAttachment> FileAttachments { get; set; }
+
+    /// <summary>
+    /// List of file attachments for the message.
+    /// </summary>
+    /// <value>System.IO.FileInfo</value>
     public ICollection<FileInfo> Attachments { get; set; }
+
+    /// <summary>
+    /// List of inline message image attachments.
+    /// </summary>
+    /// <value>File Attachment object.</value>
     public ICollection<IFileAttachment> FileInline { get; set; }
+
+    /// <summary>
+    /// List of inline message image attachments.
+    /// </summary>
+    /// <value>File Attachment object.</value>
     public ICollection<FileInfo> Inline { get; set; }
+
+    /// <summary>
+    /// List of user defined tags to help catagorize outgoing email traffic based on some critera.
+    /// </summary>
+    /// <value>List of strings</value>
     public ICollection<string> Tags { get; set; }
-    public string CampaignId { get; set; }
+
+    /// <summary>
+    /// Enable/Disable DKIM signatures on per-message basis.
+    /// </summary>
+    /// <value>boolean</value>
     public bool Dkim { get; set; }
+
+    /// <summary>
+    /// What is the desired time of delivery.  Delivery times can only be scheduled a maximum of three days in advance.
+    /// </summary>
+    /// <value>DateTime</value>
     public DateTime? DeliveryTime { get; set; }
+
+    /// <summary>
+    /// Enables sending in test mode.
+    /// </summary>
+    /// <value>boolean</value>
     public bool TestMode { get; set; }
+
+    /// <summary>
+    /// Toggles tracking on a per-message basis.
+    /// </summary>
+    /// <value>boolean</value>
     public bool Tracking { get; set; }
+
+    /// <summary>
+    /// Toggles clicks tracking on a per-message basis.
+    /// </summary>
+    /// <value>boolean</value>
     public bool TrackingClicks { get; set; }
+
+    /// <summary>
+    /// Toggles opens tracking on a per-message basis.
+    /// </summary>
+    /// <value>boolean</value>
     public bool TrackingOpens { get; set; }
+
+    /// <summary>
+    /// Set custom variables per recipient that can be referenced in the message.
+    /// </summary>
+    /// <value>json object</value>
     public JObject RecipientVariables { get; set; }
+
+    /// <summary>
+    /// Add an arbitrary custom MIME header value to the message.
+    /// </summary>
+    /// <value>dictionary of custom header strings.</value>
     public IDictionary<string, string> CustomHeaders { get; set; }
+
+    /// <summary>
+    /// Add custom JSON data to the message.
+    /// </summary>
+    /// <value>dictionary of custom data json objects</value>
     public IDictionary<string, JObject> CustomData { get; set; }
+
+    /// <summary>
+    /// Sets if TLS certificate and hostname should not be verified when establishing a TLS connection
+    /// and Mailgun will accept any certificate during delivery.
+    /// </summary>
+    /// <value>
+    /// True, message sent will not verify certificate or hostname when establishing TLS connection to send;
+    /// False, Mailgun will verify certificate and hostname. If either one cannot be verified, a TLS connection will not be established.
+    ///</value>
     public bool SkipTlsVerification { get; set; }
+
+    /// <summary>
+    /// Send the message securely, if TLS connection cannot be established Mailgun will not deliver the message.
+    /// If this flag isn't set it will still try to establish a secure connection, else will send in SMTP plaintext.
+    /// </summary>
+    /// <value>
+    /// True, this requires the message only be sent over a TLS connection; false, Mailgun will still try
+    /// and upgrade the connection, but if Mailgun cannot, the message will be delivered over plaintext SMTP connection.
+    ///</value>
     public bool SendSecure { get; set; }
 
+    /// <summary>
+    /// The total message size including attachments cannot exceed 25MB.
+    /// </summary>
     private const long MAX_TOTAL_MESSAGE_SIZE = 25000000;
+
+    /// <summary>
+    /// The number of allowed recipients in the "to" list has a maximum of 1,000 for a batch send.
+    /// </summary>
     private const int MAX_RECIPIENT_SIZE = 1000;
 
+    /// <summary>
+    /// The maximum number of allowed tags to a domain. The number of allowable tags can be increased
+    /// by sending a support email to mailgun support.
+    /// </summary>
+    private const int MAX_TAG_LIMIT = 4000;
+
+    /// <summary>
+    /// Create an instance of the Message class.
+    /// </summary>
+    public Message()
+    {
+      this.To = new Collection<IRecipient>();
+      this.Cc = new Collection<MailAddress>();
+      this.Bcc = new Collection<MailAddress>();
+      this.Attachments = new Collection<FileInfo>();
+      this.FileAttachments = new Collection<IFileAttachment>();
+      this.Inline = new Collection<FileInfo>();
+      this.FileInline = new Collection<IFileAttachment>();
+      this.Tags = new Collection<string>();
+      this.CustomHeaders = new Dictionary<string, string>();
+      this.CustomData = new Dictionary<string, JObject>();
+    }
+
+    /// <summary>
+    /// Get the message as a httpcontent to be used in sending an http request.
+    /// </summary>
+    /// <returns>System.Net.Http.HttpContent</returns>
     public HttpContent AsFormContent()
     {
       var formContent = new MultipartFormDataContent();
@@ -84,6 +239,10 @@ namespace MailgunSharp.Messages
       return formContent;
     }
 
+    /// <summary>
+    /// Get the message as a list of key-value string pairs to be used in sending an http request.
+    /// </summary>
+    /// <returns>List of key-value string pairs.</returns>
     public ICollection<KeyValuePair<string, string>> AsKeyValueCollection()
     {
       if (this.To == null)
@@ -109,13 +268,13 @@ namespace MailgunSharp.Messages
       var content = new Collection<KeyValuePair<string, string>>()
       {
         new KeyValuePair<string, string>("from", this.From.Address.ToString()),
-        new KeyValuePair<string, string>("o:testmode", boolAsYesNo(this.TestMode)),
-        new KeyValuePair<string, string>("o:tracking", boolAsYesNo(this.Tracking)),
-        new KeyValuePair<string, string>("o:tracking-clicks", boolAsYesNo(this.TrackingClicks)),
-        new KeyValuePair<string, string>("o:tracking-opens", boolAsYesNo(this.TrackingOpens)),
+        new KeyValuePair<string, string>("o:testmode", boolToYesNo(this.TestMode)),
+        new KeyValuePair<string, string>("o:tracking", boolToYesNo(this.Tracking)),
+        new KeyValuePair<string, string>("o:tracking-clicks", boolToYesNo(this.TrackingClicks)),
+        new KeyValuePair<string, string>("o:tracking-opens", boolToYesNo(this.TrackingOpens)),
         new KeyValuePair<string, string>("o:require-tls", this.SendSecure.ToString()),
         new KeyValuePair<string, string>("o:skip-verfication", this.SkipTlsVerification.ToString()),
-        new KeyValuePair<string, string>("o:dkim", boolAsYesNo(this.Dkim))
+        new KeyValuePair<string, string>("o:dkim", boolToYesNo(this.Dkim))
       };
 
       var addressList = new Collection<MailAddress>();
@@ -137,24 +296,19 @@ namespace MailgunSharp.Messages
         content.Add(new KeyValuePair<string, string>("bcc", generateCommaDelimenatedList(this.Bcc)));
       }
 
-      if (!isStringNullOrEmpty(this.Subject))
+      if (!isStringNullEmptyWhitespace(this.Subject))
       {
         content.Add(new KeyValuePair<string, string>("subject", this.Subject));
       }
 
-      if (!isStringNullOrEmpty(this.Html))
+      if (!isStringNullEmptyWhitespace(this.Html))
       {
         content.Add(new KeyValuePair<string, string>("html", this.Html));
       }
 
-      if (!isStringNullOrEmpty(this.Text))
+      if (!isStringNullEmptyWhitespace(this.Text))
       {
         content.Add(new KeyValuePair<string, string>("text", this.Text));
-      }
-
-      if (!isStringNullOrEmpty(this.CampaignId))
-      {
-        content.Add(new KeyValuePair<string, string>("o:campaign", this.CampaignId));
       }
 
       if (this.RecipientVariables != null)
@@ -194,16 +348,31 @@ namespace MailgunSharp.Messages
       return content;
     }
 
-    private string boolAsYesNo(bool flag)
+    /// <summary>
+    /// Get a boolean as a lowercase "yes" or "no"
+    /// </summary>
+    /// <param name="flag">The boolean to get string.</param>
+    /// <returns>String value of True will be "yes", and False, will be "no".</returns>
+    private string boolToYesNo(bool flag)
     {
       return (flag ? "yes" : "no");
     }
 
-    private bool isStringNullOrEmpty(string str)
+    /// <summary>
+    /// Check if the string only is null, empty, or whitespace.
+    /// </summary>
+    /// <param name="str">The string to check.</param>
+    /// <returns>True, if the string is only null, empty, or whitespace; false, if it isn't null, empty, or whitespace.</returns>
+    private bool isStringNullEmptyWhitespace(string str)
     {
       return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
     }
 
+    /// <summary>
+    /// Create a list of email addresses with commas seperating each address.
+    /// </summary>
+    /// <param name="addresses">List of email address to turn into a comma delimenated list of addresses.</param>
+    /// <returns>string representing the comma delimenated addresses.</returns>
     private string generateCommaDelimenatedList(ICollection<MailAddress> addresses)
     {
       var addressList = new StringBuilder();

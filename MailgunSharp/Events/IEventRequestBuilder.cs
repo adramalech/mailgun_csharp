@@ -15,7 +15,7 @@ namespace MailgunSharp.Events
     /// <param name="dateTime">The beginning time range value.</param>
     /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
     /// <returns>The instance of the builder.</returns>
-    IEventRequestBuilder SetStartTimeRange(DateTime dateTime, TimeZoneInfo tzInfo);
+    IEventRequestBuilder SetStartTimeRange(DateTime dateTime, TimeZoneInfo tzInfo = null);
 
     /// <summary>
     /// Set the end search time range to filter results by.
@@ -23,7 +23,7 @@ namespace MailgunSharp.Events
     /// <param name="dateTime">The end time range value.</param>
     /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
     /// <returns>The instance of the builder.</returns>
-    IEventRequestBuilder SetEndTimeRange(DateTime dateTime, TimeZoneInfo tzInfo);
+    IEventRequestBuilder SetEndTimeRange(DateTime dateTime, TimeZoneInfo tzInfo = null);
 
     /// <summary>
     /// Set the direction of the search time range.

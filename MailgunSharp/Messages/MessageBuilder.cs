@@ -10,18 +10,39 @@ namespace MailgunSharp.Messages
 {
   public sealed class MessageBuilder : IMessageBuilder
   {
+    /// <summary>
+    ///
+    /// </summary>
     private IMessage message;
 
+    /// <summary>
+    ///
+    /// </summary>
     private const long MAX_TOTAL_MESSAGE_SIZE = 25000000;
 
+    /// <summary>
+    ///
+    /// </summary>
     private const int MAX_RECIPIENT_SIZE = 1000;
 
+    /// <summary>
+    ///
+    /// </summary>
     private long messageSize;
 
+    /// <summary>
+    ///
+    /// </summary>
     private int recipientCount;
 
+    /// <summary>
+    ///
+    /// </summary>
     private int recipientVarCount;
 
+    /// <summary>
+    ///
+    /// </summary>
     public MessageBuilder()
     {
       message = new Message();

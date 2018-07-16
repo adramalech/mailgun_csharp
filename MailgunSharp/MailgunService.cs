@@ -24,14 +24,42 @@ namespace MailgunSharp
 {
   public sealed class MailgunService : IMailgunService
   {
+    /// <summary>
+    ///
+    /// </summary>
     private const int MAX_ADDRESS_LENGTH = 8000;
+
+    /// <summary>
+    ///
+    /// </summary>
     private const int MAX_RECORD_LIMIT = 10000;
+
+    /// <summary>
+    ///
+    /// </summary>
     private const int MAX_JSON_OBJECTS = 1000;
+
+    /// <summary>
+    ///
+    /// </summary>
     private const string MAILGUN_BASE_URL = @"https://api.mailgun.net/v3/";
 
+    /// <summary>
+    ///
+    /// </summary>
     private readonly string companyDomain;
+
+    /// <summary>
+    ///
+    /// </summary>
     private readonly HttpClient httpClient;
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="companyDomain"></param>
+    /// <param name="apiKey"></param>
+    /// <param name="httpClient"></param>
     public MailgunService(Uri companyDomain, string apiKey, HttpClient httpClient = null)
     {
       if (companyDomain == null)

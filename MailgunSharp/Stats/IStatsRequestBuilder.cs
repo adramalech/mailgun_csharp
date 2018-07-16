@@ -35,7 +35,7 @@ namespace MailgunSharp.Stats
     /// <param name="startTime">A datetime UTC value.</param>
     /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
     /// <returns>The instance of the builder.</returns>
-    IStatsRequestBuilder SetStartTime(DateTime startTime, TimeZoneInfo tzInfo);
+    IStatsRequestBuilder SetStartTime(DateTime startTime, TimeZoneInfo tzInfo = null);
 
     /// <summary>
     /// Set the end datetime to be used as the end of the windowed datetime range.
@@ -43,7 +43,7 @@ namespace MailgunSharp.Stats
     /// <param name="endTime">A datetime UTC value.</param>
     /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
     /// <returns>The instance of the builder.</returns>
-    IStatsRequestBuilder SetEndTime(DateTime endTime, TimeZoneInfo tzInfo);
+    IStatsRequestBuilder SetEndTime(DateTime endTime, TimeZoneInfo tzInfo = null);
 
     /// <summary>
     /// Build the request object.

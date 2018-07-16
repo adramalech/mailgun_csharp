@@ -6,6 +6,9 @@ namespace MailgunSharp.Request
 {
   public class QueryString : IQueryString
   {
+    /// <summary>
+    /// The String builder that will be used to build the querystring.
+    /// </summary>
     private StringBuilder stb;
 
     private int count;

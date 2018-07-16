@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
 using MailgunSharp.Enums;
+using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Domains
 {
@@ -98,7 +99,7 @@ namespace MailgunSharp.Domains
         throw new ArgumentNullException("Name cannot be null or empty!");
       }
 
-      if (checkIfStringIsNullEmptyWhitespace(smtpPassword))
+      if (smtpPassword.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Smtp Password cannot be null or empty!");
       }
@@ -118,9 +119,9 @@ namespace MailgunSharp.Domains
     {
       var jsonObject = new JObject();
 
-      jsonObject["name"] = getHostname(this.name);
+      jsonObject["name"] = this.name.GetHostname();
       jsonObject["smtp_password"] = this.smtpPassword;
-      jsonObject["spam_action"] = getSpamActionName(this.spamAction);
+      jsonObject["spam_action"] = EnumLookup.GetSpamActionName(this.spamAction);
       jsonObject["wildcard"] = this.wildcard;
       jsonObject["force_dkim_authority"] = this.forceDKIMAuthority;
 
@@ -135,66 +136,14 @@ namespace MailgunSharp.Domains
     {
       var content = new Collection<KeyValuePair<string, string>>()
       {
-        new KeyValuePair<string, string>("name", getHostname(this.name)),
+        new KeyValuePair<string, string>("name", this.name.GetHostname()),
         new KeyValuePair<string, string>("smtp_password", this.smtpPassword),
-        new KeyValuePair<string, string>("spam_action", getSpamActionName(this.spamAction)),
+        new KeyValuePair<string, string>("spam_action", EnumLookup.GetSpamActionName(this.spamAction)),
         new KeyValuePair<string, string>("wildcard", this.wildcard.ToString().ToLower()),
         new KeyValuePair<string, string>("force_dkim_authority", this.forceDKIMAuthority.ToString().ToLower())
       };
 
       return content;
-    }
-
-    /// <summary>
-    /// Check if the string only is null, empty, or whitespace.
-    /// </summary>
-    /// <param name="str">The string to check.</param>
-    /// <returns>True, if the string is only null, empty, or whitespace; false, if it isn't null, empty, or whitespace.</returns>
-    private bool checkIfStringIsNullEmptyWhitespace(string str)
-    {
-      return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
-    }
-
-    /// <summary>
-    /// Get the spam action name description.
-    /// </summary>
-    /// <param name="spamAction">The spam action type to get the description of.</param>
-    /// <returns>string</returns>
-    private string getSpamActionName(SpamAction spamAction)
-    {
-      var name = "";
-
-      switch (spamAction)
-      {
-        case SpamAction.BLOCKED:
-          name = "blocked";
-          break;
-
-        case SpamAction.DISABLED:
-          name = "disabled";
-          break;
-
-        case SpamAction.TAG:
-          name = "tag";
-          break;
-      }
-
-      return name;
-    }
-
-    /// <summary>
-    /// Get the minimal hostname from a URI.
-    /// </summary>
-    /// <param name="uri">The valid uri of the domain name.</param>
-    /// <returns>String representing just the minimal hostname.</returns>
-    private string getHostname(Uri uri)
-    {
-      if (uri == null)
-      {
-        return string.Empty;
-      }
-
-      return uri.Host.Replace("https://", string.Empty).Replace("http://", string.Empty).Replace("www.", string.Empty);
     }
   }
 }

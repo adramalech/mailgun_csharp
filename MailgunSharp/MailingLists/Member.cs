@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using MailgunSharp.Extensions;
 
 namespace MailgunSharp.MailingLists
 {
@@ -118,8 +119,8 @@ namespace MailgunSharp.MailingLists
       jsonObject["address"] = this.address.ToString();
       jsonObject["name"] = this.name;
       jsonObject["vars"] = this.vars.ToString(Formatting.None);
-      jsonObject["subscribed"] = boolToYesNo(this.subscribed);
-      jsonObject["upsert"] = boolToYesNo(this.upsert);
+      jsonObject["subscribed"] = this.subscribed.ToYesNo();
+      jsonObject["upsert"] = this.upsert.ToYesNo();
 
       return jsonObject;
     }
@@ -135,21 +136,11 @@ namespace MailgunSharp.MailingLists
         new KeyValuePair<string, string>("address", this.address.ToString()),
         new KeyValuePair<string, string>("name", this.name),
         new KeyValuePair<string, string>("vars", this.vars.ToString(Formatting.None)),
-        new KeyValuePair<string, string>("subscribed", boolToYesNo(this.subscribed)),
-        new KeyValuePair<string, string>("upsert", boolToYesNo(this.upsert))
+        new KeyValuePair<string, string>("subscribed", this.subscribed.ToYesNo()),
+        new KeyValuePair<string, string>("upsert", this.upsert.ToYesNo())
       };
 
       return content;
-    }
-
-    /// <summary>
-    /// Takes in a boolean and returns an all lower-case "yes" for true or "no" for false.
-    /// </summary>
-    /// <param name="flag">the boolean input value.</param>
-    /// <returns>a string representing true or false as yes or no.</returns>
-    private string boolToYesNo(bool flag)
-    {
-      return (flag) ? "yes" : "no";
     }
   }
 }

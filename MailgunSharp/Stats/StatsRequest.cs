@@ -69,7 +69,7 @@ namespace MailgunSharp.Stats
 
       if (this.Duration.HasValue && this.Resolution.HasValue)
       {
-        strBuilder.Append($"duration={this.Duration.Value}{getTimeResolutionName(this.Resolution.Value)}");
+        strBuilder.Append($"duration={this.Duration.Value}{EnumLookup.GetTimeResolutionName(this.Resolution.Value)}");
       }
       else
       {
@@ -81,85 +81,11 @@ namespace MailgunSharp.Stats
       {
         foreach (var eventType in this.EventTypes)
         {
-          strBuilder.Append($"&event={getEventTypeName(eventType)}");
+          strBuilder.Append($"&event={EnumLookup.GetEventTypeName(eventType)}");
         }
       }
 
       return strBuilder.ToString();
-    }
-
-    /// <summary>
-    /// Get the event type's name.
-    /// </summary>
-    /// <param name="eventType">The event type.</param>
-    /// <returns>The name of the event type parameter as a string.</returns>
-    private string getEventTypeName(EventType eventType)
-    {
-      var name = "";
-
-      switch (eventType)
-      {
-        case EventType.ACCEPTED:
-          name = "accepted";
-          break;
-
-        case EventType.CLICKED:
-          name = "clicked";
-          break;
-
-        case EventType.COMPLAINED:
-          name = "complained";
-          break;
-
-        case EventType.DELIVERED:
-          name = "delivered";
-          break;
-
-        case EventType.FAILED:
-          name = "failed";
-          break;
-
-        case EventType.OPENED:
-          name = "opened";
-          break;
-
-        case EventType.STORED:
-          name = "stored";
-          break;
-
-        case EventType.UNSUBSCRIBED:
-          name = "unsubscribed";
-          break;
-      }
-
-      return name;
-    }
-
-    /// <summary>
-    /// Get the Time Resolution's name.
-    /// </summary>
-    /// <param name="resolution">The time resolution type.</param>
-    /// <returns>The name of the time resolution parameter as a string.</returns>
-    private string getTimeResolutionName(TimeResolution resolution)
-    {
-      var name = "";
-
-      switch (resolution)
-      {
-        case TimeResolution.DAY:
-          name = "d";
-          break;
-
-        case TimeResolution.HOUR:
-          name = "h";
-          break;
-
-        case TimeResolution.MONTH:
-          name = "m";
-          break;
-      }
-
-      return name;
     }
   }
 }

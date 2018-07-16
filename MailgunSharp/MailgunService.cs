@@ -18,6 +18,7 @@ using MailgunSharp.Domains;
 using MailgunSharp.Events;
 using MailgunSharp.Stats;
 using MailgunSharp.Enums;
+using MailgunSharp.Extensions;
 
 namespace MailgunSharp
 {
@@ -38,14 +39,14 @@ namespace MailgunSharp
         throw new ArgumentNullException("Company domain cannot be null!");
       }
 
-      if (checkStringIfNullEmptyWhitespace(apiKey))
+      if (apiKey.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Api key cannot be null!");
       }
 
       this.httpClient = (httpClient == null) ? new HttpClient() : httpClient;
 
-      this.companyDomain = getHostname(companyDomain);
+      this.companyDomain = companyDomain.GetHostname();
 
       this.httpClient.BaseAddress = new Uri(MAILGUN_BASE_URL);
 
@@ -175,7 +176,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (checkStringIfNullEmptyWhitespace(tagName))
+      if (tagName.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Tag name cannot be null or empty!");
       }
@@ -185,7 +186,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> UpdateTagDescription(string tagName, string description, CancellationToken ct = default(CancellationToken))
     {
-      if (checkStringIfNullEmptyWhitespace(tagName))
+      if (tagName.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Tag name cannot be null or empty!");
       }
@@ -199,7 +200,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> DeleteTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (checkStringIfNullEmptyWhitespace(tagName))
+      if (tagName.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Tag name cannot be null or empty!");
       }
@@ -209,7 +210,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetTagStats(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (checkStringIfNullEmptyWhitespace(tagName))
+      if (tagName.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Tag name cannot be null or empty!");
       }
@@ -219,7 +220,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetListCountriesStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (checkStringIfNullEmptyWhitespace(tagName))
+      if (tagName.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Tag name cannot be null or empty!");
       }
@@ -229,7 +230,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetListEmailProviderStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (checkStringIfNullEmptyWhitespace(tagName))
+      if (tagName.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Tag name cannot be null or empty!");
       }
@@ -239,7 +240,7 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetListDeviceStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (checkStringIfNullEmptyWhitespace(tagName))
+      if (tagName.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Tag name cannot be null or empty!");
       }
@@ -392,7 +393,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Address cannot be null or empty!");
       }
 
-      var url = (checkStringIfNullEmptyWhitespace(tag)) ? $"{this.companyDomain}/unsubscribers/{address.Address}" : $"{this.companyDomain}/unsubscribers/{address.Address}?tag={tag}";
+      var url = (tag.IsNullEmptyWhitespace()) ? $"{this.companyDomain}/unsubscribers/{address.Address}" : $"{this.companyDomain}/unsubscribers/{address.Address}?tag={tag}";
 
       return this.httpClient.DeleteAsync(url, ct);
     }
@@ -527,9 +528,9 @@ namespace MailgunSharp
         throw new ArgumentNullException("Address cannot be null or empty!");
       }
 
-      var subbed = (subscribed.HasValue) ? boolToYesNo(subscribed.Value) : "";
+      var subbed = (subscribed.HasValue) ? subscribed.Value.ToYesNo() : "";
 
-      var url = (checkStringIfNullEmptyWhitespace(subbed)) ? $"lists/{address.Address}/members/pages?limit={limit}" : $"lists/{address.Address}/members/pages?limit={limit}&subscribed={subbed}";
+      var url = (subbed.IsNullEmptyWhitespace()) ? $"lists/{address.Address}/members/pages?limit={limit}" : $"lists/{address.Address}/members/pages?limit={limit}&subscribed={subbed}";
 
       return this.httpClient.GetAsync(url, ct);
     }
@@ -593,7 +594,7 @@ namespace MailgunSharp
       }
 
       json["members"] = jsonArray.ToString(Formatting.None);
-      json["upsert"] = boolToYesNo(upsert);
+      json["upsert"] = upsert.ToYesNo();
 
       return this.httpClient.PostAsync($"lists/{address}/members", new StringContent(json.ToString(Formatting.None), Encoding.UTF8, "application/json"), ct);
     }
@@ -657,7 +658,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Name cannot be null or empty!");
       }
 
-      var hostname = getHostname(name);
+      var hostname = name.GetHostname();
 
       return this.httpClient.GetAsync($"/domains/{hostname}", ct);
     }
@@ -669,7 +670,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Name cannot be null or empty!");
       }
 
-      var hostname = getHostname(name);
+      var hostname = name.GetHostname();
 
       return this.httpClient.GetAsync($"/domains/{hostname}/verify", ct);
     }
@@ -693,7 +694,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Name cannot be null or empty!");
       }
 
-      var hostname = getHostname(name);
+      var hostname = name.GetHostname();
 
       return this.httpClient.DeleteAsync($"/domains/{hostname}", ct);
     }
@@ -715,7 +716,7 @@ namespace MailgunSharp
         throw new ArgumentOutOfRangeException("Skip cannot be an integer value less than 0!");
       }
 
-      var hostname = getHostname(name);
+      var hostname = name.GetHostname();
 
       return this.httpClient.GetAsync($"/domains/{hostname}/credentials?limit={limit}&skip={skip}", ct);
     }
@@ -732,7 +733,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Credential cannot be null or empty!");
       }
 
-      var hostname = getHostname(name);
+      var hostname = name.GetHostname();
 
       var formContent = new FormUrlEncodedContent(credential.ToFormContent());
 
@@ -746,12 +747,12 @@ namespace MailgunSharp
         throw new ArgumentNullException("Name cannot be null or empty!");
       }
 
-      if (checkStringIfNullEmptyWhitespace(username))
+      if (username.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Username cannot be null or empty!");
       }
 
-      if (checkStringIfNullEmptyWhitespace(password))
+      if (password.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Password cannot be null or empty!");
       }
@@ -761,7 +762,7 @@ namespace MailgunSharp
         throw new ArgumentOutOfRangeException("Password must have a minimum length of 5, and maximum length of 32!");
       }
 
-      var hostname = getHostname(name);
+      var hostname = name.GetHostname();
 
       var content = new Collection<KeyValuePair<string, string>>()
       {
@@ -780,7 +781,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Name cannot be null or empty!");
       }
 
-      var hostname = getHostname(name);
+      var hostname = name.GetHostname();
 
       return this.httpClient.DeleteAsync($"/domains/{hostname}/credentials/{username}", ct);
     }
@@ -792,7 +793,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Name cannot be null or empty!");
       }
 
-      var hostname = getHostname(name);
+      var hostname = name.GetHostname();
 
       return this.httpClient.GetAsync($"/domains/{hostname}/connection", ct);
     }
@@ -804,7 +805,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Name cannot be null or empty!");
       }
 
-      var hostname = getHostname(name);
+      var hostname = name.GetHostname();
 
       var content = new Collection<KeyValuePair<string, string>>()
       {
@@ -824,7 +825,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Name cannot be null or empty!");
       }
 
-      var hostname = getHostname(name);
+      var hostname = name.GetHostname();
 
       return this.httpClient.GetAsync($"/domains/{hostname}/tracking", ct);
     }
@@ -836,11 +837,11 @@ namespace MailgunSharp
         throw new ArgumentNullException("Name cannot be null or empty!");
       }
 
-      var hostname = getHostname(name);
+      var hostname = name.GetHostname();
 
       var content = new Collection<KeyValuePair<string, string>>()
       {
-        new KeyValuePair<string, string>("active", boolToYesNo(active)),
+        new KeyValuePair<string, string>("active", active.ToYesNo()),
       };
 
       var formContent = new FormUrlEncodedContent(content);
@@ -855,9 +856,9 @@ namespace MailgunSharp
         throw new ArgumentNullException("Name cannot be null or empty!");
       }
 
-      var hostname = getHostname(name);
+      var hostname = name.GetHostname();
 
-      var activeName = getDomainClickTrackingActiveName(active);
+      var activeName = EnumLookup.GetDomainClickTrackingActiveName(active);
 
       var content = new Collection<KeyValuePair<string, string>>()
       {
@@ -876,7 +877,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Name cannot be null or empty!");
       }
 
-      var hostname = getHostname(name);
+      var hostname = name.GetHostname();
 
       var content = new Collection<KeyValuePair<string, string>>()
       {
@@ -897,7 +898,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Name cannot be null or empty!");
       }
 
-      var hostname = getHostname(name);
+      var hostname = name.GetHostname();
 
       var content = new Collection<KeyValuePair<string, string>>()
       {
@@ -941,29 +942,9 @@ namespace MailgunSharp
       return this.httpClient.GetAsync(url, ct);
     }
 
-    private bool checkStringIfNullEmptyWhitespace(string str)
-    {
-      return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
-    }
-
     private bool isIPv4AddressValid(string ipV4Address)
     {
       return Regex.IsMatch(ipV4Address, @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
-    }
-
-    private string boolToYesNo(bool flag)
-    {
-      return (flag) ? "yes" : "no";
-    }
-
-    private string getHostname(Uri uri)
-    {
-      if (uri == null)
-      {
-        return string.Empty;
-      }
-
-      return uri.Host.Replace("https://", string.Empty).Replace("http://", string.Empty).Replace("www.", string.Empty);
     }
 
     private bool checkPasswordLengthRequirement(string password)
@@ -971,92 +952,6 @@ namespace MailgunSharp
       var length = password.Length;
 
       return (length > 4 && length < 33);
-    }
-
-    private string getDomainClickTrackingActiveName(DomainClickTrackingActive active)
-    {
-      var name = "";
-
-      switch (active)
-      {
-        case DomainClickTrackingActive.HTML_ONLY:
-          name = "htmlonly";
-          break;
-
-        case DomainClickTrackingActive.NO:
-          name = "no";
-          break;
-
-        case DomainClickTrackingActive.YES:
-          name = "yes";
-          break;
-      }
-
-      return name;
-    }
-
-    private string getEventTypeName(EventType eventType)
-    {
-      var name = "";
-
-      switch (eventType)
-      {
-        case EventType.ACCEPTED:
-          name = "accepted";
-          break;
-
-        case EventType.CLICKED:
-          name = "clicked";
-          break;
-
-        case EventType.COMPLAINED:
-          name = "complained";
-          break;
-
-        case EventType.DELIVERED:
-          name = "delivered";
-          break;
-
-        case EventType.FAILED:
-          name = "failed";
-          break;
-
-        case EventType.OPENED:
-          name = "opened";
-          break;
-
-        case EventType.STORED:
-          name = "stored";
-          break;
-
-        case EventType.UNSUBSCRIBED:
-          name = "unsubscribed";
-          break;
-      }
-
-      return name;
-    }
-
-    private string getTimeResolutionName(TimeResolution resolution)
-    {
-      var name = "";
-
-      switch (resolution)
-      {
-        case TimeResolution.HOUR:
-          name = "h";
-          break;
-
-        case TimeResolution.DAY:
-          name = "d";
-          break;
-
-        case TimeResolution.MONTH:
-          name = "m";
-          break;
-      }
-
-      return name;
     }
   }
 }

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using MailgunSharp.Enums;
+using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Events
 {
@@ -110,7 +111,7 @@ namespace MailgunSharp.Events
     /// <returns>The instance of the builder.</returns>
     public IEventRequestBuilder SetAttachmentFilename(string name)
     {
-      if (checkStringIfNullEmptyWhitespace(name))
+      if (name.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Attachment Filename cannot be null or empty!");
       }
@@ -127,7 +128,7 @@ namespace MailgunSharp.Events
     /// <returns>The instance of the builder.</returns>
     public IEventRequestBuilder SetMessageId(string id)
     {
-      if (checkStringIfNullEmptyWhitespace(id))
+      if (id.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Message Id cannot be null or empty!");
       }
@@ -254,16 +255,6 @@ namespace MailgunSharp.Events
     public IEventRequest Build()
     {
       return this.eventRequest;
-    }
-
-    /// <summary>
-    /// Check if the string only is null, empty, or whitespace.
-    /// </summary>
-    /// <param name="str">The string to check.</param>
-    /// <returns>True, if the string is only null, empty, or whitespace; false, if it isn't null, empty, or whitespace.</returns>
-    private bool checkStringIfNullEmptyWhitespace(string str)
-    {
-      return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
     }
   }
 }

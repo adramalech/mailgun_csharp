@@ -100,7 +100,7 @@ namespace MailgunSharp.MailingLists
       jsonObject["address"] = this.address.ToString();
       jsonObject["name"] = this.name;
       jsonObject["description"] = this.description;
-      jsonObject["access_level"] = getAccessLevelName(this.accessLevel);
+      jsonObject["access_level"] = EnumLookup.GetAccessLevelName(this.accessLevel);
 
       return jsonObject;
     }
@@ -116,35 +116,10 @@ namespace MailgunSharp.MailingLists
         new KeyValuePair<string, string>("address", this.address.ToString()),
         new KeyValuePair<string, string>("name", this.name),
         new KeyValuePair<string, string>("description", this.description),
-        new KeyValuePair<string, string>("access_level", getAccessLevelName(this.accessLevel))
+        new KeyValuePair<string, string>("access_level", EnumLookup.GetAccessLevelName(this.accessLevel))
       };
 
       return content;
-    }
-
-    /// <summary>
-    /// Get the name of the access level type.
-    /// </summary>
-    /// <param name="accessLevel">The access level type.</param>
-    /// <returns>Name of the access level type.</returns>
-    private string getAccessLevelName(AccessLevel accessLevel)
-    {
-      var name = "";
-
-      switch (accessLevel)
-      {
-        case AccessLevel.READ_ONLY:
-          name = "readonly";
-          break;
-        case AccessLevel.MEMBERS:
-          name = "members";
-          break;
-        case AccessLevel.EVERYONE:
-          name = "everyone";
-          break;
-      }
-
-      return name;
     }
   }
 }

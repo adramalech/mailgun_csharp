@@ -7,6 +7,7 @@ using System.IO;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Messages
 {
@@ -268,13 +269,13 @@ namespace MailgunSharp.Messages
       var content = new Collection<KeyValuePair<string, string>>()
       {
         new KeyValuePair<string, string>("from", this.From.Address.ToString()),
-        new KeyValuePair<string, string>("o:testmode", boolToYesNo(this.TestMode)),
-        new KeyValuePair<string, string>("o:tracking", boolToYesNo(this.Tracking)),
-        new KeyValuePair<string, string>("o:tracking-clicks", boolToYesNo(this.TrackingClicks)),
-        new KeyValuePair<string, string>("o:tracking-opens", boolToYesNo(this.TrackingOpens)),
+        new KeyValuePair<string, string>("o:testmode", this.TestMode.ToYesNo()),
+        new KeyValuePair<string, string>("o:tracking", this.Tracking.ToYesNo()),
+        new KeyValuePair<string, string>("o:tracking-clicks",this.TrackingClicks.ToYesNo()),
+        new KeyValuePair<string, string>("o:tracking-opens", this.TrackingOpens.ToYesNo()),
         new KeyValuePair<string, string>("o:require-tls", this.SendSecure.ToString()),
         new KeyValuePair<string, string>("o:skip-verfication", this.SkipTlsVerification.ToString()),
-        new KeyValuePair<string, string>("o:dkim", boolToYesNo(this.Dkim))
+        new KeyValuePair<string, string>("o:dkim", this.Dkim.ToYesNo())
       };
 
       var addressList = new Collection<MailAddress>();
@@ -296,17 +297,17 @@ namespace MailgunSharp.Messages
         content.Add(new KeyValuePair<string, string>("bcc", generateCommaDelimenatedList(this.Bcc)));
       }
 
-      if (!isStringNullEmptyWhitespace(this.Subject))
+      if (!this.Subject.IsNullEmptyWhitespace())
       {
         content.Add(new KeyValuePair<string, string>("subject", this.Subject));
       }
 
-      if (!isStringNullEmptyWhitespace(this.Html))
+      if (!this.Html.IsNullEmptyWhitespace())
       {
         content.Add(new KeyValuePair<string, string>("html", this.Html));
       }
 
-      if (!isStringNullEmptyWhitespace(this.Text))
+      if (!this.Text.IsNullEmptyWhitespace())
       {
         content.Add(new KeyValuePair<string, string>("text", this.Text));
       }
@@ -346,26 +347,6 @@ namespace MailgunSharp.Messages
       }
 
       return content;
-    }
-
-    /// <summary>
-    /// Get a boolean as a lowercase "yes" or "no"
-    /// </summary>
-    /// <param name="flag">The boolean to get string.</param>
-    /// <returns>String value of True will be "yes", and False, will be "no".</returns>
-    private string boolToYesNo(bool flag)
-    {
-      return (flag ? "yes" : "no");
-    }
-
-    /// <summary>
-    /// Check if the string only is null, empty, or whitespace.
-    /// </summary>
-    /// <param name="str">The string to check.</param>
-    /// <returns>True, if the string is only null, empty, or whitespace; false, if it isn't null, empty, or whitespace.</returns>
-    private bool isStringNullEmptyWhitespace(string str)
-    {
-      return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
     }
 
     /// <summary>

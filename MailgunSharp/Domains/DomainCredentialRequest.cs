@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
+using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Domains
 {
@@ -42,12 +43,12 @@ namespace MailgunSharp.Domains
     /// <param name="password">The smtp password of a string. Must be a minimum length of 5 and maximum length of 32.</param>
     public DomainCredentialRequest(string username, string password)
     {
-      if (checkStringIfNullEmptyWhitespace(username))
+      if (username.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Username cannot be null or empty!");
       }
 
-      if (checkStringIfNullEmptyWhitespace(password))
+      if (password.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Password cannot be null or empty!");
       }
@@ -103,16 +104,6 @@ namespace MailgunSharp.Domains
       var length = password.Length;
 
       return (length > 4 && length < 33);
-    }
-
-    /// <summary>
-    /// Check if the string only is null, empty, or whitespace.
-    /// </summary>
-    /// <param name="str">The string to check.</param>
-    /// <returns>True, if the string is only null, empty, or whitespace; false, if it isn't null, empty, or whitespace.</returns>
-    private bool checkStringIfNullEmptyWhitespace(string str)
-    {
-      return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
     }
   }
 }

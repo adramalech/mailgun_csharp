@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Newtonsoft.Json.Linq;
 using MailgunSharp.Enums;
+using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Events
 {
@@ -144,12 +145,12 @@ namespace MailgunSharp.Events
 
       if (this.Ascending.HasValue)
       {
-        strBuilder.Append($"&ascending={boolToYesNo(this.Ascending.Value)}");
+        strBuilder.Append($"&ascending={this.Ascending.Value.ToYesNo()}");
       }
 
       if (this.Pretty.HasValue)
       {
-        strBuilder.Append($"&pretty={boolToYesNo(this.Pretty.Value)}");
+        strBuilder.Append($"&pretty={this.Pretty.Value.ToYesNo()}");
       }
 
       if (this.Size.HasValue)
@@ -157,7 +158,7 @@ namespace MailgunSharp.Events
         strBuilder.Append($"size={this.Size}");
       }
 
-      if (!checkStringIfNullEmptyWhitespace(this.MessageId))
+      if (!this.MessageId.IsNullEmptyWhitespace())
       {
         strBuilder.Append($"&message-id={this.MessageId}");
       }
@@ -182,7 +183,7 @@ namespace MailgunSharp.Events
         strBuilder.Append($"&size={this.Size}");
       }
 
-      if (!checkStringIfNullEmptyWhitespace(this.AttachmentFileName))
+      if (!this.AttachmentFileName.IsNullEmptyWhitespace())
       {
         strBuilder.Append($"&attachment={this.AttachmentFileName}");
       }
@@ -192,7 +193,7 @@ namespace MailgunSharp.Events
         strBuilder.Append($"&from={this.From.Address}");
       }
 
-      if (!checkStringIfNullEmptyWhitespace(this.Subject))
+      if (!this.Subject.IsNullEmptyWhitespace())
       {
         strBuilder.Append($"&subject={this.Subject}");
       }
@@ -214,7 +215,7 @@ namespace MailgunSharp.Events
 
         foreach (var type in this.EventTypes)
         {
-          strBuilder.Append(getEventTypeName(type));
+          strBuilder.Append(EnumLookup.GetEventTypeName(type));
 
           i++;
 
@@ -232,7 +233,7 @@ namespace MailgunSharp.Events
 
       if (this.SeverityType.HasValue)
       {
-        strBuilder.Append($"&severity={getSeverityTypeName(this.SeverityType.Value)}");
+        strBuilder.Append($"&severity={EnumLookup.GetSeverityTypeName(this.SeverityType.Value)}");
       }
 
       var tagCount = this.EventTypes.Count;
@@ -269,96 +270,6 @@ namespace MailgunSharp.Events
       }
 
       return strBuilder.ToString();
-    }
-
-    /// <summary>
-    /// Get the description name of the event type.
-    /// </summary>
-    /// <param name="eventType">The event type to get the description of.</param>
-    /// <returns>string</returns>
-    private string getEventTypeName(EventType eventType)
-    {
-      var name = "";
-
-      switch (eventType)
-      {
-        case EventType.ACCEPTED:
-          name = "accepted";
-          break;
-
-        case EventType.CLICKED:
-          name = "clicked";
-          break;
-
-        case EventType.COMPLAINED:
-          name = "complained";
-          break;
-
-        case EventType.DELIVERED:
-          name = "delivered";
-          break;
-
-        case EventType.FAILED:
-          name = "failed";
-          break;
-
-        case EventType.OPENED:
-          name = "opened";
-          break;
-
-        case EventType.STORED:
-          name = "stored";
-          break;
-
-        case EventType.UNSUBSCRIBED:
-          name = "unsubscribed";
-          break;
-      }
-
-      return name;
-    }
-
-    /// <summary>
-    /// Get the severity type description.
-    /// </summary>
-    /// <param name="severityType">The severity type to get the description of.</param>
-    /// <returns>string</returns>
-    private string getSeverityTypeName(Severity severityType)
-    {
-      var name = "";
-
-      switch (severityType)
-      {
-        case Severity.PERMANENT:
-          name = "permanent";
-          break;
-
-        case Severity.TEMPORARY:
-          name = "temporary";
-          break;
-      }
-
-      return name;
-    }
-
-    /// <summary>
-    /// Get a boolean as a lowercase "yes" or "no"
-    /// </summary>
-    /// <param name="flag">The boolean to get string.</param>
-    /// <returns>String value of True will be "yes", and False, will be "no".</returns>
-    private string boolToYesNo(bool flag)
-    {
-      return (flag) ? "yes" : "no";
-    }
-
-    /// <summary>
-    /// Check if the string only is null, empty, or whitespace.
-    /// </summary>
-    /// <param name="str">The string to check.</param>
-    /// <returns>True, if the string is only null, empty, or whitespace; false, if it isn't null, empty, or whitespace.</returns>
-    private bool checkStringIfNullEmptyWhitespace(string str)
-    {
-      return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
     }
   }
 }

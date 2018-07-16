@@ -1,4 +1,5 @@
 using System;
+using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Messages
 {
@@ -39,7 +40,7 @@ namespace MailgunSharp.Messages
     /// <param name="data">The file content of the file to be attached.</param>
     public FileAttachment(string filename, byte[] data)
     {
-      if (checkStringIfNullEmptyWhitespace(filename))
+      if (filename.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Filename cannot be null or empty!");
       }
@@ -51,16 +52,6 @@ namespace MailgunSharp.Messages
 
       this.filename = filename;
       this.data = data;
-    }
-
-    /// <summary>
-    /// Check if the string only is null, empty, or whitespace.
-    /// </summary>
-    /// <param name="str">The string to check.</param>
-    /// <returns>True, if the string is only null, empty, or whitespace; false, if it isn't null, empty, or whitespace.</returns>
-    private bool checkStringIfNullEmptyWhitespace(string str)
-    {
-      return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
     }
   }
 }

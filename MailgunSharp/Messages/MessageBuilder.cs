@@ -4,6 +4,7 @@ using System.IO;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Messages
 {
@@ -254,7 +255,7 @@ namespace MailgunSharp.Messages
 
     public IMessageBuilder SetHtmlContentBody(string html)
     {
-      if (checkStringIfNullOrEmpty(html))
+      if (html.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("HTML Body cannot be null!");
       }
@@ -275,7 +276,7 @@ namespace MailgunSharp.Messages
 
     public IMessageBuilder SetSubject(string subject)
     {
-      if (checkStringIfNullOrEmpty(subject))
+      if (subject.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Subject cannot be null!");
       }
@@ -301,7 +302,7 @@ namespace MailgunSharp.Messages
 
     public IMessageBuilder SetTextContentBody(string text)
     {
-      if (checkStringIfNullOrEmpty(text))
+      if (text.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Text Body cannot be null!");
       }
@@ -313,7 +314,7 @@ namespace MailgunSharp.Messages
 
     public IMessageBuilder AddTag(string tag)
     {
-      if (checkStringIfNullOrEmpty(tag))
+      if (tag.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Tag cannot be null!");
       }
@@ -358,12 +359,12 @@ namespace MailgunSharp.Messages
 
     public IMessageBuilder AddCustomHeader(string headerName, string value)
     {
-      if (checkStringIfNullOrEmpty(headerName))
+      if (headerName.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Custom header name cannot be null!");
       }
 
-      if (checkStringIfNullOrEmpty(value))
+      if (value.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Custom header value cannot be null!");
       }
@@ -412,7 +413,7 @@ namespace MailgunSharp.Messages
 
     public IMessageBuilder AddCustomData(string name, JObject value)
     {
-      if (checkStringIfNullOrEmpty(name))
+      if (name.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Name cannot be null!");
       }
@@ -454,11 +455,6 @@ namespace MailgunSharp.Messages
       return message;
     }
 
-    private bool checkStringIfNullOrEmpty(string str)
-    {
-      return (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str));
-    }
-
     private bool exceedsMaxMessageSize(long size)
     {
       return (messageSize + size > MAX_TOTAL_MESSAGE_SIZE);
@@ -466,7 +462,7 @@ namespace MailgunSharp.Messages
 
     private bool isRfc2822LineFolded(string text)
     {
-      if (checkStringIfNullOrEmpty(text) || text.Length <= 998)
+      if (text.IsNullEmptyWhitespace() || text.Length <= 998)
       {
         return true;
       }

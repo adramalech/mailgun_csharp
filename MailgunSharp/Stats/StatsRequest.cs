@@ -66,27 +66,27 @@ namespace MailgunSharp.Stats
     /// <returns>string value as a http query string.</returns>
     public string ToQueryString()
     {
-      var strBuilder = new StringBuilder();
+      var queryStr = new QueryString();
 
       if (this.Duration.HasValue && this.Resolution.HasValue)
       {
-        strBuilder.Append($"duration={this.Duration.Value}{EnumLookup.GetTimeResolutionName(this.Resolution.Value)}");
+        queryStr.AppendIfNotNullOrEmpty("duration", $"{this.Duration.Value}{EnumLookup.GetTimeResolutionName(this.Resolution.Value)}");
       }
       else
       {
-        strBuilder.Append($"start={((DateTimeOffset)this.Start).ToUnixTimeSeconds()}");
-        strBuilder.Append($"&end={((DateTimeOffset)this.End).ToUnixTimeSeconds()}");
+        queryStr.AppendIfNotNullOrEmpty("start", ((DateTimeOffset)this.Start).ToUnixTimeSeconds());
+        queryStr.AppendIfNotNullOrEmpty("end", ((DateTimeOffset)this.End).ToUnixTimeSeconds());
       }
 
       if (this.EventTypes != null && this.EventTypes.Count > 0)
       {
         foreach (var eventType in this.EventTypes)
         {
-          strBuilder.Append($"&event={EnumLookup.GetEventTypeName(eventType)}");
+          queryStr.AppendIfNotNullOrEmpty("event", EnumLookup.GetEventTypeName(eventType));
         }
       }
 
-      return strBuilder.ToString();
+      return queryStr.ToString();
     }
   }
 }

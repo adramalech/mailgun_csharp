@@ -15,7 +15,7 @@ namespace MailgunSharp.Domains
     /// <summary>
     /// The domain name.
     /// </summary>
-    /// <value>System.Net.Uri</value>
+    /// <value>System.Uri</value>
     public Uri Name
     {
       get

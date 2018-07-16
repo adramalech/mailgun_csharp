@@ -285,43 +285,43 @@ namespace MailgunSharp.Messages
         addressList.Add(t.Address);
       }
 
-      content.Add(new KeyValuePair<string, string>("to", generateCommaDelimenatedList(addressList)));
+      content.AddIfNotNullOrEmpty("to", generateCommaDelimenatedList(addressList));
 
       if (this.Cc != null)
       {
-        content.Add(new KeyValuePair<string, string>("cc", generateCommaDelimenatedList(this.Cc)));
+        content.AddIfNotNullOrEmpty("cc", generateCommaDelimenatedList(this.Cc));
       }
 
       if (this.Bcc != null)
       {
-        content.Add(new KeyValuePair<string, string>("bcc", generateCommaDelimenatedList(this.Bcc)));
+        content.AddIfNotNullOrEmpty("bcc", generateCommaDelimenatedList(this.Bcc));
       }
 
       if (!this.Subject.IsNullEmptyWhitespace())
       {
-        content.Add(new KeyValuePair<string, string>("subject", this.Subject));
+        content.AddIfNotNullOrEmpty("subject", this.Subject);
       }
 
       if (!this.Html.IsNullEmptyWhitespace())
       {
-        content.Add(new KeyValuePair<string, string>("html", this.Html));
+        content.AddIfNotNullOrEmpty("html", this.Html);
       }
 
       if (!this.Text.IsNullEmptyWhitespace())
       {
-        content.Add(new KeyValuePair<string, string>("text", this.Text));
+        content.AddIfNotNullOrEmpty("text", this.Text);
       }
 
       if (this.RecipientVariables != null)
       {
-        content.Add(new KeyValuePair<string, string>("recipient-variables", this.RecipientVariables.ToString(Formatting.None)));
+        content.AddIfNotNullOrEmpty("recipient-variables", this.RecipientVariables.ToString(Formatting.None));
       }
 
       if (this.Tags != null)
       {
         foreach (var tag in this.Tags)
         {
-          content.Add(new KeyValuePair<string, string>("o:tag", tag));
+          content.AddIfNotNullOrEmpty("o:tag", tag);
         }
       }
 
@@ -329,7 +329,7 @@ namespace MailgunSharp.Messages
       {
         foreach (var customHeader in this.CustomHeaders)
         {
-          content.Add(new KeyValuePair<string, string>($"h:{customHeader.Key}", customHeader.Value));
+          content.AddIfNotNullOrEmpty($"h:{customHeader.Key}", customHeader.Value);
         }
       }
 
@@ -337,13 +337,13 @@ namespace MailgunSharp.Messages
       {
         foreach (var data in this.CustomData)
         {
-          content.Add(new KeyValuePair<string, string>($"v:{data.Key}", data.Value.ToString(Formatting.None)));
+          content.AddIfNotNullOrEmpty($"v:{data.Key}", data.Value.ToString(Formatting.None));
         }
       }
 
       if (this.DeliveryTime != null && this.DeliveryTime.HasValue)
       {
-        content.Add(new KeyValuePair<string, string>("o:deliverytime", ((DateTimeOffset)this.DeliveryTime.Value).ToUnixTimeSeconds().ToString()));
+        content.AddIfNotNullOrEmpty("o:deliverytime", ((DateTimeOffset)this.DeliveryTime.Value).ToUnixTimeSeconds().ToString());
       }
 
       return content;

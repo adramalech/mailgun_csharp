@@ -3,6 +3,7 @@ using System.Net.Mail;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
+using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Supression
 {
@@ -41,7 +42,8 @@ namespace MailgunSharp.Supression
     /// </summary>
     /// <param name="address">A valid email address.</param>
     /// <param name="createdAt">Timestamp as datetime UTC.</param>
-    public ComplaintRequest(MailAddress address, DateTime? createdAt = null)
+    /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
+    public ComplaintRequest(MailAddress address, DateTime? createdAt = null, TimeZoneInfo tzInfo = null)
     {
       if (address == null)
       {
@@ -49,7 +51,11 @@ namespace MailgunSharp.Supression
       }
 
       this.address = address;
-      this.createdAt = createdAt;
+
+      if (this.createdAt.HasValue)
+      {
+        this.createdAt = (tzInfo == null) ? createdAt.Value.ToUniversalTime() : TimeZoneInfo.ConvertTimeToUtc(createdAt.Value.ToUniversalTime(), tzInfo);
+      }
     }
 
     /// <summary>

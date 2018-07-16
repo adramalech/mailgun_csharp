@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using MailgunSharp.Enums;
+using MailgunSharp.Extensions;
 
 namespace MailgunSharp.MailingLists
 {

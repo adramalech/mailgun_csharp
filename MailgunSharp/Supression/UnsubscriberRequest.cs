@@ -3,6 +3,7 @@ using System.Net.Mail;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Supression
 {
@@ -58,7 +59,8 @@ namespace MailgunSharp.Supression
     /// <param name="address">A valid email address.</param>
     /// <param name="tag">A specific tag to unsubscribe from, will default to "*" which will unsubscribe an address from all domain's correspondence.</param>
     /// <param name="createdAt">Timestamp of an unsubscribe event.</param>
-    public UnsubscriberRequest(MailAddress address, string tag = "*", DateTime? createdAt = null)
+    /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
+    public UnsubscriberRequest(MailAddress address, string tag = "*", DateTime? createdAt = null, TimeZoneInfo tzInfo = null)
     {
       if (address == null)
       {
@@ -67,7 +69,11 @@ namespace MailgunSharp.Supression
 
       this.address = address;
       this.tag = tag;
-      this.createdAt = createdAt;
+
+      if (this.createdAt.HasValue)
+      {
+        this.createdAt = (tzInfo == null) ? createdAt.Value.ToUniversalTime() : TimeZoneInfo.ConvertTimeToUtc(createdAt.Value.ToUniversalTime(), tzInfo);
+      }
     }
 
     /// <summary>

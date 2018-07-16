@@ -34,10 +34,11 @@ namespace MailgunSharp.Events
     /// Set the beginning search time range to filter results by.
     /// </summary>
     /// <param name="dateTime">The beginning time range value.</param>
+    /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
     /// <returns>The instance of the builder.</returns>
-    public IEventRequestBuilder SetStartTimeRange(DateTime dateTime)
+    public IEventRequestBuilder SetStartTimeRange(DateTime dateTime, TimeZoneInfo tzInfo = null)
     {
-      this.eventRequest.Begin = dateTime;
+      this.eventRequest.Begin = (tzInfo == null) ? dateTime.ToUniversalTime() : TimeZoneInfo.ConvertTimeToUtc(dateTime.ToUniversalTime(), tzInfo);
 
       return this;
     }
@@ -46,10 +47,11 @@ namespace MailgunSharp.Events
     /// Set the end search time range to filter results by.
     /// </summary>
     /// <param name="dateTime">The end time range value.</param>
+    /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
     /// <returns>The instance of the builder.</returns>
-    public IEventRequestBuilder SetEndTimeRange(DateTime dateTime)
+    public IEventRequestBuilder SetEndTimeRange(DateTime dateTime, TimeZoneInfo tzInfo = null)
     {
-      this.eventRequest.End = dateTime;
+      this.eventRequest.End = (tzInfo == null) ? dateTime.ToUniversalTime() : TimeZoneInfo.ConvertTimeToUtc(dateTime.ToUniversalTime(), tzInfo);
 
       return this;
     }

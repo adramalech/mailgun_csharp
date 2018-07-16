@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MailgunSharp.Enums;
+using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Stats
 {
@@ -65,10 +66,11 @@ namespace MailgunSharp.Stats
     /// Set the start datetime to be used as the start of the windowed datetime range.
     /// </summary>
     /// <param name="startTime">A datetime UTC value.</param>
+    /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
     /// <returns>The instance of the builder.</returns>
-    public IStatsRequestBuilder SetStartTime(DateTime startTime)
+    public IStatsRequestBuilder SetStartTime(DateTime startTime, TimeZoneInfo tzInfo = null)
     {
-      this.statsRequest.Start = startTime;
+      this.statsRequest.Start = (tzInfo == null) ? startTime.ToUniversalTime() : TimeZoneInfo.ConvertTimeToUtc(startTime.ToUniversalTime(), tzInfo);
 
       return this;
     }
@@ -77,10 +79,11 @@ namespace MailgunSharp.Stats
     /// Set the end datetime to be used as the end of the windowed datetime range.
     /// </summary>
     /// <param name="endTime">A datetime UTC value.</param>
+    /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
     /// <returns>The instance of the builder.</returns>
-    public IStatsRequestBuilder SetEndTime(DateTime endTime)
+    public IStatsRequestBuilder SetEndTime(DateTime endTime, TimeZoneInfo tzInfo = null)
     {
-      this.statsRequest.End = endTime;
+      this.statsRequest.End = (tzInfo == null) ? endTime.ToUniversalTime() : TimeZoneInfo.ConvertTimeToUtc(endTime.ToUniversalTime(), tzInfo);
 
       return this;
     }

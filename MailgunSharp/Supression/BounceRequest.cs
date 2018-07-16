@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Mail;
 using Newtonsoft.Json.Linq;
 using MailgunSharp.Enums;
+using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Supression
 {
@@ -72,7 +73,8 @@ namespace MailgunSharp.Supression
     /// <param name="statusCode">The STMP Error status code.  Defaults to 550, Mailbox Unavailable.</param>
     /// <param name="error">The error description. Defaults to empty string.</param>
     /// <param name="createdAt">Timestamp of the bounced event. Defaults to current time UTC.</param>
-    public BounceRequest(MailAddress address, SmtpErrorCode statusCode = SmtpErrorCode.MAILBOX_UNAVAILABLE, string error = "", DateTime? createdAt = null)
+    /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
+    public BounceRequest(MailAddress address, SmtpErrorCode statusCode = SmtpErrorCode.MAILBOX_UNAVAILABLE, string error = "", DateTime? createdAt = null, TimeZoneInfo tzInfo = null)
     {
       if (address == null)
       {
@@ -82,7 +84,11 @@ namespace MailgunSharp.Supression
       this.address = address;
       this.code = statusCode;
       this.error = error;
-      this.createdAt = createdAt;
+
+      if (createdAt.HasValue)
+      {
+        this.createdAt = (tzInfo == null) ? createdAt.Value.ToUniversalTime() : TimeZoneInfo.ConvertTimeToUtc(createdAt.Value.ToUniversalTime(), tzInfo);
+      }
     }
 
     /// <summary>

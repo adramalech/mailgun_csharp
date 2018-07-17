@@ -75,8 +75,8 @@ namespace MailgunSharp.Stats
       }
       else
       {
-        queryStr.AppendIfNotNullOrEmpty("start", ((DateTimeOffset)this.Start).ToUnixTimeSeconds());
-        queryStr.AppendIfNotNullOrEmpty("end", ((DateTimeOffset)this.End).ToUnixTimeSeconds());
+        queryStr.AppendIfNotNullOrEmpty("start", ((DateTimeOffset)this.Start).ToUnixTimeSeconds().ToString());
+        queryStr.AppendIfNotNullOrEmpty("end", ((DateTimeOffset)this.End).ToUnixTimeSeconds().ToString());
       }
 
       if (this.EventTypes != null && this.EventTypes.Count > 0)

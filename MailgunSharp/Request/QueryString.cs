@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Text.Encodings.Web;
 using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Request
@@ -37,44 +38,23 @@ namespace MailgunSharp.Request
     /// <summary>
     /// Append a value with a variable name as a parameter to the querystring if not null or empty.
     /// </summary>
-    /// <param name="var">The varaible name of the parameter to be appended.</param>
-    /// <param name="val">The value of the parameter to be appended.</param>
-    /// <typeparam name="T">The value's type.</typeparam>
-    public bool AppendIfNotNullOrEmpty<T>(string var, T val) where T : struct
+    /// <param name="variable">The varaible name of the parameter to be appended.</param>
+    /// <param name="value">The value of the parameter to be appended.</param>
+    public bool AppendIfNotNullOrEmpty(string variable, string value)
     {
-      if (var.IsNullEmptyWhitespace())
+      if (variable.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Variable cannot be null or empty!");
       }
 
-      var wasAdded = stb.AddIfNotNullEmptyWhitespace((stb.IsEmpty()) ? $"{var}={val}" : $"&{var}={val}");
-
-      if (wasAdded)
-      {
-        this.count++;
-      }
-
-      return wasAdded;
-    }
-
-    /// <summary>
-    /// Append a value with a variable name as a parameter to the querystring if not null or empty.
-    /// </summary>
-    /// <param name="var">The varaible name of the parameter to be appended.</param>
-    /// <param name="val">The value of the parameter to be appended.</param>
-    public bool AppendIfNotNullOrEmpty(string var, string val)
-    {
-      if (var.IsNullEmptyWhitespace())
-      {
-        throw new ArgumentNullException("Variable cannot be null or empty!");
-      }
-
-      if (val.IsNullEmptyWhitespace())
+      if (value.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Value cannot be null or empty!");
       }
 
-      var wasAdded = stb.AddIfNotNullEmptyWhitespace((stb.IsEmpty()) ? $"{var}={val}" : $"&{var}={val}");
+      var prefix = (stb.IsEmpty()) ? "?" : "&";
+
+      var wasAdded = stb.AddIfNotNullEmptyWhitespace($"{prefix}{UrlEncoder.Default.Encode(variable)}={UrlEncoder.Default.Encode(value)}");
 
       if (wasAdded)
       {

@@ -11,16 +11,8 @@ namespace MailgunSharp.Request
     /// <summary>
     /// Append a value with a variable name as a parameter to the querystring if not null or empty.
     /// </summary>
-    /// <param name="var">The varaible name of the parameter to be appended.</param>
-    /// <param name="val">The value of the parameter to be appended.</param>
-    /// <typeparam name="T">The value's type.</typeparam>
-    bool AppendIfNotNullOrEmpty<T>(string var, T val) where T : struct;
-
-    /// <summary>
-    /// Append a value with a variable name as a parameter to the querystring if not null or empty.
-    /// </summary>
-    /// <param name="var">The varaible name of the parameter to be appended.</param>
-    /// <param name="val">The value of the parameter to be appended.</param>
-    bool AppendIfNotNullOrEmpty(string var, string val);
+    /// <param name="variable">The varaible name of the parameter to be appended.</param>
+    /// <param name="value">The value of the parameter to be appended.</param>
+    bool AppendIfNotNullOrEmpty(string variable, string value);
   }
 }

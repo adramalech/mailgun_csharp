@@ -174,7 +174,7 @@ namespace MailgunSharp
     /// <summary>
     ///
     /// </summary>
-    /// <param name="limit"></param>
+    /// <param name="limit">Number of entries to return.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetBounces(int limit = 100, CancellationToken ct = default(CancellationToken));
@@ -221,7 +221,7 @@ namespace MailgunSharp
     /// <summary>
     ///
     /// </summary>
-    /// <param name="limit"></param>
+    /// <param name="limit">Number of entries to return.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetUnsubscribers(int limit = 100, CancellationToken ct = default(CancellationToken));
@@ -262,7 +262,7 @@ namespace MailgunSharp
     /// <summary>
     ///
     /// </summary>
-    /// <param name="limit"></param>
+    /// <param name="limit">Number of entries to return.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetComplaints(int limit = 100, CancellationToken ct = default(CancellationToken));
@@ -302,7 +302,7 @@ namespace MailgunSharp
     /// <summary>
     ///
     /// </summary>
-    /// <param name="limit"></param>
+    /// <param name="limit">Number of entries to return.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetMailingLists(int limit = 100, CancellationToken ct = default(CancellationToken));
@@ -344,7 +344,7 @@ namespace MailgunSharp
     ///
     /// </summary>
     /// <param name="address"></param>
-    /// <param name="limit"></param>
+    /// <param name="limit">Number of entries to return.</param>
     /// <param name="subscribed"></param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
@@ -400,7 +400,7 @@ namespace MailgunSharp
     /// <summary>
     ///
     /// </summary>
-    /// <param name="limit"></param>
+    /// <param name="limit">Number of entries to return.</param>
     /// <param name="skip"></param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
@@ -442,7 +442,7 @@ namespace MailgunSharp
     ///
     /// </summary>
     /// <param name="name"></param>
-    /// <param name="limit"></param>
+    /// <param name="limit">Number of entries to return.</param>
     /// <param name="skip"></param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>

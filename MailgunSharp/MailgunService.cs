@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Net;
@@ -33,6 +34,16 @@ namespace MailgunSharp
     /// The maximum number of records that can be returned in a response of a supression api request.
     /// </summary>
     private const int MAX_RECORD_LIMIT = 10000;
+
+    /// <summary>
+    /// The maximum integer value of an ASCII character.
+    /// </summary>
+    private const int MAX_ASCII_LENGTH = 128;
+
+    /// <summary>
+    /// The maximum character length of any tag.
+    /// </summary>
+    private const int MAX_TAG_CHAR_LENGTH = 128;
 
     /// <summary>
     /// The maximum number of json objects that can be added in a request.
@@ -101,7 +112,7 @@ namespace MailgunSharp
       return this.httpClient.PostAsync($"{this.companyDomain}/messages", message.AsFormContent(), ct);
     }
 
-    public Task<HttpResponseMessage> ValidateEmailAddressAsync(MailAddress address, bool validateMailbox, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> ValidateEmailAddressAsync(MailAddress address, bool validateMailbox = false, CancellationToken ct = default(CancellationToken))
     {
       if (address == null)
       {
@@ -111,41 +122,21 @@ namespace MailgunSharp
       return this.httpClient.GetAsync($"address/private/validate?address={address.Address}&mailbox_verification={validateMailbox.ToString()}", ct);
     }
 
-    public Task<HttpResponseMessage> ParseEmailAddressAsync(IRecipient recipient, bool syntaxOnly = true, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> ParseEmailAddressAsync(string address, bool syntaxOnly = true, CancellationToken ct = default(CancellationToken))
     {
-      if (recipient == null)
+      if (address.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Recipients cannot be null or empty!");
       }
-
-      var address = recipient.Address.ToString();
 
       return parseAddressesAsync(address, syntaxOnly, ct);
     }
 
-    public Task<HttpResponseMessage> ParseEmailAddressAsync(ICollection<IRecipient> recipients, bool syntaxOnly = true, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> ParseEmailAddressesAsync(ICollection<string> addresses, bool syntaxOnly = true, CancellationToken ct = default(CancellationToken))
     {
-      if (recipients == null || recipients.Count < 1)
+      if (addresses == null || addresses.Count < 1)
       {
         throw new ArgumentNullException("Recipients cannot be null or empty!");
-      }
-
-      var addresses = new StringBuilder();
-      var i = 1;
-      var totalMinusLast = recipients.Count - 1;
-
-      foreach (var recipient in recipients)
-      {
-        var str = recipient.Address.ToString();
-
-        if (i < totalMinusLast)
-        {
-          str += ",";
-        }
-
-        addresses.Append(str);
-
-        i++;
       }
 
       var addressList = addresses.ToString();
@@ -216,16 +207,21 @@ namespace MailgunSharp
       return this.httpClient.DeleteAsync($"{this.companyDomain}/ips/{ipV4Address}", ct);
     }
 
-    public Task<HttpResponseMessage> GetTags(CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> GetTags(int limit = 100, CancellationToken ct = default(CancellationToken))
     {
-      return this.httpClient.GetAsync($"{this.companyDomain}/tags", ct);
+      if (limit < 1)
+      {
+        throw new ArgumentOutOfRangeException("The limit of returned tags cannot be less than 1.");
+      }
+
+      return this.httpClient.GetAsync($"{this.companyDomain}/tags?limit={limit}", ct);
     }
 
     public Task<HttpResponseMessage> GetTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (tagName.IsNullEmptyWhitespace())
+      if (doesTagNameHaveCorrectFormatting(tagName))
       {
-        throw new ArgumentNullException("Tag name cannot be null or empty!");
+        throw new ArgumentNullException("Tag name cannot be null or empty. Must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/tags/{tagName}", ct);
@@ -233,9 +229,9 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> UpdateTagDescription(string tagName, string description, CancellationToken ct = default(CancellationToken))
     {
-      if (tagName.IsNullEmptyWhitespace())
+      if (doesTagNameHaveCorrectFormatting(tagName))
       {
-        throw new ArgumentNullException("Tag name cannot be null or empty!");
+        throw new ArgumentNullException("Tag name cannot be null or empty. Must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
       var content = new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>("description", description) };
@@ -247,9 +243,9 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> DeleteTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (tagName.IsNullEmptyWhitespace())
+      if (doesTagNameHaveCorrectFormatting(tagName))
       {
-        throw new ArgumentNullException("Tag name cannot be null or empty!");
+        throw new ArgumentNullException("Tag name cannot be null or empty. Must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
       return this.httpClient.DeleteAsync($"{this.companyDomain}/tags/{tagName}", ct);
@@ -257,9 +253,9 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetTagStats(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (tagName.IsNullEmptyWhitespace())
+      if (doesTagNameHaveCorrectFormatting(tagName))
       {
-        throw new ArgumentNullException("Tag name cannot be null or empty!");
+        throw new ArgumentNullException("Tag name cannot be null or empty. Must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/tags/{tagName}/stats", ct);
@@ -267,9 +263,9 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetListCountriesStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (tagName.IsNullEmptyWhitespace())
+      if (doesTagNameHaveCorrectFormatting(tagName))
       {
-        throw new ArgumentNullException("Tag name cannot be null or empty!");
+        throw new ArgumentNullException("Tag name cannot be null or empty. Must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/tags/{tagName}/stats/aggregates/countries", ct);
@@ -277,9 +273,9 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetListEmailProviderStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (tagName.IsNullEmptyWhitespace())
+      if (doesTagNameHaveCorrectFormatting(tagName))
       {
-        throw new ArgumentNullException("Tag name cannot be null or empty!");
+        throw new ArgumentNullException("Tag name cannot be null or empty. Must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/tags/{tagName}/stats/aggregates/providers", ct);
@@ -287,9 +283,9 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetListDeviceStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
-      if (tagName.IsNullEmptyWhitespace())
+      if (doesTagNameHaveCorrectFormatting(tagName))
       {
-        throw new ArgumentNullException("Tag name cannot be null or empty!");
+        throw new ArgumentNullException("Tag name cannot be null or empty. Must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/tags/{tagName}/stats/aggregates/devices", ct);
@@ -1009,6 +1005,23 @@ namespace MailgunSharp
       var length = password.Length;
 
       return (length >= MIN_SMTP_PASSWORD_LENGTH && length <= MAX_SMTP_PASSWORD_LENGTH);
+    }
+
+    /// <summary>
+    /// Check if the tag is not null, empty, or whitespace.
+    ///
+    /// In addition, check if the tag name not properly formatted ASCII and has a maximum length of 128 characters.
+    /// </summary>
+    /// <param name="tagName">The tag name to check.</param>
+    /// <returns>True if the tag is correctly formatted and isn't null or empty; false, if the tag is not correctly formatted.</returns>
+    private bool doesTagNameHaveCorrectFormatting(string tagName)
+    {
+      if (tagName.IsNullEmptyWhitespace() || tagName.Any(t => t > MAX_ASCII_LENGTH) || tagName.Length > MAX_TAG_CHAR_LENGTH)
+      {
+        return false;
+      }
+
+      return true;
     }
   }
 }

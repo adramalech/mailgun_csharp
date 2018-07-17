@@ -50,7 +50,7 @@ namespace MailgunSharp
     /// <param name="syntaxOnly"></param>
     /// <param name="ct"></param>
     /// <returns></returns>
-    Task<HttpResponseMessage> ParseEmailAddressesAsync(ICollection<IRecipient> recipients, bool syntaxOnly = true, CancellationToken ct = default(CancellationToken));
+    Task<HttpResponseMessage> ParseEmailAddressAsync(ICollection<IRecipient> recipients, bool syntaxOnly = true, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
     ///

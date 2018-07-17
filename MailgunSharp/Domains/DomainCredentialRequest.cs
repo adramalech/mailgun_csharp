@@ -8,6 +8,16 @@ namespace MailgunSharp.Domains
 {
   public sealed class DomainCredentialRequest : IDomainCredentialRequest
   {
+    /// <summary>
+    /// Maximum allowed SMTP password length.
+    /// </summary>
+    private const int MAX_SMTP_PASSWORD_LENGTH = 32;
+
+    /// <summary>
+    /// Minimum allowed SMTP password length.
+    /// </summary>
+    private const int MIN_SMTP_PASSWORD_LENGTH = 5;
+
     private readonly string username;
 
     /// <summary>
@@ -103,7 +113,7 @@ namespace MailgunSharp.Domains
     {
       var length = password.Length;
 
-      return (length > 4 && length < 33);
+      return (length >= MIN_SMTP_PASSWORD_LENGTH && length <= MAX_SMTP_PASSWORD_LENGTH);
     }
   }
 }

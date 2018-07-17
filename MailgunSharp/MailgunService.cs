@@ -25,41 +25,51 @@ namespace MailgunSharp
   public sealed class MailgunService : IMailgunService
   {
     /// <summary>
-    ///
+    /// The maximum string length of a list of email addresses to be used in a email address parse validation request.
     /// </summary>
     private const int MAX_ADDRESS_LENGTH = 8000;
 
     /// <summary>
-    ///
+    /// The maximum number of records that can be returned in a response of a supression api request.
     /// </summary>
     private const int MAX_RECORD_LIMIT = 10000;
 
     /// <summary>
-    ///
+    /// The maximum number of json objects that can be added in a request.
     /// </summary>
     private const int MAX_JSON_OBJECTS = 1000;
 
     /// <summary>
-    ///
+    /// The base url for the mailgun v3 api.
     /// </summary>
     private const string MAILGUN_BASE_URL = @"https://api.mailgun.net/v3/";
 
     /// <summary>
-    ///
+    /// Maximum allowed SMTP password length.
+    /// </summary>
+    private const int MAX_SMTP_PASSWORD_LENGTH = 32;
+
+    /// <summary>
+    /// Minimum allowed SMTP password length.
+    /// </summary>
+    private const int MIN_SMTP_PASSWORD_LENGTH = 5;
+
+    /// <summary>
+    /// The company's domain name registered in the Mailgun Account.
     /// </summary>
     private readonly string companyDomain;
 
     /// <summary>
-    ///
+    /// The http client instance to be used to make http requests to mailgun's api.
     /// </summary>
     private readonly HttpClient httpClient;
 
     /// <summary>
-    ///
+    /// Create an instance of the Mailgun Service.
     /// </summary>
-    /// <param name="companyDomain"></param>
-    /// <param name="apiKey"></param>
-    /// <param name="httpClient"></param>
+    /// <param name="companyDomain">The company's domain name registered in the mailgun account.</param>
+    /// <param name="apiKey">The company's mailgun account apikey.</param>
+    /// <param name="httpClient">The httpclient can be optionally passed in to use one given instead of generating a new one.</param>
     public MailgunService(Uri companyDomain, string apiKey, HttpClient httpClient = null)
     {
       if (companyDomain == null)
@@ -113,7 +123,7 @@ namespace MailgunSharp
       return parseAddressesAsync(address, syntaxOnly, ct);
     }
 
-    public Task<HttpResponseMessage> ParseEmailAddressesAsync(ICollection<IRecipient> recipients, bool syntaxOnly = true, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> ParseEmailAddressAsync(ICollection<IRecipient> recipients, bool syntaxOnly = true, CancellationToken ct = default(CancellationToken))
     {
       if (recipients == null || recipients.Count < 1)
       {
@@ -124,7 +134,7 @@ namespace MailgunSharp
       var i = 1;
       var totalMinusLast = recipients.Count - 1;
 
-      foreach(var recipient in recipients)
+      foreach (var recipient in recipients)
       {
         var str = recipient.Address.ToString();
 
@@ -143,6 +153,15 @@ namespace MailgunSharp
       return parseAddressesAsync(addressList, syntaxOnly, ct);
     }
 
+    /// <summary>
+    /// Make the request to parse a list of email addresses that are comma delimited.
+    ///
+    /// Maximum allowed character of email address list of 8,000 characters.
+    /// </summary>
+    /// <param name="addressList">List of email addresses to be parsed.</param>
+    /// <param name="syntaxOnly">Perform only syntax checks or DNS and ESP specific validation as well.</param>
+    /// <param name="ct">The async cancellation token.</param>
+    /// <returns></returns>
     private Task<HttpResponseMessage> parseAddressesAsync(string addressList, bool syntaxOnly, CancellationToken ct)
     {
       if (addressList.Length > MAX_ADDRESS_LENGTH)
@@ -970,16 +989,26 @@ namespace MailgunSharp
       return this.httpClient.GetAsync(url, ct);
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="ipV4Address"></param>
+    /// <returns></returns>
     private bool isIPv4AddressValid(string ipV4Address)
     {
       return Regex.IsMatch(ipV4Address, @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
     }
 
+    /// <summary>
+    /// Check the characteristics of the password to make sure it is within the minimum and maximum limits of length.
+    /// </summary>
+    /// <param name="password">The password to be checked.</param>
+    /// <returns>True if the password is within the range of the minimum and maximum allowable password length.</returns>
     private bool checkPasswordLengthRequirement(string password)
     {
       var length = password.Length;
 
-      return (length > 4 && length < 33);
+      return (length >= MIN_SMTP_PASSWORD_LENGTH && length <= MAX_SMTP_PASSWORD_LENGTH);
     }
   }
 }

@@ -11,37 +11,43 @@ namespace MailgunSharp.Messages
   public sealed class MessageBuilder : IMessageBuilder
   {
     /// <summary>
-    ///
+    /// The message to be built.
     /// </summary>
     private IMessage message;
 
     /// <summary>
-    ///
+    /// The maximum size of a message in bytes, or 25MB.
     /// </summary>
     private const long MAX_TOTAL_MESSAGE_SIZE = 25000000;
 
     /// <summary>
-    ///
+    /// The maximum number of recipients allowed on a "to" MIME header for batch email sending.
     /// </summary>
     private const int MAX_RECIPIENT_SIZE = 1000;
 
     /// <summary>
-    ///
+    /// The maximum allowed character before a CRLF line ending must be added to fold the line.
+    /// CRLF takes up two characters "CRLF" = \r\n.
+    /// </summary>
+    private const int RFC_2822_LINE_FOLD_LENGTH = 998;
+
+    /// <summary>
+    /// The size of the current message.
     /// </summary>
     private long messageSize;
 
     /// <summary>
-    ///
+    /// The number of recipients, "to", added to the message.
     /// </summary>
     private int recipientCount;
 
     /// <summary>
-    ///
+    /// The number of recipient variables added to the message.
     /// </summary>
     private int recipientVarCount;
 
     /// <summary>
-    ///
+    /// Create an instance of the message builder class.
     /// </summary>
     public MessageBuilder()
     {
@@ -476,14 +482,28 @@ namespace MailgunSharp.Messages
       return message;
     }
 
+    /// <summary>
+    /// Does the message exceed the 25MB size limit?
+    /// </summary>
+    /// <param name="size">The size of the current message.</param>
+    /// <returns>True if it does exceed, false if it doesn't.</returns>
     private bool exceedsMaxMessageSize(long size)
     {
-      return (messageSize + size > MAX_TOTAL_MESSAGE_SIZE);
+      return ((messageSize + size) > MAX_TOTAL_MESSAGE_SIZE);
     }
 
+    /// <summary>
+    /// Does the lines of the recipient variables adhere to the RFC 2822 line folding.
+    ///
+    /// No line can exist in the message that is greater than 1,000 characters long including line ending.
+    ///
+    /// Make sure each 998 characters if greater than 998 character length has a line ending CRLF = \r\n.
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns></returns>
     private bool isRfc2822LineFolded(string text)
     {
-      if (text.IsNullEmptyWhitespace() || text.Length <= 998)
+      if (text.IsNullEmptyWhitespace() || text.Length <= RFC_2822_LINE_FOLD_LENGTH)
       {
         return true;
       }
@@ -496,7 +516,7 @@ namespace MailgunSharp.Messages
 
       foreach (var line in lines)
       {
-        if (line.Length > 998)
+        if (line.Length > RFC_2822_LINE_FOLD_LENGTH)
         {
           return false;
         }

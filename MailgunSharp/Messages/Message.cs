@@ -128,7 +128,7 @@ namespace MailgunSharp.Messages
     public JObject RecipientVariables { get; set; }
 
     /// <summary>
-    /// Add an arbitrary custom MIME header value to the message.
+    /// Add an arbitrary custom header value to the message.
     /// </summary>
     /// <value>dictionary of custom header strings.</value>
     public IDictionary<string, string> CustomHeaders { get; set; }

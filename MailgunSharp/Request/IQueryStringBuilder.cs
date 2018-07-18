@@ -1,6 +1,6 @@
 namespace MailgunSharp.Request
 {
-  public interface IQueryStringBuilder
+  internal interface IQueryStringBuilder
   {
     /// <summary>
     /// Append a parameter to the querystring.

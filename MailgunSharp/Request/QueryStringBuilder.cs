@@ -3,7 +3,7 @@ using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Request
 {
-  public class QueryStringBuilder : IQueryStringBuilder
+  internal sealed class QueryStringBuilder : IQueryStringBuilder
   {
     /// <summary>
     /// The instance of query string to be built.

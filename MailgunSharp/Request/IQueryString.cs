@@ -1,6 +1,6 @@
 namespace MailgunSharp.Request
 {
-  public interface IQueryString
+  internal interface IQueryString
   {
     /// <summary>
     /// The current count of appended query string parameters.

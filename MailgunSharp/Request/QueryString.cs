@@ -5,7 +5,7 @@ using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Request
 {
-  public class QueryString : IQueryString
+  internal sealed class QueryString : IQueryString
   {
     /// <summary>
     /// The String builder that will be used to build the querystring.

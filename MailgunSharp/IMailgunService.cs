@@ -141,7 +141,7 @@ namespace MailgunSharp
     Task<HttpResponseMessage> GetTagStats(string tagName, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    /// Returns a list of coutn
+    /// Returns a list of countries of origin for a given domain for different event types.
     /// </summary>
     /// <param name="tagName">Name of the tag.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
@@ -163,13 +163,6 @@ namespace MailgunSharp
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetListDeviceStatsByTag(string tagName, CancellationToken ct = default(CancellationToken));
-
-    /// <summary>
-    /// Returns total stats for the domain.
-    /// </summary>
-    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
-    /// <returns>An async Task with the http response message.</returns>
-    Task<HttpResponseMessage> GetStatTotals(CancellationToken ct = default(CancellationToken));
 
     /// <summary>
     /// Paginate over a list of bounces for a domain.
@@ -399,168 +392,179 @@ namespace MailgunSharp
     Task<HttpResponseMessage> DeleteMailingListMember(MailAddress mailingListAddress, MailAddress memberAddress, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Returns a list of domains under your account in JSON.
     /// </summary>
     /// <param name="limit">Number of entries to return.</param>
-    /// <param name="skip"></param>
+    /// <param name="skip">Number of records to skip.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetDomains(int limit = 100, int skip = 0, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Returns a single domain, including credentials and DNS records.
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="name">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetDomain(Uri name, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
+    /// Verifies and returns a single domain, including credentials and DNS records.
     ///
+    /// If the domain is successfully verified the message should be the following:  "Domain DNS records have been updated."
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="name">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetAndVerifyDomain(Uri name, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Create a new domain.
     /// </summary>
-    /// <param name="domain"></param>
+    /// <param name="domain">The domain object to be created.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> AddDomain(IDomainRequest domain, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Delete a domain from your account.
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="name">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> DeleteDomain(Uri name, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Returns a list of SMTP credentials for the defined domain.
     /// </summary>
-    /// <param name="name"></param>
+    /// <<param name="name">The domain name.</param>
     /// <param name="limit">Number of entries to return.</param>
-    /// <param name="skip"></param>
+    /// <param name="skip">Number of records to skip.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetDomainCredentials(Uri name, int limit = 100, int skip = 0, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Creates a new set of SMTP credentials for the defined domain.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="credential"></param>
+    /// <param name="name">The domain name.</param>
+    /// <param name="credential">The SMTP credentials to be added to the specified domain.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> AddDomainCredential(Uri name, IDomainCredentialRequest credential, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Updates the specified SMTP credentials. Currently only the password can be changed.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="username"></param>
-    /// <param name="password"></param>
+    /// <param name="name">The domain name.</param>
+    /// <param name="username">The username to find the domain credentials with.</param>
+    /// <param name="password">The password to change.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> UpdateDomainCredentialPassword(Uri name, string username, string password, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Deletes the defined SMTP credentials.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="username"></param>
+    /// <param name="name">The domain name.</param>
+    /// <param name="username">The username of the credentials to be removed.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> DeleteDomainCredential(Uri name, string username, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Returns delivery connection settings for the defined domain.
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="name">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetDomainDeliveryConnectionSettings(Uri name, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Updates the specified delivery connection settings for the defined domain.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="requireTLS"></param>
-    /// <param name="skipVerification"></param>
+    /// <param name="name">The domain name.</param>
+    /// <param name="requireTLS">
+    /// True, this requires the message only be sent over a TLS connection; false, Mailgun will still try
+    /// and upgrade the connection, but if Mailgun cannot, the message will be delivered over plaintext SMTP connection.
+    /// </param>
+    /// <param name="skipVerification">
+    /// True, message sent will not verify certificate or hostname when establishing TLS connection to send;
+    /// False, Mailgun will verify certificate and hostname. If either one cannot be verified, a TLS connection will not be established.
+    /// </param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> UpdateDomainDeliveryConnectionSettings(Uri name, bool requireTLS = false, bool skipVerification = false, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Returns tracking settings for a domain.
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="name">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetDomainTrackingSettings(Uri name, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Updates the open tracking settings for a domain.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="active"></param>
+    /// <param name="name">The domain name.</param>
+    /// <param name="active">True, enable; false, disable.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> UpdateDomainOpenTrackingSettings(Uri name, bool active, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Updates the click tracking settings for a domain.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="active"></param>
+    /// <param name="name">The domain name.</param>
+    /// <param name="active">True, enable; false, disable.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> UpdateDomainClickTrackingSettings(Uri name, DomainClickTrackingActive active, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Updates unsubscribe tracking settings for a domain.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="active"></param>
-    /// <param name="customHtmlFooter"></param>
-    /// <param name="customTextFooter"></param>
+    /// <param name="name">The domain name.</param>
+    /// <param name="active">True, enable; false, disable.</param>
+    /// <param name="customHtmlFooter">Custom HTML version of unsubscribe footer.</param>
+    /// <param name="customTextFooter">Custom text version of the unsubscribe footer.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> UpdateDomainUnsubscribeTrackingSettings(Uri name, bool active, string customHtmlFooter, string customTextFooter, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Change the DKIM authority for a domain.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="self"></param>
+    /// <param name="name">The domain name.</param>
+    /// <param name="self">
+    /// True, the domain will be DKIM authority for itself;
+    /// false, will be the same DKIM Authority as the root domain registered.
+    /// </param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> ChangeDomainDKIMAuthority(Uri name, bool self, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Returns total stats for the domain.
     /// </summary>
-    /// <param name="statsRequest"></param>
+    /// <param name="statsRequest">The request params for grabbing filtered stats items.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetStatsTotal(IStatsRequest statsRequest, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Get a list of event records based on parameters that filter the returned set of records.
     /// </summary>
-    /// <param name="eventRequest"></param>
+    /// <param name="eventRequest">The event request params for grabbing filtered set of event records.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetEvents(IEventRequest eventRequest, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Grab a page of results from given pagination object. Can be a previous, next, first, or last page.
     /// </summary>
-    /// <param name="uri"></param>
+    /// <param name="uri">The url of the page to retreive the data from.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetPage(Uri uri, CancellationToken ct = default(CancellationToken));

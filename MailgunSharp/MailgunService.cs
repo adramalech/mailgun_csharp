@@ -219,9 +219,14 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
+      if (tagName.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Tag cannot be null or empty!");
+      }
+
       if (doesTagNameHaveCorrectFormatting(tagName))
       {
-        throw new ArgumentNullException("Tag name cannot be null or empty. Must be ASCII characters with a length no greater than 128 ASCII characters!");
+        throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/tags/{tagName}", ct);
@@ -229,9 +234,14 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> UpdateTagDescription(string tagName, string description, CancellationToken ct = default(CancellationToken))
     {
+      if (tagName.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Tag cannot be null or empty!");
+      }
+
       if (doesTagNameHaveCorrectFormatting(tagName))
       {
-        throw new ArgumentNullException("Tag name cannot be null or empty. Must be ASCII characters with a length no greater than 128 ASCII characters!");
+        throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
       var content = new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>("description", description) };
@@ -243,9 +253,14 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> DeleteTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
+      if (tagName.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Tag cannot be null or empty!");
+      }
+
       if (doesTagNameHaveCorrectFormatting(tagName))
       {
-        throw new ArgumentNullException("Tag name cannot be null or empty. Must be ASCII characters with a length no greater than 128 ASCII characters!");
+        throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
       return this.httpClient.DeleteAsync($"{this.companyDomain}/tags/{tagName}", ct);
@@ -253,9 +268,14 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetTagStats(string tagName, CancellationToken ct = default(CancellationToken))
     {
+      if (tagName.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Tag cannot be null or empty!");
+      }
+
       if (doesTagNameHaveCorrectFormatting(tagName))
       {
-        throw new ArgumentNullException("Tag name cannot be null or empty. Must be ASCII characters with a length no greater than 128 ASCII characters!");
+        throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/tags/{tagName}/stats", ct);
@@ -263,9 +283,14 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetListCountriesStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
+      if (tagName.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Tag cannot be null or empty!");
+      }
+
       if (doesTagNameHaveCorrectFormatting(tagName))
       {
-        throw new ArgumentNullException("Tag name cannot be null or empty. Must be ASCII characters with a length no greater than 128 ASCII characters!");
+        throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/tags/{tagName}/stats/aggregates/countries", ct);
@@ -273,9 +298,14 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetListEmailProviderStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
+      if (tagName.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Tag cannot be null or empty!");
+      }
+
       if (doesTagNameHaveCorrectFormatting(tagName))
       {
-        throw new ArgumentNullException("Tag name cannot be null or empty. Must be ASCII characters with a length no greater than 128 ASCII characters!");
+        throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/tags/{tagName}/stats/aggregates/providers", ct);
@@ -283,9 +313,14 @@ namespace MailgunSharp
 
     public Task<HttpResponseMessage> GetListDeviceStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
+      if (tagName.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Tag cannot be null or empty!");
+      }
+
       if (doesTagNameHaveCorrectFormatting(tagName))
       {
-        throw new ArgumentNullException("Tag name cannot be null or empty. Must be ASCII characters with a length no greater than 128 ASCII characters!");
+        throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/tags/{tagName}/stats/aggregates/devices", ct);
@@ -436,6 +471,16 @@ namespace MailgunSharp
         throw new ArgumentNullException("Address cannot be null or empty!");
       }
 
+      if (tag.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Tag cannot be null or empty!");
+      }
+
+      if (doesTagNameHaveCorrectFormatting(tag))
+      {
+        throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
+      }
+
       var url = (tag.IsNullEmptyWhitespace()) ? $"{this.companyDomain}/unsubscribers/{address.Address}" : $"{this.companyDomain}/unsubscribers/{address.Address}?tag={tag}";
 
       return this.httpClient.DeleteAsync(url, ct);
@@ -578,7 +623,7 @@ namespace MailgunSharp
       return this.httpClient.GetAsync(url, ct);
     }
 
-    public Task<HttpResponseMessage> GetMailingListMembers(MailAddress mailingListAddress, MailAddress memberAddress, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> GetMailingListMember(MailAddress mailingListAddress, MailAddress memberAddress, CancellationToken ct = default(CancellationToken))
     {
       if (mailingListAddress == null)
       {

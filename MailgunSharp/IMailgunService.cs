@@ -172,7 +172,7 @@ namespace MailgunSharp
     Task<HttpResponseMessage> GetStatTotals(CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Paginate over a list of bounces for a domain.
     /// </summary>
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
@@ -180,23 +180,23 @@ namespace MailgunSharp
     Task<HttpResponseMessage> GetBounces(int limit = 100, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Fetch a single bounce event by a given email address.
     /// </summary>
-    /// <param name="address"></param>
+    /// <param name="address">Valid email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetBounce(MailAddress address, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Add a bounce record to the bounce list. Updates the existing record if the address is alraedy there.
     /// </summary>
-    /// <param name="bounce"></param>
+    /// <param name="bounce">The bounce record to add or update.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> AddBounce(IBounceRequest bounce, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Add multiple bounce records to the bounce list in a single API call.
     /// </summary>
     /// <param name="bounces"></param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
@@ -204,22 +204,22 @@ namespace MailgunSharp
     Task<HttpResponseMessage> AddBounces(ICollection<IBounceRequest> bounces, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Clears a given bounce event. The delivery to the deleted email address resumes until it bounces again.
     /// </summary>
-    /// <param name="address"></param>
+    /// <param name="address">Valid email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> DeleteBounce(MailAddress address, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Clears all bounced email addresses for a domain. Delivery to the deleted email addresses will no longer be suppressed.
     /// </summary>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> DeleteBounces(CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Paginate over a list of unsubscribers for a domain.  Will be returned in alphabetical order.
     /// </summary>
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
@@ -227,15 +227,15 @@ namespace MailgunSharp
     Task<HttpResponseMessage> GetUnsubscribers(int limit = 100, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Fetch a single unsubscribe record.
     /// </summary>
-    /// <param name="address"></param>
+    /// <param name="address">The valid email address matching an unsubscriber record.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetUnsubscriber(MailAddress address, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Add an address to the unsubscriber table.
     /// </summary>
     /// <param name="unsubscriber"></param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
@@ -243,7 +243,7 @@ namespace MailgunSharp
     Task<HttpResponseMessage> AddUnsubscriber(IUnsubscriberRequest unsubscriber, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Add multiple unsubscribe records to the unsubscribe list in a single API call.
     /// </summary>
     /// <param name="unsubscribers"></param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
@@ -251,16 +251,17 @@ namespace MailgunSharp
     Task<HttpResponseMessage> AddUnsubscribers(ICollection<IUnsubscriberRequest> unsubscribers, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Remove an address from the unsubscribers list. If tag parameter is not provided, completely removes an address from the list.
+    /// If tag is provided will remove just that tag.
     /// </summary>
-    /// <param name="address"></param>
-    /// <param name="tag"></param>
+    /// <param name="address">The address of the unsubscribed person.</param>
+    /// <param name="tag">The tag the unsubscriber is wanting to remove.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> DeleteUnsubscriber(MailAddress address, string tag = "", CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Paginate over a list of complaints for a domain.
     /// </summary>
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
@@ -268,15 +269,15 @@ namespace MailgunSharp
     Task<HttpResponseMessage> GetComplaints(int limit = 100, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Fetch a single spam complaint by a given email address.
     /// </summary>
-    /// <param name="address"></param>
+    /// <param name="address">Valid email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetComplaint(MailAddress address, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Add an address to the complaints list.
     /// </summary>
     /// <param name="complaint"></param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
@@ -284,23 +285,23 @@ namespace MailgunSharp
     Task<HttpResponseMessage> AddComplaint(IComplaintRequest complaint, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Add multiple complaint records to the complaint list in a single API call.
     /// </summary>
-    /// <param name="complaints"></param>
+    /// <param name="complaints">Multiple complaint records.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> AddComplaints(ICollection<IComplaintRequest> complaints, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Remove a given spam complaint.
     /// </summary>
-    /// <param name="address"></param>
+    /// <param name="address">Valid email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> DeleteComplaint(MailAddress address, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Paginate over mailing lists under your account.
     /// </summary>
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
@@ -308,91 +309,91 @@ namespace MailgunSharp
     Task<HttpResponseMessage> GetMailingLists(int limit = 100, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Returns a single mailing list by a given address.
     /// </summary>
-    /// <param name="address"></param>
+    /// <param name="address">Valid email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetMailingList(MailAddress address, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Creates a new mailing list.
     /// </summary>
-    /// <param name="mailingList"></param>
+    /// <param name="mailingList">The mailing list to be added.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> AddMailingList(IMailingList mailingList, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Update mailnig list properties, such as address, description or name.
     /// </summary>
-    /// <param name="address"></param>
-    /// <param name="mailingList"></param>
+    /// <param name="address">Valid email address.</param>
+    /// <param name="mailingList">The mailing list to be updated.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> UpdateMailingList(MailAddress address, IMailingList mailingList, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Deletes a mailing list.
     /// </summary>
-    /// <param name="address"></param>
+    /// <param name="address">Valid email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> DeleteMailingList(MailAddress address, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Paginate over list of members in the given mailing list.
     /// </summary>
-    /// <param name="address"></param>
+    /// <param name="address">Valid email address.</param>
     /// <param name="limit">Number of entries to return.</param>
-    /// <param name="subscribed"></param>
+    /// <param name="subscribed">True, lists subscribed; false, for list unsubscribed. If null will list all.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetMailingListMembers(MailAddress address, int limit = 100, bool? subscribed = null, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Retrieves a mailing list member.
     /// </summary>
-    /// <param name="mailingListAddress"></param>
-    /// <param name="memberAddress"></param>
+    /// <param name="mailingListAddress">The mailing list's email address.</param>
+    /// <param name="memberAddress">The member's email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    Task<HttpResponseMessage> GetMailingListMembers(MailAddress mailingListAddress, MailAddress memberAddress, CancellationToken ct = default(CancellationToken));
+    Task<HttpResponseMessage> GetMailingListMember(MailAddress mailingListAddress, MailAddress memberAddress, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Adds a member to the mailing list.
     /// </summary>
-    /// <param name="address"></param>
-    /// <param name="member"></param>
+    /// <param name="address">Valid email address.</param>
+    /// <param name="member">A mailing list member.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> AddMailingListMember(MailAddress address, IMember member, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Adds multiple members, up to 1,000 per call, to a Mailing list.
     /// </summary>
-    /// <param name="address"></param>
-    /// <param name="members"></param>
-    /// <param name="upsert"></param>
+    /// <param name="address">Valid email address.</param>
+    /// <param name="members">List of members to be added to the mailing list.</param>
+    /// <param name="upsert">True, to update existing members; false, to ignore duplicates.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> AddMailingListMembers(MailAddress address, ICollection<IMember> members, bool upsert, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Updates a mailing list member with given properties.  Won't touch the property if it's not passed in.
     /// </summary>
-    /// <param name="mailingListAddress"></param>
-    /// <param name="memberAddress"></param>
-    /// <param name="member"></param>
+    /// <param name="mailingListAddress">The mailing list's email address.</param>
+    /// <param name="memberAddress">The member's email address.</param>
+    /// <param name="member">A mailing list member.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> UpdateMailingListMember(MailAddress mailingListAddress, MailAddress memberAddress, IMember member, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    ///
+    /// Delete a mailing list member.
     /// </summary>
-    /// <param name="mailingListAddress"></param>
-    /// <param name="memberAddress"></param>
+    /// <param name="mailingListAddress">The mailing list's email address.</param>
+    /// <param name="memberAddress">The member's email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> DeleteMailingListMember(MailAddress mailingListAddress, MailAddress memberAddress, CancellationToken ct = default(CancellationToken));

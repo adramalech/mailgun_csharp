@@ -34,6 +34,9 @@ namespace MailgunSharp.Test.Request
     [InlineData("var1", "")]
     [InlineData("", "")]
     [InlineData(null, null)]
+    [InlineData(" ", "")]
+    [InlineData("", " ")]
+    [InlineData(" ", " ")]
     public void QueryString_AppendParam_Should_Throw_Error_If_Variable_Or_Value_Is_Empty_Or_Null(string variable, string value)
     {
       var queryString = new QueryString();

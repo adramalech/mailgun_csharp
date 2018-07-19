@@ -43,5 +43,41 @@ namespace MailgunSharp.Test.Request
 
       Assert.Throws<ArgumentNullException>(() => queryString.AppendIfNotNullOrEmpty(variable, value));
     }
+
+    [Fact]
+    public void QueryString_AppendParam_Should_Have_Correct_Formatted_ToString()
+    {
+      var queryString = new QueryString();
+
+      Assert.True(queryString.AppendIfNotNullOrEmpty("var1", "val1"));
+
+      var qs = queryString.ToString();
+
+      Assert.True(qs.IndexOf('?') == 0);
+
+      Assert.True(qs.Contains('='));
+
+      Assert.False(qs.Contains('&'));
+    }
+
+    [Fact]
+    public void QueryString_AppendMultipleParam_Should_Have_Correct_Formatted_ToString()
+    {
+      var queryString = new QueryString();
+
+      Assert.True(queryString.AppendIfNotNullOrEmpty("var1", "val1"));
+
+      Assert.True(queryString.AppendIfNotNullOrEmpty("var2", "val2"));
+
+      var qs = queryString.ToString();
+
+      Assert.True(qs.IndexOf('?') == 0);
+
+      var equalStrSplit = qs.Split('=');
+
+      Assert.True(equalStrSplit != null && equalStrSplit.Length == 3);
+
+      Assert.True(qs.Contains('&'));
+    }
   }
 }

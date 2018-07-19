@@ -1,5 +1,6 @@
 using System;
 using MailgunSharp.Request;
+using MailgunSharp.Extensions;
 using Xunit;
 
 namespace MailgunSharp.Test.Request
@@ -48,6 +49,32 @@ namespace MailgunSharp.Test.Request
       Assert.True(queryString != null);
 
       Assert.True(queryString.Count == 3);
+    }
+
+    [Fact]
+    public void Append_MultipleParameters_Check_QueryString_ToString_Format_For_Seperators()
+    {
+      var queryStringBuilder = new QueryStringBuilder();
+
+      var queryString = queryStringBuilder
+                          .Append("var1", "val1")
+                          .Append("var2", "val2")
+                          .Append("var3", "val3")
+                          .Build();
+
+      Assert.True(queryString != null);
+
+      Assert.True(queryString.Count == 3);
+
+      var str = queryString.ToString();
+
+      Assert.True(!string.IsNullOrEmpty(str) && !string.IsNullOrWhiteSpace(str));
+
+      Assert.True(str.IndexOf('?') == 0);
+
+      var strArray = str.Split('&');
+
+      Assert.True(strArray != null && strArray.Length == 3);
     }
   }
 }

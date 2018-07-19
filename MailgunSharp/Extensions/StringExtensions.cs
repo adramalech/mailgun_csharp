@@ -1,6 +1,9 @@
+using System.Runtime.CompilerServices;
+[assembly:InternalsVisibleTo("MailgunSharp.Test")]
+
 namespace MailgunSharp.Extensions
 {
-  public static class StringExtensions
+  internal static class StringExtensions
   {
     /// <summary>
     /// Check if the string only is null, empty, or whitespace.

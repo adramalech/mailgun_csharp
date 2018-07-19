@@ -1,6 +1,9 @@
+using System.Runtime.CompilerServices;
+[assembly:InternalsVisibleTo("MailgunSharp.Test")]
+
 namespace MailgunSharp.Extensions
 {
-  public static class BooleanExtensions
+  internal static class BooleanExtensions
   {
     /// <summary>
     /// Get a boolean as a lowercase "yes" or "no"

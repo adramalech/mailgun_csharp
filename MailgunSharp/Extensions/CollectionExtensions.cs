@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
+using System.Runtime.CompilerServices;
+[assembly:InternalsVisibleTo("MailgunSharp.Test")]
+
 namespace MailgunSharp.Extensions
 {
-  public static class CollectionExtensions
+  internal static class CollectionExtensions
   {
     /// <summary>
     /// Add a key-value string pair to a collection of key-value string pairs if key and value are not null, empty, or whitespace.

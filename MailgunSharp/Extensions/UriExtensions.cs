@@ -1,8 +1,11 @@
 using System;
 
+using System.Runtime.CompilerServices;
+[assembly:InternalsVisibleTo("MailgunSharp.Test")]
+
 namespace MailgunSharp.Extensions
 {
-  public static class UriExtensions
+  internal static class UriExtensions
   {
     /// <summary>
     /// Get the minimal hostname from a URI.

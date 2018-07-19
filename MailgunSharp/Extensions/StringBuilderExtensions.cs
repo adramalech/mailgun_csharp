@@ -1,9 +1,12 @@
 using System;
 using System.Text;
 
+using System.Runtime.CompilerServices;
+[assembly:InternalsVisibleTo("MailgunSharp.Test")]
+
 namespace MailgunSharp.Extensions
 {
-  public static class StringBuilderExtensions
+  internal static class StringBuilderExtensions
   {
     /// <summary>
     /// If the string being added is not null, empty or whitespace append the string to the stringbuilder.

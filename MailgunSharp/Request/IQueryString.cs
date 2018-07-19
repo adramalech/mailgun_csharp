@@ -1,3 +1,6 @@
+using System.Runtime.CompilerServices;
+[assembly:InternalsVisibleTo("MailgunSharp.Test")]
+
 namespace MailgunSharp.Request
 {
   internal interface IQueryString

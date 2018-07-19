@@ -3,6 +3,9 @@ using System.Text;
 using System.Text.Encodings.Web;
 using MailgunSharp.Extensions;
 
+using System.Runtime.CompilerServices;
+[assembly:InternalsVisibleTo("MailgunSharp.Test")]
+
 namespace MailgunSharp.Request
 {
   internal sealed class QueryString : IQueryString

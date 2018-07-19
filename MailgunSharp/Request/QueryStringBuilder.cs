@@ -1,6 +1,9 @@
 using System;
 using MailgunSharp.Extensions;
 
+using System.Runtime.CompilerServices;
+[assembly:InternalsVisibleTo("MailgunSharp.Test")]
+
 namespace MailgunSharp.Request
 {
   internal sealed class QueryStringBuilder : IQueryStringBuilder
@@ -21,12 +24,12 @@ namespace MailgunSharp.Request
     /// <summary>
     /// Append a parameter to the querystring.
     /// </summary>
-    /// <param name="var">The parameter variable name.</param>
-    /// <param name="val">The value of the paramater.</param>
+    /// <param name="variable">The parameter variable name.</param>
+    /// <param name="value">The value of the paramater.</param>
     /// <returns>The query string builder instance.</returns>
-    public IQueryStringBuilder Append(string var, string val)
+    public IQueryStringBuilder Append(string variable, string value)
     {
-      this.queryString.AppendIfNotNullOrEmpty(var, val);
+      this.queryString.AppendIfNotNullOrEmpty(variable, value);
 
       return this;
     }

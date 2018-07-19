@@ -1,3 +1,6 @@
+using System.Runtime.CompilerServices;
+[assembly:InternalsVisibleTo("MailgunSharp.Test")]
+
 namespace MailgunSharp.Request
 {
   internal interface IQueryStringBuilder
@@ -5,10 +8,10 @@ namespace MailgunSharp.Request
     /// <summary>
     /// Append a parameter to the querystring.
     /// </summary>
-    /// <param name="var">The parameter variable name.</param>
-    /// <param name="val">The value of the paramater.</param>
+    /// <param name="variable">The parameter variable name.</param>
+    /// <param name="value">The value of the paramater.</param>
     /// <returns>The query string builder instance.</returns>
-    IQueryStringBuilder Append(string var, string val);
+    IQueryStringBuilder Append(string variable, string value);
 
     /// <summary>
     /// Return the instance of the querystring that was built.

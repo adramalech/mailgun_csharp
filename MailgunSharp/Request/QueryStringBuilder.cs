@@ -1,4 +1,6 @@
 using System;
+using System.Text;
+using System.Text.Encodings.Web;
 using MailgunSharp.Extensions;
 
 using System.Runtime.CompilerServices;
@@ -9,38 +11,69 @@ namespace MailgunSharp.Request
   internal sealed class QueryStringBuilder : IQueryStringBuilder
   {
     /// <summary>
-    /// The instance of query string to be built.
+    /// The String builder that will be used to build the querystring.
     /// </summary>
-    private IQueryString queryString;
+    private StringBuilder stb;
+
+    private int count;
 
     /// <summary>
-    /// Create an instance of query string builder class.
+    /// The current count of appended query string parameters.
     /// </summary>
-    public QueryStringBuilder()
+    /// <value>int</value>
+    public int Count
     {
-      this.queryString = new QueryString();
+      get
+      {
+        return count;
+      }
     }
 
     /// <summary>
-    /// Append a parameter to the querystring.
+    /// Create an instance of query string class with new stringbuilder and a zero appended parameter count.
     /// </summary>
-    /// <param name="variable">The parameter variable name.</param>
-    /// <param name="value">The value of the paramater.</param>
-    /// <returns>The query string builder instance.</returns>
+    public QueryStringBuilder()
+    {
+      this.stb = new StringBuilder();
+      this.count = 0;
+    }
+
+    /// <summary>
+    /// Append a value with a variable name as a parameter to the querystring if not null or empty.
+    /// </summary>
+    /// <param name="variable">The varaible name of the parameter to be appended.</param>
+    /// <param name="value">The value of the parameter to be appended.</param>
     public IQueryStringBuilder Append(string variable, string value)
     {
-      this.queryString.AppendIfNotNullOrEmpty(variable, value);
+      if (variable.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Variable cannot be null or empty!");
+      }
+
+      if (value.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Value cannot be null or empty!");
+      }
+
+      var prefix = (stb.IsEmpty()) ? "?" : "&";
+
+      var wasAdded = stb.AddIfNotNullEmptyWhitespace($"{prefix}{UrlEncoder.Default.Encode(variable)}={UrlEncoder.Default.Encode(value)}");
+
+      if (wasAdded)
+      {
+        this.count++;
+      }
 
       return this;
     }
 
     /// <summary>
-    /// Return the instance of the querystring that was built.
+    /// Override the object ToString method to return the result of the string builder.
     /// </summary>
-    /// <returns>The querystring.</returns>
-    public IQueryString Build()
+    /// <returns>string</returns>
+    public override string ToString()
     {
-      return queryString;
+      return stb.ToString();
     }
   }
 }

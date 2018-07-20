@@ -1,80 +1,79 @@
 using System;
+using Xunit;
 using MailgunSharp.Request;
 using MailgunSharp.Extensions;
-using Xunit;
 
 namespace MailgunSharp.Test.Request
 {
-  public class QueryStringBuilderTest
+  public class QueryStringTest
   {
     [Fact]
-    public void Initialize_QueryStringBuilder_Should_Return_Zero_Count_QueryString()
+    public void Initialized_QueryString_Should_Have_Count_Equal_To_Zero()
     {
       var queryStringBuilder = new QueryStringBuilder();
 
-      var queryString = queryStringBuilder.Build();
+      Assert.True(queryStringBuilder != null);
 
-      Assert.True(queryString != null);
-
-      Assert.True(queryString.Count == 0);
+      Assert.True(queryStringBuilder.Count == 0);
     }
 
     [Theory]
-    [InlineData("var1", "var2")]
-    [InlineData("a", "b")]
-    public void Append_Parameter_To_QueryString_Shoul_Return_True_And_Have_Count_One_QueryString(string variable, string value)
+    [InlineData("var1", "val1")]
+    public void QueryString_AppendParam_Check_If_Exists_Should_Have_Count_Equal_To_One(string variable, string value)
     {
       var queryStringBuilder = new QueryStringBuilder();
 
-      var queryString = queryStringBuilder
-                          .Append(variable, value)
-                          .Build();
+      queryStringBuilder.Append(variable, value);
 
-      Assert.True(queryString != null);
+      Assert.True(queryStringBuilder.Count == 1);
+    }
 
-      Assert.True(queryString.Count == 1);
+    [Theory]
+    [InlineData("", "var1")]
+    [InlineData("var1", "")]
+    [InlineData("", "")]
+    [InlineData(null, null)]
+    [InlineData(" ", "")]
+    [InlineData("", " ")]
+    [InlineData(" ", " ")]
+    public void QueryStringBuilder_AppendParam_Should_Throw_Error_If_Variable_Or_Value_Is_Empty_Or_Null(string variable, string value)
+    {
+      var queryStringBuilder = new QueryStringBuilder();
+
+      Assert.Throws<ArgumentNullException>(() => queryStringBuilder.Append(variable, value));
     }
 
     [Fact]
-    public void Append_Multiple_Parameters_Count_Of_QueryString_Should_Be_The_Same_As_List_Of_Params()
+    public void QueryStringBuilder_AppendParam_Should_Have_Correct_Formatted_ToString()
+    {
+      var queryStringBuilder = new QueryStringBuilder();
+
+      var queryString = queryStringBuilder.Append("var1", "val1").ToString();
+
+      Assert.True(queryString.IndexOf('?') == 0);
+
+      Assert.True(queryString.Contains('='));
+
+      Assert.False(queryString.Contains('&'));
+    }
+
+    [Fact]
+    public void QueryStringBuilder_AppendMultipleParam_Should_Have_Correct_Formatted_ToString()
     {
       var queryStringBuilder = new QueryStringBuilder();
 
       var queryString = queryStringBuilder
                           .Append("var1", "val1")
                           .Append("var2", "val2")
-                          .Append("var3", "val3")
-                          .Build();
+                          .ToString();
 
-      Assert.True(queryString != null);
+      Assert.True(queryString.IndexOf('?') == 0);
 
-      Assert.True(queryString.Count == 3);
-    }
+      var equalStrSplit = queryString.Split('=');
 
-    [Fact]
-    public void Append_MultipleParameters_Check_QueryString_ToString_Format_For_Seperators()
-    {
-      var queryStringBuilder = new QueryStringBuilder();
+      Assert.True(equalStrSplit != null && equalStrSplit.Length == 3);
 
-      var queryString = queryStringBuilder
-                          .Append("var1", "val1")
-                          .Append("var2", "val2")
-                          .Append("var3", "val3")
-                          .Build();
-
-      Assert.True(queryString != null);
-
-      Assert.True(queryString.Count == 3);
-
-      var str = queryString.ToString();
-
-      Assert.True(!string.IsNullOrEmpty(str) && !string.IsNullOrWhiteSpace(str));
-
-      Assert.True(str.IndexOf('?') == 0);
-
-      var strArray = str.Split('&');
-
-      Assert.True(strArray != null && strArray.Length == 3);
+      Assert.True(queryString.Contains('&'));
     }
   }
 }

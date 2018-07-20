@@ -6,17 +6,17 @@ namespace MailgunSharp.Request
   internal interface IQueryStringBuilder
   {
     /// <summary>
-    /// Append a parameter to the querystring.
+    /// The current count of appended query string parameters.
     /// </summary>
-    /// <param name="variable">The parameter variable name.</param>
-    /// <param name="value">The value of the paramater.</param>
-    /// <returns>The query string builder instance.</returns>
-    IQueryStringBuilder Append(string variable, string value);
+    /// <value>int</value>
+    int Count { get; }
 
     /// <summary>
-    /// Return the instance of the querystring that was built.
+    /// Append a value with a variable name as a parameter to the querystring if not null or empty.
     /// </summary>
-    /// <returns>The querystring.</returns>
-    IQueryString Build();
+    /// <param name="variable">The varaible name of the parameter to be appended.</param>
+    /// <param name="value">The value of the parameter to be appended.</param>
+    /// <returns>The instance of the query string builder.</returns>
+    IQueryStringBuilder Append(string variable, string value);
   }
 }

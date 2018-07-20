@@ -57,12 +57,9 @@ namespace MailgunSharp.Request
 
       var prefix = (stb.IsEmpty()) ? "?" : "&";
 
-      var wasAdded = stb.AddIfNotNullEmptyWhitespace($"{prefix}{UrlEncoder.Default.Encode(variable)}={UrlEncoder.Default.Encode(value)}");
+      stb.Append($"{prefix}{UrlEncoder.Default.Encode(variable)}={UrlEncoder.Default.Encode(value)}");
 
-      if (wasAdded)
-      {
-        this.count++;
-      }
+      this.count++;
 
       return this;
     }

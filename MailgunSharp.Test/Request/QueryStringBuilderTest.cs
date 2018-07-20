@@ -48,7 +48,9 @@ namespace MailgunSharp.Test.Request
     {
       var queryStringBuilder = new QueryStringBuilder();
 
-      var queryString = queryStringBuilder.Append("var1", "val1").ToString();
+      var queryString = queryStringBuilder
+                          .Append("var1", "val1")
+                          .ToString();
 
       Assert.True(queryString.IndexOf('?') == 0);
 

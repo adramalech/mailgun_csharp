@@ -13,7 +13,7 @@ namespace MailgunSharp.Supression
     /// A valid email address.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    MailAddress Address { get; }
+    MailAddress EmailAddress { get; }
 
     /// <summary>
     /// SMTP Error code.

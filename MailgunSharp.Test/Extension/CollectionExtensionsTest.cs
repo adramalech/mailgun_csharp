@@ -33,7 +33,6 @@ namespace MailgunSharp.Test.Extension
     [InlineData("b", "")]
     [InlineData("b", null)]
     [InlineData("b", " ")]
-    [InlineData("b", "")]
     [InlineData("", "")]
     [InlineData(null, null)]
     [InlineData(" ", " ")]
@@ -45,9 +44,8 @@ namespace MailgunSharp.Test.Extension
     }
 
     [Theory]
-    [InlineData("a", "b")]
     [InlineData("key", "value")]
-    [InlineData(" k ", " v ")]
+    [InlineData(" key ", " value ")]
     public void KeyValuePair_Collection_AddIfNotNullEmtpyWhitespace_Add_A_Null_Empty_Whitespace_Should_Be_True(string key, string value)
     {
       var collection = new Collection<KeyValuePair<string, string>>();

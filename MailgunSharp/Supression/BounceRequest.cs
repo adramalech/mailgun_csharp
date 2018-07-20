@@ -10,17 +10,17 @@ namespace MailgunSharp.Supression
 {
   public sealed class BounceRequest : IBounceRequest
   {
-    private readonly MailAddress address;
+    private readonly MailAddress emailAddress;
 
     /// <summary>
     /// A valid email address.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    public MailAddress Address
+    public MailAddress EmailAddress
     {
       get
       {
-        return address;
+        return emailAddress;
       }
     }
 
@@ -69,19 +69,19 @@ namespace MailgunSharp.Supression
     /// <summary>
     /// Create an instance of the bounce request class.
     /// </summary>
-    /// <param name="address">The valid email address.</param>
+    /// <param name="emailAddress">The valid email address.</param>
     /// <param name="statusCode">The STMP Error status code.  Defaults to 550, Mailbox Unavailable.</param>
     /// <param name="error">The error description. Defaults to empty string.</param>
     /// <param name="createdAt">Timestamp of the bounced event. Defaults to current time UTC.</param>
     /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
-    public BounceRequest(MailAddress address, SmtpErrorCode statusCode = SmtpErrorCode.MAILBOX_UNAVAILABLE, string error = "", DateTime? createdAt = null, TimeZoneInfo tzInfo = null)
+    public BounceRequest(MailAddress emailAddress, SmtpErrorCode statusCode = SmtpErrorCode.MAILBOX_UNAVAILABLE, string error = "", DateTime? createdAt = null, TimeZoneInfo tzInfo = null)
     {
-      if (address == null)
+      if (emailAddress == null)
       {
         throw new ArgumentNullException("Address cannot be null or emtpy!");
       }
 
-      this.address = address;
+      this.emailAddress = emailAddress;
       this.code = statusCode;
       this.error = error;
 
@@ -99,7 +99,7 @@ namespace MailgunSharp.Supression
     {
       var jsonObject = new JObject();
 
-      jsonObject["address"] = this.address.Address;
+      jsonObject["address"] = this.emailAddress.Address;
       jsonObject["code"] = ((int)this.code).ToString();
       jsonObject["error"] = this.error;
       jsonObject["created_at"] = ((!this.createdAt.HasValue) ? ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() : ((DateTimeOffset)this.createdAt.Value).ToUnixTimeSeconds()).ToString();
@@ -115,7 +115,7 @@ namespace MailgunSharp.Supression
     {
       var content = new Collection<KeyValuePair<string, string>>()
       {
-        new KeyValuePair<string, string>("address", this.address.ToString()),
+        new KeyValuePair<string, string>("address", this.emailAddress.ToString()),
         new KeyValuePair<string, string>("code", ((int)this.code).ToString()),
         new KeyValuePair<string, string>("error", this.error),
         new KeyValuePair<string, string>("created_at", ((!this.createdAt.HasValue) ? ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() : ((DateTimeOffset)this.createdAt.Value).ToUnixTimeSeconds()).ToString())

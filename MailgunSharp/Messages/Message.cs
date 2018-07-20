@@ -285,43 +285,43 @@ namespace MailgunSharp.Messages
         addressList.Add(t.Address);
       }
 
-      content.AddIfNotNullOrEmpty("to", generateCommaDelimenatedList(addressList));
+      content.Add("to", generateCommaDelimenatedList(addressList));
 
       if (this.Cc != null)
       {
-        content.AddIfNotNullOrEmpty("cc", generateCommaDelimenatedList(this.Cc));
+        content.Add("cc", generateCommaDelimenatedList(this.Cc));
       }
 
       if (this.Bcc != null)
       {
-        content.AddIfNotNullOrEmpty("bcc", generateCommaDelimenatedList(this.Bcc));
+        content.Add("bcc", generateCommaDelimenatedList(this.Bcc));
       }
 
       if (!this.Subject.IsNullEmptyWhitespace())
       {
-        content.AddIfNotNullOrEmpty("subject", this.Subject);
+        content.Add("subject", this.Subject);
       }
 
       if (!this.Html.IsNullEmptyWhitespace())
       {
-        content.AddIfNotNullOrEmpty("html", this.Html);
+        content.Add("html", this.Html);
       }
 
       if (!this.Text.IsNullEmptyWhitespace())
       {
-        content.AddIfNotNullOrEmpty("text", this.Text);
+        content.Add("text", this.Text);
       }
 
       if (this.RecipientVariables != null)
       {
-        content.AddIfNotNullOrEmpty("recipient-variables", this.RecipientVariables.ToString(Formatting.None));
+        content.Add("recipient-variables", this.RecipientVariables.ToString(Formatting.None));
       }
 
       if (this.Tags != null)
       {
         foreach (var tag in this.Tags)
         {
-          content.AddIfNotNullOrEmpty("o:tag", tag);
+          content.Add("o:tag", tag);
         }
       }
 
@@ -329,7 +329,7 @@ namespace MailgunSharp.Messages
       {
         foreach (var customHeader in this.CustomHeaders)
         {
-          content.AddIfNotNullOrEmpty($"h:{customHeader.Key}", customHeader.Value);
+          content.Add($"h:{customHeader.Key}", customHeader.Value);
         }
       }
 
@@ -337,13 +337,13 @@ namespace MailgunSharp.Messages
       {
         foreach (var data in this.CustomData)
         {
-          content.AddIfNotNullOrEmpty($"v:{data.Key}", data.Value.ToString(Formatting.None));
+          content.Add($"v:{data.Key}", data.Value.ToString(Formatting.None));
         }
       }
 
       if (this.DeliveryTime != null && this.DeliveryTime.HasValue)
       {
-        content.AddIfNotNullOrEmpty("o:deliverytime", ((DateTimeOffset)this.DeliveryTime.Value).ToUnixTimeSeconds().ToString());
+        content.Add("o:deliverytime", ((DateTimeOffset)this.DeliveryTime.Value).ToUnixTimeSeconds().ToString());
       }
 
       return content;

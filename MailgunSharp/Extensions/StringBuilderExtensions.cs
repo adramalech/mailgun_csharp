@@ -16,7 +16,7 @@ namespace MailgunSharp.Extensions
     /// <returns>True if string is appended to stringbuilder, false if not.</returns>
     public static bool AddIfNotNullEmptyWhitespace(this StringBuilder stb, string str)
     {
-      if (str.IsNullEmptyWhitespace())
+      if (string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str))
       {
         return false;
       }

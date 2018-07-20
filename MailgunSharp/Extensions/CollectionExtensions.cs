@@ -17,12 +17,13 @@ namespace MailgunSharp.Extensions
     /// <returns>True if the key-value string pair was added to the collection or false if it was not added.</returns>
     public static bool AddIfNotNullOrEmpty(this ICollection<KeyValuePair<string, string>> collection, string key, string value)
     {
-      if (key.IsNullEmptyWhitespace() || value.IsNullEmptyWhitespace())
+      if (string.IsNullOrEmpty(key) || string.IsNullOrWhiteSpace(key) || string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
       {
         return false;
       }
 
       collection.Add(new KeyValuePair<string, string>(key, value));
+
       return true;
     }
 

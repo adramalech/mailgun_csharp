@@ -12,8 +12,8 @@ namespace MailgunSharp.Domains
     /// <summary>
     /// The domain name.
     /// </summary>
-    /// <value>System.Uri</value>
-    Uri Name { get; }
+    /// <value>string</value>
+    string DomainName { get; }
 
     /// <summary>
     /// Password for SMTP authentication.

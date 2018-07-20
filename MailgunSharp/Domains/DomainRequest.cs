@@ -10,17 +10,17 @@ namespace MailgunSharp.Domains
 {
   public sealed class DomainRequest
   {
-    private readonly Uri name;
+    private readonly string domainName;
 
     /// <summary>
     /// The domain name.
     /// </summary>
-    /// <value>System.Uri</value>
-    public Uri Name
+    /// <value>string</value>
+    public string DomainName
     {
       get
       {
-        return name;
+        return domainName;
       }
     }
 
@@ -87,16 +87,21 @@ namespace MailgunSharp.Domains
     /// <summary>
     /// Create an instance of the domain request.
     /// </summary>
-    /// <param name="name">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="smtpPassword">The password for SMTP authentication.</param>
     /// <param name="spamAction">The action the domain will have when handling spam.</param>
     /// <param name="wildcard">Will the domain accept email for sub-domains.</param>
     /// <param name="forceDKIMAuthority">Is the domain itself the DKIM Authority, or will it inherit DKIM Authority from root registered domain.</param>
-    public DomainRequest(Uri name, string smtpPassword, SpamAction spamAction = SpamAction.DISABLED, bool wildcard = false, bool forceDKIMAuthority = false)
+    public DomainRequest(string domainName, string smtpPassword, SpamAction spamAction = SpamAction.DISABLED, bool wildcard = false, bool forceDKIMAuthority = false)
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
+      }
+
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
       }
 
       if (smtpPassword.IsNullEmptyWhitespace())
@@ -104,7 +109,7 @@ namespace MailgunSharp.Domains
         throw new ArgumentNullException("Smtp Password cannot be null or empty!");
       }
 
-      this.name = name;
+      this.domainName = domainName;
       this.smtpPassword = smtpPassword;
       this.spamAction = spamAction;
       this.wildcard = wildcard;
@@ -119,7 +124,7 @@ namespace MailgunSharp.Domains
     {
       var jsonObject = new JObject();
 
-      jsonObject["name"] = this.name.GetHostname();
+      jsonObject["name"] = this.domainName;
       jsonObject["smtp_password"] = this.smtpPassword;
       jsonObject["spam_action"] = EnumLookup.GetSpamActionName(this.spamAction);
       jsonObject["wildcard"] = this.wildcard;
@@ -136,7 +141,7 @@ namespace MailgunSharp.Domains
     {
       var content = new Collection<KeyValuePair<string, string>>()
       {
-        new KeyValuePair<string, string>("name", this.name.GetHostname()),
+        new KeyValuePair<string, string>("name", this.domainName),
         new KeyValuePair<string, string>("smtp_password", this.smtpPassword),
         new KeyValuePair<string, string>("spam_action", EnumLookup.GetSpamActionName(this.spamAction)),
         new KeyValuePair<string, string>("wildcard", this.wildcard.ToString().ToLower()),
@@ -144,6 +149,16 @@ namespace MailgunSharp.Domains
       };
 
       return content;
+    }
+
+    /// <summary>
+    /// Check if the hostname is valid format.
+    /// </summary>
+    /// <param name="hostname">The hostname to check.</param>
+    /// <returns>True, if valid, false if not valid.</returns>
+    private bool isHostnameValid(string hostname)
+    {
+      return Uri.CheckHostName(hostname) == UriHostNameType.Dns;
     }
   }
 }

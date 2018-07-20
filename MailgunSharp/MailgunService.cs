@@ -81,7 +81,7 @@ namespace MailgunSharp
     /// <param name="companyDomain">The company's domain name registered in the mailgun account.</param>
     /// <param name="apiKey">The company's mailgun account apikey.</param>
     /// <param name="httpClient">The httpclient can be optionally passed in to use one given instead of generating a new one.</param>
-    public MailgunService(Uri companyDomain, string apiKey, HttpClient httpClient = null)
+    public MailgunService(string companyDomain, string apiKey, HttpClient httpClient = null)
     {
       if (companyDomain == null)
       {
@@ -93,9 +93,14 @@ namespace MailgunSharp
         throw new ArgumentNullException("Api key cannot be null!");
       }
 
+      if (!isHostnameValid(companyDomain))
+      {
+        throw new FormatException("Hostname is incorrectly formatted!");
+      }
+
       this.httpClient = (httpClient == null) ? new HttpClient() : httpClient;
 
-      this.companyDomain = companyDomain.GetHostname();
+      this.companyDomain = companyDomain;
 
       this.httpClient.BaseAddress = new Uri(MAILGUN_BASE_URL);
 
@@ -1030,19 +1035,22 @@ namespace MailgunSharp
     /// <summary>
     /// Returns a single domain, including credentials and DNS records.
     /// </summary>
-    /// <param name="name">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> GetDomain(Uri name, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> GetDomain(string domainName, CancellationToken ct = default(CancellationToken))
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
       }
 
-      var hostname = name.GetHostname();
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
+      }
 
-      return this.httpClient.GetAsync($"/domains/{hostname}", ct);
+      return this.httpClient.GetAsync($"/domains/{domainName}", ct);
     }
 
     /// <summary>
@@ -1050,19 +1058,22 @@ namespace MailgunSharp
     ///
     /// If the domain is successfully verified the message should be the following:  "Domain DNS records have been updated."
     /// </summary>
-    /// <param name="name">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> GetAndVerifyDomain(Uri name, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> GetAndVerifyDomain(string domainName, CancellationToken ct = default(CancellationToken))
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
       }
 
-      var hostname = name.GetHostname();
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
+      }
 
-      return this.httpClient.GetAsync($"/domains/{hostname}/verify", ct);
+      return this.httpClient.GetAsync($"/domains/{domainName}/verify", ct);
     }
 
     /// <summary>
@@ -1086,34 +1097,42 @@ namespace MailgunSharp
     /// <summary>
     /// Delete a domain from your account.
     /// </summary>
-    /// <param name="name">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> DeleteDomain(Uri name, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> DeleteDomain(string domainName, CancellationToken ct = default(CancellationToken))
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
       }
 
-      var hostname = name.GetHostname();
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
+      }
 
-      return this.httpClient.DeleteAsync($"/domains/{hostname}", ct);
+      return this.httpClient.DeleteAsync($"/domains/{domainName}", ct);
     }
 
     /// <summary>
     /// Returns a list of SMTP credentials for the defined domain.
     /// </summary>
-    /// <<param name="name">The domain name.</param>
+    /// <<param name="domainName">The domain name.</param>
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="skip">Number of records to skip.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> GetDomainCredentials(Uri name, int limit = 100, int skip = 0, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> GetDomainCredentials(string domainName, int limit = 100, int skip = 0, CancellationToken ct = default(CancellationToken))
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
+      }
+
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
       }
 
       if (limit < 1)
@@ -1126,23 +1145,26 @@ namespace MailgunSharp
         throw new ArgumentOutOfRangeException("Skip cannot be an integer value less than 0!");
       }
 
-      var hostname = name.GetHostname();
-
-      return this.httpClient.GetAsync($"/domains/{hostname}/credentials?limit={limit}&skip={skip}", ct);
+      return this.httpClient.GetAsync($"/domains/{domainName}/credentials?limit={limit}&skip={skip}", ct);
     }
 
     /// <summary>
     /// Creates a new set of SMTP credentials for the defined domain.
     /// </summary>
-    /// <param name="name">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="credential">The SMTP credentials to be added to the specified domain.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> AddDomainCredential(Uri name, IDomainCredentialRequest credential, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> AddDomainCredential(string domainName, IDomainCredentialRequest credential, CancellationToken ct = default(CancellationToken))
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
+      }
+
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
       }
 
       if (credential == null)
@@ -1150,26 +1172,29 @@ namespace MailgunSharp
         throw new ArgumentNullException("Credential cannot be null or empty!");
       }
 
-      var hostname = name.GetHostname();
-
       var formContent = new FormUrlEncodedContent(credential.ToFormContent());
 
-      return this.httpClient.PostAsync($"/domains/{hostname}/credentials", formContent, ct);
+      return this.httpClient.PostAsync($"/domains/{domainName}/credentials", formContent, ct);
     }
 
     /// <summary>
     /// Updates the specified SMTP credentials. Currently only the password can be changed.
     /// </summary>
-    /// <param name="name">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="username">The username to find the domain credentials with.</param>
     /// <param name="password">The password to change.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> UpdateDomainCredentialPassword(Uri name, string username, string password, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> UpdateDomainCredentialPassword(string domainName, string username, string password, CancellationToken ct = default(CancellationToken))
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
+      }
+
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
       }
 
       if (username.IsNullEmptyWhitespace())
@@ -1187,8 +1212,6 @@ namespace MailgunSharp
         throw new ArgumentOutOfRangeException("Password must have a minimum length of 5, and maximum length of 32!");
       }
 
-      var hostname = name.GetHostname();
-
       var content = new Collection<KeyValuePair<string, string>>()
       {
         new KeyValuePair<string, string>("password", password)
@@ -1196,7 +1219,7 @@ namespace MailgunSharp
 
       var formContent = new FormUrlEncodedContent(content);
 
-      return this.httpClient.PutAsync($"/domains/{hostname}/credentials/{username}", formContent, ct);
+      return this.httpClient.PutAsync($"/domains/{domainName}/credentials/{username}", formContent, ct);
     }
 
     /// <summary>
@@ -1214,44 +1237,50 @@ namespace MailgunSharp
     /// <summary>
     /// Deletes the defined SMTP credentials.
     /// </summary>
-    /// <param name="name">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="username">The username of the credentials to be removed.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> DeleteDomainCredential(Uri name, string username, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> DeleteDomainCredential(string domainName, string username, CancellationToken ct = default(CancellationToken))
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
       }
 
-      var hostname = name.GetHostname();
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
+      }
 
-      return this.httpClient.DeleteAsync($"/domains/{hostname}/credentials/{username}", ct);
+      return this.httpClient.DeleteAsync($"/domains/{domainName}/credentials/{username}", ct);
     }
 
     /// <summary>
     /// Returns delivery connection settings for the defined domain.
     /// </summary>
-    /// <param name="name">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> GetDomainDeliveryConnectionSettings(Uri name, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> GetDomainDeliveryConnectionSettings(string domainName, CancellationToken ct = default(CancellationToken))
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
       }
 
-      var hostname = name.GetHostname();
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
+      }
 
-      return this.httpClient.GetAsync($"/domains/{hostname}/connection", ct);
+      return this.httpClient.GetAsync($"/domains/{domainName}/connection", ct);
     }
 
     /// <summary>
     /// Updates the specified delivery connection settings for the defined domain.
     /// </summary>
-    /// <param name="name">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="requireTLS">
     /// True, this requires the message only be sent over a TLS connection; false, Mailgun will still try
     /// and upgrade the connection, but if Mailgun cannot, the message will be delivered over plaintext SMTP connection.
@@ -1262,14 +1291,17 @@ namespace MailgunSharp
     /// </param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> UpdateDomainDeliveryConnectionSettings(Uri name, bool requireTLS = false, bool skipVerification = false, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> UpdateDomainDeliveryConnectionSettings(string domainName, bool requireTLS = false, bool skipVerification = false, CancellationToken ct = default(CancellationToken))
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
       }
 
-      var hostname = name.GetHostname();
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
+      }
 
       var content = new Collection<KeyValuePair<string, string>>()
       {
@@ -1279,42 +1311,48 @@ namespace MailgunSharp
 
       var formContent = new FormUrlEncodedContent(content);
 
-      return this.httpClient.PutAsync($"/domains/{hostname}/connection", formContent, ct);
+      return this.httpClient.PutAsync($"/domains/{domainName}/connection", formContent, ct);
     }
 
     /// <summary>
     /// Returns tracking settings for a domain.
     /// </summary>
-    /// <param name="name">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> GetDomainTrackingSettings(Uri name, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> GetDomainTrackingSettings(string domainName, CancellationToken ct = default(CancellationToken))
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
       }
 
-      var hostname = name.GetHostname();
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
+      }
 
-      return this.httpClient.GetAsync($"/domains/{hostname}/tracking", ct);
+      return this.httpClient.GetAsync($"/domains/{domainName}/tracking", ct);
     }
 
     /// <summary>
     /// Updates the open tracking settings for a domain.
     /// </summary>
-    /// <param name="name">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="active">True, enable; false, disable.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> UpdateDomainOpenTrackingSettings(Uri name, bool active, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> UpdateDomainOpenTrackingSettings(string domainName, bool active, CancellationToken ct = default(CancellationToken))
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
       }
 
-      var hostname = name.GetHostname();
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
+      }
 
       var content = new Collection<KeyValuePair<string, string>>()
       {
@@ -1323,24 +1361,27 @@ namespace MailgunSharp
 
       var formContent = new FormUrlEncodedContent(content);
 
-      return this.httpClient.GetAsync($"/domains/{hostname}/tracking/open", ct);
+      return this.httpClient.GetAsync($"/domains/{domainName}/tracking/open", ct);
     }
 
     /// <summary>
     /// Updates the click tracking settings for a domain.
     /// </summary>
-    /// <param name="name">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="active">True, enable; false, disable.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> UpdateDomainClickTrackingSettings(Uri name, DomainClickTrackingActive active, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> UpdateDomainClickTrackingSettings(string domainName, DomainClickTrackingActive active, CancellationToken ct = default(CancellationToken))
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
       }
 
-      var hostname = name.GetHostname();
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
+      }
 
       var activeName = EnumLookup.GetDomainClickTrackingActiveName(active);
 
@@ -1351,26 +1392,29 @@ namespace MailgunSharp
 
       var formContent = new FormUrlEncodedContent(content);
 
-      return this.httpClient.PutAsync($"/domains/{hostname}/tracking/click", formContent, ct);
+      return this.httpClient.PutAsync($"/domains/{domainName}/tracking/click", formContent, ct);
     }
 
     /// <summary>
     /// Updates unsubscribe tracking settings for a domain.
     /// </summary>
-    /// <param name="name">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="active">True, enable; false, disable.</param>
     /// <param name="customHtmlFooter">Custom HTML version of unsubscribe footer.</param>
     /// <param name="customTextFooter">Custom text version of the unsubscribe footer.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> UpdateDomainUnsubscribeTrackingSettings(Uri name, bool active, string customHtmlFooter, string customTextFooter, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> UpdateDomainUnsubscribeTrackingSettings(string domainName, bool active, string customHtmlFooter, string customTextFooter, CancellationToken ct = default(CancellationToken))
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
       }
 
-      var hostname = name.GetHostname();
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
+      }
 
       var content = new Collection<KeyValuePair<string, string>>()
       {
@@ -1381,27 +1425,30 @@ namespace MailgunSharp
 
       var formContent = new FormUrlEncodedContent(content);
 
-      return this.httpClient.PutAsync($"/domains/{hostname}/tracking/unsubscribe", formContent, ct);
+      return this.httpClient.PutAsync($"/domains/{domainName}/tracking/unsubscribe", formContent, ct);
     }
 
     /// <summary>
     /// Change the DKIM authority for a domain.
     /// </summary>
-    /// <param name="name">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="self">
     /// True, the domain will be DKIM authority for itself;
     /// false, will be the same DKIM Authority as the root domain registered.
     /// </param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> ChangeDomainDKIMAuthority(Uri name, bool self, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> ChangeDomainDKIMAuthority(string domainName, bool self, CancellationToken ct = default(CancellationToken))
     {
-      if (name == null)
+      if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null or empty!");
+        throw new ArgumentNullException("DomainName cannot be ");
       }
 
-      var hostname = name.GetHostname();
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
+      }
 
       var content = new Collection<KeyValuePair<string, string>>()
       {
@@ -1410,7 +1457,7 @@ namespace MailgunSharp
 
       var formContent = new FormUrlEncodedContent(content);
 
-      return this.httpClient.PutAsync($"/domains/{hostname}/dkim_authority", formContent, ct);
+      return this.httpClient.PutAsync($"/domains/{domainName}/dkim_authority", formContent, ct);
     }
 
     /// <summary>
@@ -1488,6 +1535,16 @@ namespace MailgunSharp
       }
 
       return true;
+    }
+
+    /// <summary>
+    /// Check if the hostname is valid format.
+    /// </summary>
+    /// <param name="hostname">The hostname to check.</param>
+    /// <returns>True, if valid, false if not valid.</returns>
+    private bool isHostnameValid(string hostname)
+    {
+      return Uri.CheckHostName(hostname) == UriHostNameType.Dns;
     }
   }
 }

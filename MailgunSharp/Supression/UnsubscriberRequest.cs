@@ -39,13 +39,13 @@ namespace MailgunSharp.Supression
       }
     }
 
-    private readonly DateTime? createdAt;
+    private readonly DateTime createdAt;
 
     /// <summary>
     /// Timestamp of an unsubscribe event.
     /// </summary>
     /// <value>DateTime</value>
-    public DateTime? CreatedAt
+    public DateTime CreatedAt
     {
       get
       {
@@ -70,9 +70,13 @@ namespace MailgunSharp.Supression
       this.address = address;
       this.tag = tag;
 
-      if (this.createdAt.HasValue)
+      if (createdAt.HasValue)
       {
         this.createdAt = (tzInfo == null) ? createdAt.Value.ToUniversalTime() : TimeZoneInfo.ConvertTimeToUtc(createdAt.Value.ToUniversalTime(), tzInfo);
+      }
+      else
+      {
+        this.createdAt = (tzInfo == null) ? DateTime.UtcNow : TimeZoneInfo.ConvertTimeToUtc(DateTime.UtcNow, tzInfo);
       }
     }
 
@@ -86,7 +90,7 @@ namespace MailgunSharp.Supression
 
       jsonObject["address"] = this.address.Address;
       jsonObject["tag"] = this.tag;
-      jsonObject["created_at"] = ((!this.createdAt.HasValue) ? ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() : ((DateTimeOffset)this.createdAt.Value).ToUnixTimeSeconds()).ToString();
+      jsonObject["created_at"] = (((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds()).ToString();
 
       return jsonObject;
     }
@@ -101,7 +105,7 @@ namespace MailgunSharp.Supression
       {
         new KeyValuePair<string, string>("address", this.address.Address),
         new KeyValuePair<string, string>("tag", this.tag),
-        new KeyValuePair<string, string>("created_at", ((!this.createdAt.HasValue) ? ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds() : ((DateTimeOffset)this.createdAt.Value).ToUnixTimeSeconds()).ToString())
+        new KeyValuePair<string, string>("created_at", (((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds()).ToString())
       };
 
       return content;

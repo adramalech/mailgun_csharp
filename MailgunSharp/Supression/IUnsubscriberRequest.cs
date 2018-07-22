@@ -24,7 +24,7 @@ namespace MailgunSharp.Supression
     /// Timestamp of an unsubscribe event.
     /// </summary>
     /// <value>DateTime</value>
-    DateTime? CreatedAt { get; }
+    DateTime CreatedAt { get; }
 
     /// <summary>
     /// Get Unsubscriber request object represented as a json object for http request.

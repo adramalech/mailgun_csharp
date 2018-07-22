@@ -31,7 +31,7 @@ namespace MailgunSharp.Supression
     /// Timestamp of a bounce event.
     /// </summary>
     /// <value>DateTime</value>
-    DateTime? CreatedAt { get; }
+    DateTime CreatedAt { get; }
 
     /// <summary>
     /// Get the Bounce request object as json to be used in an http request.

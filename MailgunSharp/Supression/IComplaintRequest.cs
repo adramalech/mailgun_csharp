@@ -18,7 +18,7 @@ namespace MailgunSharp.Supression
     /// Timestamp of a complaint event.
     /// </summary>
     /// <value>DateTime</value>
-    DateTime? CreatedAt { get; }
+    DateTime CreatedAt { get; }
 
     /// <summary>
     /// Get Complaint Request object represented as json object for http request.

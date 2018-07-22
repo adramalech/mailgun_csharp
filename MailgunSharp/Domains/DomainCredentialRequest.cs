@@ -65,7 +65,6 @@ namespace MailgunSharp.Domains
 
       var length = password.Length;
 
-
       if (checkPasswordLengthRequirement(password))
       {
         throw new ArgumentOutOfRangeException("Password must have a minimum length of 5, and maximum length of 32!");

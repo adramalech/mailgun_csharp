@@ -11,7 +11,7 @@ namespace MailgunSharp.Enums
     /// <returns>string</returns>
     public static string GetEventTypeName(EventType eventType)
     {
-      var name = "";
+      var name = string.Empty;
 
       switch (eventType)
       {
@@ -58,7 +58,7 @@ namespace MailgunSharp.Enums
     /// <returns>The name of the time resolution parameter as a string.</returns>
     public static string GetTimeResolutionName(TimeResolution resolution)
     {
-      var name = "";
+      var name = string.Empty;
 
       switch (resolution)
       {
@@ -85,7 +85,7 @@ namespace MailgunSharp.Enums
     /// <returns>The name of the domain click tracking type as a string.</returns>
     public static string GetDomainClickTrackingActiveName(DomainClickTrackingActive active)
     {
-      var name = "";
+      var name = string.Empty;
 
       switch (active)
       {
@@ -112,7 +112,7 @@ namespace MailgunSharp.Enums
     /// <returns>The spam action type name as a string.</returns>
     public static string GetSpamActionName(SpamAction spamAction)
     {
-      var name = "";
+      var name = string.Empty;
 
       switch (spamAction)
       {
@@ -139,7 +139,7 @@ namespace MailgunSharp.Enums
     /// <returns>The Failed event severity type as a name.</returns>
     public static string GetSeverityTypeName(Severity severityType)
     {
-      var name = "";
+      var name = string.Empty;
 
       switch (severityType)
       {
@@ -162,7 +162,7 @@ namespace MailgunSharp.Enums
     /// <returns>Name of the access level type.</returns>
     public static string GetAccessLevelName(AccessLevel accessLevel)
     {
-      var name = "";
+      var name = string.Empty;
 
       switch (accessLevel)
       {

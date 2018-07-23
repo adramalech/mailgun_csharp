@@ -75,8 +75,8 @@ namespace MailgunSharp.Routes
     public Route()
     {
       this.actions = new Collection<string>();
-      this.expression = "";
-      this.description = "";
+      this.expression = string.Empty;
+      this.description = string.Empty;
       this.priority = 0;
     }
 
@@ -144,7 +144,7 @@ namespace MailgunSharp.Routes
         throw new InvalidOperationException("Expression can only be set once!");
       }
 
-      this.actions.Add($"match_recipient({regex.ToString()})");
+      this.expression = $"match_recipient({regex.ToString()})";
 
       return this;
     }
@@ -156,11 +156,6 @@ namespace MailgunSharp.Routes
     /// <returns>An instance of the route.</returns>
     public IRoute CatchAll()
     {
-      if (!this.expression.IsNullEmptyWhitespace())
-      {
-        throw new InvalidOperationException("Expression can only be set once!");
-      }
-
       this.actions.Add("catch_all()");
 
       return this;

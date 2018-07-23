@@ -12,6 +12,7 @@ using MailgunSharp.Domains;
 using MailgunSharp.Events;
 using MailgunSharp.Stats;
 using MailgunSharp.Enums;
+using MailgunSharp.Routes;
 
 namespace MailgunSharp
 {

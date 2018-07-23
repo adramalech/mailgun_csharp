@@ -361,7 +361,7 @@ namespace MailgunSharp.Messages
       var i = 1;
       var total = addresses.Count;
 
-      var str = "";
+      var str = string.Empty;
 
       foreach (var address in addresses)
       {

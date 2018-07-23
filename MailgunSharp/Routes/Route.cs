@@ -169,6 +169,31 @@ namespace MailgunSharp.Routes
       return this;
     }
 
+    public ICollection<KeyValuePair<string, string>> AsFormContent()
+    {
+      if (this.actions == null || this.actions.Count < 1)
+      {
+        throw new ArgumentNullException("Unable to create route without any actions!");
+      }
 
+      if (this.expression.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Unable to create route without an expression!");
+      }
+
+      var formContent = new Collection<KeyValuePair<string, string>>()
+      {
+        new KeyValuePair<string, string>("priority", this.priority.ToString()),
+        new KeyValuePair<string, string>("description", this.description),
+        new KeyValuePair<string, string>("expression", this.expression)
+      };
+
+      foreach(var action in this.actions)
+      {
+        formContent.Add("action", action);
+      }
+
+      return formContent;
+    }
   }
 }

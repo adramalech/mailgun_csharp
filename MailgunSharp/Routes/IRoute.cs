@@ -108,5 +108,11 @@ namespace MailgunSharp.Routes
     /// </summary>
     /// <returns></returns>
     IRoute AddAction_Stop();
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    ICollection<KeyValuePair<string, string>> AsFormContent();
   }
 }

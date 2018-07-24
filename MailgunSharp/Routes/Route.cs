@@ -20,7 +20,7 @@ namespace MailgunSharp.Routes
     {
       get
       {
-        return actions;
+        return this.actions;
       }
     }
 
@@ -37,7 +37,7 @@ namespace MailgunSharp.Routes
     {
       get
       {
-        return expression;
+        return this.expression;
       }
     }
 
@@ -51,7 +51,7 @@ namespace MailgunSharp.Routes
     {
       get
       {
-        return description;
+        return this.description;
       }
     }
 
@@ -65,7 +65,7 @@ namespace MailgunSharp.Routes
     {
       get
       {
-        return priority;
+        return this.priority;
       }
     }
 

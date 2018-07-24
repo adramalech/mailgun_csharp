@@ -1,7 +1,5 @@
-using System;
 using System.Net;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
 using MailgunSharp.Enums;
 

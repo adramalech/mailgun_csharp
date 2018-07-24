@@ -1,5 +1,4 @@
 using Xunit;
-using System;
 using MailgunSharp.Enums;
 
 namespace MailgunSharp.Test.Enums

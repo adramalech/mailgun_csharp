@@ -1,7 +1,6 @@
 using System;
 using Xunit;
 using MailgunSharp.Request;
-using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Test.Request
 {

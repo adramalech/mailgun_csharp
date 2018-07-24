@@ -1,4 +1,3 @@
-using System;
 using MailgunSharp.Extensions;
 using Xunit;
 

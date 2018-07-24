@@ -1,7 +1,5 @@
-using System;
 using System.Net.Mail;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
 
 namespace MailgunSharp.MailingLists

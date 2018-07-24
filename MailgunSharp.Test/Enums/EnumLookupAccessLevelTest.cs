@@ -1,4 +1,3 @@
-using System;
 using Xunit;
 using MailgunSharp.Enums;
 
@@ -9,9 +8,9 @@ namespace MailgunSharp.Test.Enums
     [Fact]
     public void Check_Access_Level_Read_Only_Should_Return_String_readonly()
     {
-      var type = AccessLevel.READ_ONLY;
+      AccessLevel type = AccessLevel.READ_ONLY;
 
-      var name = EnumLookup.GetAccessLevelName(type);
+      string name = EnumLookup.GetAccessLevelName(type);
 
       Assert.True(name == "readonly");
     }
@@ -19,9 +18,9 @@ namespace MailgunSharp.Test.Enums
     [Fact]
     public void Check_Access_Level_Members_Should_Return_String_members()
     {
-      var type = AccessLevel.MEMBERS;
+      AccessLevel type = AccessLevel.MEMBERS;
 
-      var name = EnumLookup.GetAccessLevelName(type);
+      string name = EnumLookup.GetAccessLevelName(type);
 
       Assert.True(name == "members");
     }
@@ -29,9 +28,9 @@ namespace MailgunSharp.Test.Enums
     [Fact]
     public void Check_Access_Level_Everyone_Should_Return_String_everyone()
     {
-      var type = AccessLevel.EVERYONE;
+      AccessLevel type = AccessLevel.EVERYONE;
 
-      var name = EnumLookup.GetAccessLevelName(type);
+      string name = EnumLookup.GetAccessLevelName(type);
 
       Assert.True(name == "everyone");
     }

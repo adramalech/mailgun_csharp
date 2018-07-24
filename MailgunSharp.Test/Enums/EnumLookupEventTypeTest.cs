@@ -1,4 +1,3 @@
-using System;
 using Xunit;
 using MailgunSharp.Enums;
 

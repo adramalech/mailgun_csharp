@@ -1,7 +1,6 @@
 using System;
 using System.Net.Mail;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Xunit;
 using Newtonsoft.Json;
 using MailgunSharp.Supression;
@@ -23,8 +22,6 @@ namespace MailgunSharp.Test.Supression
 
       Assert.True(bounceRequest.Error == String.Empty);
     }
-
-
 
     [Theory]
     [ClassData(typeof(BounceRequestGenerator))]

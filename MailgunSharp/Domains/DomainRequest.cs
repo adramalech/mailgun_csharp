@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
@@ -20,7 +19,7 @@ namespace MailgunSharp.Domains
     {
       get
       {
-        return domainName;
+        return this.domainName;
       }
     }
 
@@ -34,7 +33,7 @@ namespace MailgunSharp.Domains
     {
       get
       {
-        return smtpPassword;
+        return this.smtpPassword;
       }
     }
 
@@ -48,7 +47,7 @@ namespace MailgunSharp.Domains
     {
       get
       {
-        return spamAction;
+        return this.spamAction;
       }
     }
 
@@ -62,7 +61,7 @@ namespace MailgunSharp.Domains
     {
       get
       {
-        return wildcard;
+        return this.wildcard;
       }
     }
 
@@ -80,7 +79,7 @@ namespace MailgunSharp.Domains
     {
       get
       {
-        return forceDKIMAuthority;
+        return this.forceDKIMAuthority;
       }
     }
 
@@ -122,13 +121,14 @@ namespace MailgunSharp.Domains
     /// <returns>Json object</returns>
     public JObject ToJson()
     {
-      var jsonObject = new JObject();
-
-      jsonObject["name"] = this.domainName;
-      jsonObject["smtp_password"] = this.smtpPassword;
-      jsonObject["spam_action"] = EnumLookup.GetSpamActionName(this.spamAction);
-      jsonObject["wildcard"] = this.wildcard;
-      jsonObject["force_dkim_authority"] = this.forceDKIMAuthority;
+      var jsonObject = new JObject
+      {
+        ["name"] = this.domainName,
+        ["smtp_password"] = this.smtpPassword,
+        ["spam_action"] = EnumLookup.GetSpamActionName(this.spamAction),
+        ["wildcard"] = this.wildcard,
+        ["force_dkim_authority"] = this.forceDKIMAuthority
+      };
 
       return jsonObject;
     }

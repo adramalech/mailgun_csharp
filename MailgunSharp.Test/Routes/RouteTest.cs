@@ -1,9 +1,6 @@
 using System;
-using System.Net.Mail;
 using System.Text.RegularExpressions;
 using Xunit;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using MailgunSharp.Routes;
 
 namespace MailgunSharp.Test.Routes
@@ -15,8 +12,8 @@ namespace MailgunSharp.Test.Routes
     {
       var route = new Route();
 
-      Assert.True(route.Description == String.Empty);
-      Assert.True(route.Expression == String.Empty);
+      Assert.True(route.Description == string.Empty);
+      Assert.True(route.Expression == string.Empty);
       Assert.True(route.Priority == 0);
       Assert.True(route.Actions.Count == 0);
     }
@@ -31,8 +28,8 @@ namespace MailgunSharp.Test.Routes
         route
           .SetDescription("test")
           .SetPriority(1)
-          .MatchRecipient(new Regex(@"^*@gmail.com$"))
-          .MatchHeader("from", new Regex(@"^*@postmaster.example.com$"))
+          .MatchRecipient(new Regex(@"^@gmail.com$"))
+          .MatchHeader("from", new Regex(@"^@postmaster.example.com$"))
           .CatchAll();
       });
     }

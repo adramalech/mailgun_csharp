@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using System.Net.Mail;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,7 +20,7 @@ namespace MailgunSharp.MailingLists
     {
       get
       {
-        return address;
+        return this.address;
       }
     }
 
@@ -35,7 +34,7 @@ namespace MailgunSharp.MailingLists
     {
       get
       {
-        return name;
+        return this.name;
       }
     }
 
@@ -49,7 +48,7 @@ namespace MailgunSharp.MailingLists
     {
       get
       {
-        return vars;
+        return this.vars;
       }
     }
 
@@ -63,7 +62,7 @@ namespace MailgunSharp.MailingLists
     {
       get
       {
-        return subscribed;
+        return this.subscribed;
       }
     }
 
@@ -82,7 +81,7 @@ namespace MailgunSharp.MailingLists
     {
       get
       {
-        return upsert;
+        return this.upsert;
       }
     }
 
@@ -114,13 +113,14 @@ namespace MailgunSharp.MailingLists
     /// <returns>json object</returns>
     public JObject ToJson()
     {
-      var jsonObject = new JObject();
-
-      jsonObject["address"] = this.address.ToString();
-      jsonObject["name"] = this.name;
-      jsonObject["vars"] = this.vars.ToString(Formatting.None);
-      jsonObject["subscribed"] = this.subscribed.ToYesNo();
-      jsonObject["upsert"] = this.upsert.ToYesNo();
+      var jsonObject = new JObject
+      {
+        ["address"] = this.address.ToString(),
+        ["name"] = this.name,
+        ["vars"] = this.vars.ToString(Formatting.None),
+        ["subscribed"] = this.subscribed.ToYesNo(),
+        ["upsert"] = this.upsert.ToYesNo()
+      };
 
       return jsonObject;
     }

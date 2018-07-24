@@ -1,9 +1,7 @@
 using System;
-using System.Text;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MailgunSharp.Enums;
-using MailgunSharp.Extensions;
 using MailgunSharp.Request;
 
 namespace MailgunSharp.Stats

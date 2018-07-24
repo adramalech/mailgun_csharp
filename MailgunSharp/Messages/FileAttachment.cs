@@ -15,7 +15,7 @@ namespace MailgunSharp.Messages
     {
       get
       {
-        return filename;
+        return this.filename;
       }
     }
 
@@ -29,7 +29,7 @@ namespace MailgunSharp.Messages
     {
       get
       {
-        return data;
+        return this.data;
       }
     }
 

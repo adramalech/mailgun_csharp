@@ -25,7 +25,7 @@ namespace MailgunSharp.Request
     {
       get
       {
-        return count;
+        return this.count;
       }
     }
 
@@ -55,9 +55,9 @@ namespace MailgunSharp.Request
         throw new ArgumentNullException("Value cannot be null or empty!");
       }
 
-      var prefix = (stb.IsEmpty()) ? "?" : "&";
+      var prefix = (this.stb.IsEmpty()) ? "?" : "&";
 
-      stb.Append($"{prefix}{UrlEncoder.Default.Encode(variable)}={UrlEncoder.Default.Encode(value)}");
+      this.stb.Append($"{prefix}{UrlEncoder.Default.Encode(variable)}={UrlEncoder.Default.Encode(value)}");
 
       this.count++;
 
@@ -70,7 +70,7 @@ namespace MailgunSharp.Request
     /// <returns>string</returns>
     public override string ToString()
     {
-      return stb.ToString();
+      return this.stb.ToString();
     }
   }
 }

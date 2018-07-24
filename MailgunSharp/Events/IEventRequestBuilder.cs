@@ -1,8 +1,5 @@
 using System;
 using System.Net.Mail;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
 using MailgunSharp.Enums;
 
 namespace MailgunSharp.Events

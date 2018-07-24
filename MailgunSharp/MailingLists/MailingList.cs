@@ -1,12 +1,9 @@
 using System;
-using System.Text;
 using System.Net.Mail;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using MailgunSharp.Enums;
-using MailgunSharp.Extensions;
 
 namespace MailgunSharp.MailingLists
 {
@@ -22,7 +19,7 @@ namespace MailgunSharp.MailingLists
     {
       get
       {
-        return address;
+        return this.address;
       }
     }
 
@@ -36,7 +33,7 @@ namespace MailgunSharp.MailingLists
     {
       get
       {
-        return name;
+        return this.name;
       }
     }
 
@@ -50,7 +47,7 @@ namespace MailgunSharp.MailingLists
     {
       get
       {
-        return description;
+        return this.description;
       }
     }
 
@@ -96,12 +93,13 @@ namespace MailgunSharp.MailingLists
     /// <returns>A Json object.</returns>
     public JObject ToJson()
     {
-      var jsonObject = new JObject();
-
-      jsonObject["address"] = this.address.ToString();
-      jsonObject["name"] = this.name;
-      jsonObject["description"] = this.description;
-      jsonObject["access_level"] = EnumLookup.GetAccessLevelName(this.accessLevel);
+      var jsonObject = new JObject
+      {
+        ["address"] = this.address.ToString(),
+        ["name"] = this.name,
+        ["description"] = this.description,
+        ["access_level"] = EnumLookup.GetAccessLevelName(this.accessLevel)
+      };
 
       return jsonObject;
     }

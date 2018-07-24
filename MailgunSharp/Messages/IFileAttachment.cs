@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace MailgunSharp.Messages
 {
   public interface IFileAttachment

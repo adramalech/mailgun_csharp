@@ -1,5 +1,3 @@
-using MailgunSharp.Extensions;
-
 namespace MailgunSharp.Enums
 {
   public static class EnumLookup

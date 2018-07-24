@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Xunit;
@@ -40,7 +39,9 @@ namespace MailgunSharp.Test.Extension
     {
       var collection = new Collection<KeyValuePair<string, string>>();
 
-      Assert.False(collection.AddIfNotNullOrEmpty(key, value));
+      var flag = collection.AddIfNotNullOrEmpty(key, value);
+
+      Assert.False(flag);
     }
 
     [Theory]
@@ -50,7 +51,9 @@ namespace MailgunSharp.Test.Extension
     {
       var collection = new Collection<KeyValuePair<string, string>>();
 
-      Assert.True(collection.AddIfNotNullOrEmpty(key, value));
+      var flag = collection.AddIfNotNullOrEmpty(key, value);
+
+      Assert.True(flag);
     }
   }
 }

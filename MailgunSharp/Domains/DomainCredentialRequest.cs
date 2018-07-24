@@ -28,7 +28,7 @@ namespace MailgunSharp.Domains
     {
       get
       {
-        return username;
+        return this.username;
       }
     }
 
@@ -42,7 +42,7 @@ namespace MailgunSharp.Domains
     {
       get
       {
-        return password;
+        return this.password;
       }
     }
 
@@ -62,8 +62,6 @@ namespace MailgunSharp.Domains
       {
         throw new ArgumentNullException("Password cannot be null or empty!");
       }
-
-      var length = password.Length;
 
       if (checkPasswordLengthRequirement(password))
       {
@@ -95,10 +93,11 @@ namespace MailgunSharp.Domains
     /// <returns>List of keyvalue string pairs.</returns>
     public JObject ToJson()
     {
-      var jsonObject = new JObject();
-
-      jsonObject["login"] = this.username;
-      jsonObject["password"] = this.password;
+      var jsonObject = new JObject
+      {
+        ["login"] = this.username,
+        ["password"] = this.password
+      };
 
       return jsonObject;
     }

@@ -3,7 +3,6 @@ using System.Net.Mail;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Supression
 {
@@ -19,7 +18,7 @@ namespace MailgunSharp.Supression
     {
       get
       {
-        return address;
+        return this.address;
       }
     }
 
@@ -35,7 +34,7 @@ namespace MailgunSharp.Supression
     {
       get
       {
-        return tag;
+        return this.tag;
       }
     }
 
@@ -49,7 +48,7 @@ namespace MailgunSharp.Supression
     {
       get
       {
-        return createdAt;
+        return this.createdAt;
       }
     }
 
@@ -86,11 +85,12 @@ namespace MailgunSharp.Supression
     /// <returns>Json object</returns>
     public JObject ToJson()
     {
-      var jsonObject = new JObject();
-
-      jsonObject["address"] = this.address.Address;
-      jsonObject["tag"] = this.tag;
-      jsonObject["created_at"] = (((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds()).ToString();
+      var jsonObject = new JObject
+      {
+        ["address"] = this.address.Address,
+        ["tag"] = this.tag,
+        ["created_at"] = (((DateTimeOffset) DateTime.UtcNow).ToUnixTimeSeconds()).ToString()
+      };
 
       return jsonObject;
     }

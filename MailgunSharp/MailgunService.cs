@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Text;
-using System.Net;
 using System.Net.Mail;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -99,7 +98,7 @@ namespace MailgunSharp
         throw new FormatException("Hostname is incorrectly formatted!");
       }
 
-      this.httpClient = (httpClient == null) ? new HttpClient() : httpClient;
+      this.httpClient = httpClient ?? new HttpClient();
 
       this.companyDomain = companyDomain;
 
@@ -1267,7 +1266,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty!");
       }
 
       if (!isHostnameValid(domainName))

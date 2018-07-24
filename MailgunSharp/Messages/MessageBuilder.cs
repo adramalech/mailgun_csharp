@@ -32,17 +32,17 @@ namespace MailgunSharp.Messages
     private const int RFC_2822_LINE_FOLD_LENGTH = 998;
 
     /// <summary>
-    /// The size of the current message.
+    /// The size of the current this.message.
     /// </summary>
     private long messageSize;
 
     /// <summary>
-    /// The number of recipients, "to", added to the message.
+    /// The number of recipients, "to", added to the this.message.
     /// </summary>
     private int recipientCount;
 
     /// <summary>
-    /// The number of recipient variables added to the message.
+    /// The number of recipient variables added to the this.message.
     /// </summary>
     private int recipientVarCount;
 
@@ -51,14 +51,14 @@ namespace MailgunSharp.Messages
     /// </summary>
     public MessageBuilder()
     {
-      message = new Message();
-      messageSize = 0;
-      recipientCount = 0;
-      recipientVarCount = 0;
+      this.message = new Message();
+      this.messageSize = 0;
+      this.recipientCount = 0;
+      this.recipientVarCount = 0;
     }
 
     /// <summary>
-    /// Add a file to be attached to the message.
+    /// Add a file to be attached to the this.message.
     /// </summary>
     /// <param name="attachment">A file attachment object with the file contents and filename.</param>
     /// <returns>The instance of the builder.</returns>
@@ -69,19 +69,19 @@ namespace MailgunSharp.Messages
         throw new ArgumentNullException("Attachment cannot be null!");
       }
 
-      if (message.FileAttachments == null)
+      if (this.message.FileAttachments == null)
       {
-        message.FileAttachments = new Collection<IFileAttachment>();
+        this.message.FileAttachments = new Collection<IFileAttachment>();
       }
 
-      if (messageSize + attachment.Data.Length > MAX_TOTAL_MESSAGE_SIZE)
+      if (this.messageSize + attachment.Data.Length > MAX_TOTAL_MESSAGE_SIZE)
       {
         throw new ArgumentOutOfRangeException("Cannot exceed total message size of 25MB!");
       }
 
-      messageSize += attachment.Data.Length;
+      this.messageSize += attachment.Data.Length;
 
-      message.FileAttachments.Add(attachment);
+      this.message.FileAttachments.Add(attachment);
 
       return this;
     }
@@ -98,19 +98,19 @@ namespace MailgunSharp.Messages
         throw new ArgumentNullException("Attachment cannot be null!");
       }
 
-      if (message.Attachments == null)
+      if (this.message.Attachments == null)
       {
-        message.Attachments = new Collection<FileInfo>();
+        this.message.Attachments = new Collection<FileInfo>();
       }
 
-      if (messageSize + attachment.Length > MAX_TOTAL_MESSAGE_SIZE)
+      if (this.messageSize + attachment.Length > MAX_TOTAL_MESSAGE_SIZE)
       {
         throw new ArgumentOutOfRangeException("Cannot exceed total message size of 25MB!");
       }
 
       messageSize += attachment.Length;
 
-      message.Attachments.Add(attachment);
+      this.message.Attachments.Add(attachment);
 
       return this;
     }
@@ -127,11 +127,11 @@ namespace MailgunSharp.Messages
         throw new ArgumentNullException("Bcc cannot be null!");
       }
 
-      if (message.Bcc == null) {
-        message.Bcc = new Collection<MailAddress>();
+      if (this.message.Bcc == null) {
+        this.message.Bcc = new Collection<MailAddress>();
       }
 
-      message.Bcc.Add(bcc);
+      this.message.Bcc.Add(bcc);
 
       return this;
     }
@@ -148,17 +148,17 @@ namespace MailgunSharp.Messages
         throw new ArgumentNullException("Cc cannot be null!");
       }
 
-      if (message.Cc == null) {
-        message.Cc = new Collection<MailAddress>();
+      if (this.message.Cc == null) {
+        this.message.Cc = new Collection<MailAddress>();
       }
 
-      message.Cc.Add(cc);
+      this.message.Cc.Add(cc);
 
       return this;
     }
 
     /// <summary>
-    /// Add the in-line image file information to be written into the message.
+    /// Add the in-line image file information to be written into the this.message.
     /// </summary>
     /// <param name="image"></param>
     /// <returns>The instance of the builder.</returns>
@@ -169,25 +169,25 @@ namespace MailgunSharp.Messages
         throw new ArgumentNullException("Image cannot be null!");
       }
 
-      if (message.Inline == null)
+      if (this.message.Inline == null)
       {
-        message.Inline = new Collection<FileInfo>();
+        this.message.Inline = new Collection<FileInfo>();
       }
 
-      if (messageSize + image.Length > MAX_TOTAL_MESSAGE_SIZE)
+      if (this.messageSize + image.Length > MAX_TOTAL_MESSAGE_SIZE)
       {
         throw new ArgumentOutOfRangeException("Cannot exceed total message size of 25MB!");
       }
 
-      messageSize += image.Length;
+      this.messageSize += image.Length;
 
-      message.Inline.Add(image);
+      this.message.Inline.Add(image);
 
       return this;
     }
 
     /// <summary>
-    /// Add the in-line image file attachment to be written into the message.
+    /// Add the in-line image file attachment to be written into the this.message.
     /// </summary>
     /// <param name="image">The file attachment object with the file contents and filename.</param>
     /// <returns>The instance of the builder.</returns>
@@ -198,19 +198,19 @@ namespace MailgunSharp.Messages
         throw new ArgumentNullException("Image cannot be null!");
       }
 
-      if (message.FileInline == null)
+      if (this.message.FileInline == null)
       {
-        message.FileInline = new Collection<IFileAttachment>();
+        this.message.FileInline = new Collection<IFileAttachment>();
       }
 
-      if (messageSize + image.Data.Length > MAX_TOTAL_MESSAGE_SIZE)
+      if (this.messageSize + image.Data.Length > MAX_TOTAL_MESSAGE_SIZE)
       {
         throw new ArgumentOutOfRangeException("Cannot exceed total message size of 25MB!");
       }
 
       messageSize += image.Data.Length;
 
-      message.FileInline.Add(image);
+      this.message.FileInline.Add(image);
 
       return this;
     }
@@ -227,32 +227,32 @@ namespace MailgunSharp.Messages
         throw new ArgumentNullException("Recipients cannot be null!");
       }
 
-      var count = recipientCount + 1;
+      var count = this.recipientCount + 1;
 
       if (count > MAX_RECIPIENT_SIZE)
       {
         throw new ArgumentOutOfRangeException("Maximum number of 1,000 recipients cannot be exceeded!");
       }
 
-      if (message.To == null)
+      if (this.message.To == null)
       {
-        message.To = new Collection<IRecipient>();
+        this.message.To = new Collection<IRecipient>();
       }
 
-      if (message.RecipientVariables == null)
+      if (this.message.RecipientVariables == null)
       {
-        message.RecipientVariables = new JObject();
+        this.message.RecipientVariables = new JObject();
       }
 
-      message.To.Add(recipient);
-      recipientCount++;
+      this.message.To.Add(recipient);
+      this.recipientCount++;
 
       if (recipient.Variables != null)
       {
-        message.RecipientVariables[recipient.Address] = recipient.Variables;
-        recipientVarCount++;
+        this.message.RecipientVariables[recipient.Address] = recipient.Variables;
+        this.recipientVarCount++;
 
-        if (recipientVarCount > 0 && recipientCount != recipientVarCount)
+        if (this.recipientVarCount > 0 && this.recipientCount != this.recipientVarCount)
         {
           throw new ArgumentOutOfRangeException("Did not have matching amount of recipient variables and recipients!");
         }
@@ -273,32 +273,32 @@ namespace MailgunSharp.Messages
         throw new ArgumentNullException("Recipients cannot be null!");
       }
 
-      if (message.To == null)
+      if (this.message.To == null)
       {
-        message.To = new Collection<IRecipient>();
+        this.message.To = new Collection<IRecipient>();
       }
 
-      if (message.RecipientVariables == null)
+      if (this.message.RecipientVariables == null)
       {
-        message.RecipientVariables = new JObject();
+        this.message.RecipientVariables = new JObject();
       }
 
-      if (recipientCount + recipients.Count > MAX_RECIPIENT_SIZE)
+      if (this.recipientCount + recipients.Count > MAX_RECIPIENT_SIZE)
       {
         throw new ArgumentOutOfRangeException("Maximum number of 1,000 recipients cannot be exceeded!");
       }
 
       foreach (var recipient in recipients)
       {
-        message.To.Add(recipient);
-        recipientCount++;
+        this.message.To.Add(recipient);
+        this.recipientCount++;
 
         if (recipient.Variables != null)
         {
-          message.RecipientVariables[recipient.Address] = recipient.Variables;
-          recipientVarCount++;
+          this.message.RecipientVariables[recipient.Address] = recipient.Variables;
+          this.recipientVarCount++;
 
-          if (recipientVarCount > 0 && recipientCount != recipientVarCount)
+          if (this.recipientVarCount > 0 && this.recipientCount != this.recipientVarCount)
           {
             throw new ArgumentOutOfRangeException("Did not have matching amount of recipient variables and recipients!");
           }
@@ -320,13 +320,13 @@ namespace MailgunSharp.Messages
         throw new ArgumentNullException("From cannot be null!");
       }
 
-      message.From = sender;
+      this.message.From = sender;
 
       return this;
     }
 
     /// <summary>
-    /// Set the html content of the message.
+    /// Set the html content of the this.message.
     /// </summary>
     /// <param name="html">A string containing html content.</param>
     /// <returns>The instance of the builder.</returns>
@@ -344,15 +344,15 @@ namespace MailgunSharp.Messages
         throw new ArgumentOutOfRangeException("Cannot exceed total message size of 25MB!");
       }
 
-      messageSize += sizeInBytes;
+      this.messageSize += sizeInBytes;
 
-      message.Html = html;
+      this.message.Html = html;
 
       return this;
     }
 
     /// <summary>
-    /// Set the subject of the message.
+    /// Set the subject of the this.message.
     /// </summary>
     /// <param name="subject"></param>
     /// <returns>The instance of the builder.</returns>
@@ -370,7 +370,7 @@ namespace MailgunSharp.Messages
         throw new ArgumentOutOfRangeException("Cannot exceed total message size of 25MB!");
       }
 
-      message.Subject = subject;
+      this.message.Subject = subject;
 
       return this;
     }
@@ -382,13 +382,13 @@ namespace MailgunSharp.Messages
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder SetTestMode(bool testMode)
     {
-      message.TestMode = testMode;
+      this.message.TestMode = testMode;
 
       return this;
     }
 
     /// <summary>
-    /// Set the text content of the message.
+    /// Set the text content of the this.message.
     /// </summary>
     /// <param name="text">A string of plain text.</param>
     /// <returns>The instance of the builder.</returns>
@@ -399,7 +399,7 @@ namespace MailgunSharp.Messages
         throw new ArgumentNullException("Text Body cannot be null!");
       }
 
-      message.Text = text;
+      this.message.Text = text;
 
       return this;
     }
@@ -416,12 +416,12 @@ namespace MailgunSharp.Messages
         throw new ArgumentNullException("Tag cannot be null!");
       }
 
-      if (message.Tags == null)
+      if (this.message.Tags == null)
       {
-        message.Tags = new Collection<string>();
+        this.message.Tags = new Collection<string>();
       }
 
-      message.Tags.Add(tag);
+      this.message.Tags.Add(tag);
 
       return this;
     }
@@ -433,7 +433,7 @@ namespace MailgunSharp.Messages
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder SetTracking(bool enable)
     {
-      message.Tracking = enable;
+      this.message.Tracking = enable;
 
       return this;
     }
@@ -445,7 +445,7 @@ namespace MailgunSharp.Messages
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder SetOpenTracking(bool enable)
     {
-      message.TrackingOpens = enable;
+      this.message.TrackingOpens = enable;
 
       return this;
     }
@@ -457,7 +457,7 @@ namespace MailgunSharp.Messages
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder SetClickTracking(bool enable)
     {
-      message.TrackingClicks = enable;
+      this.message.TrackingClicks = enable;
 
       return this;
     }
@@ -469,13 +469,13 @@ namespace MailgunSharp.Messages
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder SetDomainKeysIdentifiedMail(bool enable)
     {
-      message.Dkim = enable;
+      this.message.Dkim = enable;
 
       return this;
     }
 
     /// <summary>
-    /// Add an arbitrary value to the custom header of the message.
+    /// Add an arbitrary value to the custom header of the this.message.
     /// </summary>
     /// <param name="headerName">The name of the header.</param>
     /// <param name="value">The value of the header parameter.</param>
@@ -492,18 +492,18 @@ namespace MailgunSharp.Messages
         throw new ArgumentNullException("Custom header value cannot be null!");
       }
 
-      if (message.CustomHeaders == null)
+      if (this.message.CustomHeaders == null)
       {
-        message.CustomHeaders = new Dictionary<string, string>();
+        this.message.CustomHeaders = new Dictionary<string, string>();
       }
 
-      message.CustomHeaders.Add(headerName, value);
+      this.message.CustomHeaders.Add(headerName, value);
 
       return this;
     }
 
     /// <summary>
-    /// Send the message securely, if TLS connection cannot be established Mailgun will not deliver the message.
+    /// Send the message securely, if TLS connection cannot be established Mailgun will not deliver the this.message.
     /// If this flag isn't set it will still try to establish a secure connection, else will send in SMTP plaintext.
     /// </summary>
     /// <param name="enable">
@@ -513,7 +513,7 @@ namespace MailgunSharp.Messages
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder SendSecure(bool enable)
     {
-      message.SendSecure = enable;
+      this.message.SendSecure = enable;
 
       return this;
     }
@@ -529,7 +529,7 @@ namespace MailgunSharp.Messages
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder SkipSecureVerification(bool enable)
     {
-      message.SkipTlsVerification = enable;
+      this.message.SkipTlsVerification = enable;
 
       return this;
     }
@@ -553,7 +553,7 @@ namespace MailgunSharp.Messages
         throw new ArgumentOutOfRangeException("Delivery DateTime cannot exceed 3 days into the future!");
       }
 
-      message.DeliveryTime = localUtcDateTime;
+      this.message.DeliveryTime = localUtcDateTime;
 
       return this;
     }
@@ -576,12 +576,12 @@ namespace MailgunSharp.Messages
         throw new ArgumentNullException("Value cannot be null!");
       }
 
-      if (message.CustomData == null)
+      if (this.message.CustomData == null)
       {
-        message.CustomData = new Dictionary<string, JObject>();
+        this.message.CustomData = new Dictionary<string, JObject>();
       }
 
-      message.CustomData.Add(name, value);
+      this.message.CustomData.Add(name, value);
 
       return this;
     }
@@ -598,12 +598,12 @@ namespace MailgunSharp.Messages
         throw new ArgumentNullException("replyTo cannot be null!");
       }
 
-      if (message.CustomHeaders == null)
+      if (this.message.CustomHeaders == null)
       {
-        message.CustomHeaders = new Dictionary<string, string>();
+        this.message.CustomHeaders = new Dictionary<string, string>();
       }
 
-      message.CustomHeaders.Add("Reply-To", replyTo.Address);
+      this.message.CustomHeaders.Add("Reply-To", replyTo.Address);
 
       return this;
     }
@@ -614,17 +614,17 @@ namespace MailgunSharp.Messages
     /// <returns>The instance of the message that was built.</returns>
     public IMessage Build()
     {
-      return message;
+      return this.message;
     }
 
     /// <summary>
     /// Does the message exceed the 25MB size limit?
     /// </summary>
-    /// <param name="size">The size of the current message.</param>
+    /// <param name="size">The size of the current this.message.</param>
     /// <returns>True if it does exceed, false if it doesn't.</returns>
     private bool exceedsMaxMessageSize(long size)
     {
-      return ((messageSize + size) > MAX_TOTAL_MESSAGE_SIZE);
+      return ((this.messageSize + size) > MAX_TOTAL_MESSAGE_SIZE);
     }
 
     /// <summary>

@@ -11,7 +11,9 @@ namespace MailgunSharp.Test.Extension
     {
       var stringBuilder = new StringBuilder();
 
-      Assert.True(stringBuilder.IsEmpty());
+      var flag = stringBuilder.IsEmpty();
+
+      Assert.True(flag);
     }
 
     [Fact]
@@ -21,7 +23,9 @@ namespace MailgunSharp.Test.Extension
 
       stringBuilder.Append("abc123");
 
-      Assert.False(stringBuilder.IsEmpty());
+      var flag = stringBuilder.IsEmpty();
+
+      Assert.False(flag);
     }
 
     [Theory]
@@ -32,7 +36,9 @@ namespace MailgunSharp.Test.Extension
     {
       var stringBuilder = new StringBuilder();
 
-      Assert.False(stringBuilder.AddIfNotNullEmptyWhitespace(str));
+      var flag = stringBuilder.AddIfNotNullEmptyWhitespace(str);
+
+      Assert.False(flag);
 
       Assert.True(stringBuilder.Length == 0);
     }
@@ -46,7 +52,9 @@ namespace MailgunSharp.Test.Extension
     {
       var stringBuilder = new StringBuilder();
 
-      Assert.True(stringBuilder.AddIfNotNullEmptyWhitespace(str));
+      var flag = stringBuilder.AddIfNotNullEmptyWhitespace(str);
+
+      Assert.True(flag);
 
       Assert.False(stringBuilder.Length == 0);
     }

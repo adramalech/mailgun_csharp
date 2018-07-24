@@ -73,5 +73,24 @@ namespace MailgunSharp.Test.Routes
       Assert.True(route.Priority == priority);
       Assert.True(route.Actions.Count == 2);
     }
+
+    [Fact]
+    public void Route_Should_Allow_Complex_Expression()
+    {
+      var expressionBuilder = new ExpressionBuilder();
+
+      expressionBuilder
+        .And(new MatchHeader("name1", new Regex(@"^application/json$")), new MatchRecipient(new Regex(@"*@test.com")))
+        .Or(new MatchHeader("name2", new Regex(@"^regextesterhere$")), new MatchRecipient(new Regex(@"*@helloworld.com")));
+
+
+      var route = new Route();
+
+      route
+        .SetDescription("some test string")
+        .SetPriority(1)
+        .SetExpression(expressionBuilder.Build())
+        ;
+    }
   }
 }

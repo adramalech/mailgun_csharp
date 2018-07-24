@@ -162,6 +162,23 @@ namespace MailgunSharp.Routes
     }
 
     /// <summary>
+    /// Add a complex expression of two match_header, match_recipient that can be chained together with multiple pairs.
+    /// </summary>
+    /// <param name="expression">The expression that was built.</param>
+    /// <returns>An instance of the route.</returns>
+    public IRoute SetExpression(string expression)
+    {
+      if (!this.expression.IsNullEmptyWhitespace())
+      {
+        throw new InvalidOperationException("Expression can only be set once!");
+      }
+
+      this.expression = expression;
+
+      return this;
+    }
+
+    /// <summary>
     /// Forwards the message to a specified destination URL.
     /// </summary>
     /// <param name="emailAddress">The URL address to forward to.</param>

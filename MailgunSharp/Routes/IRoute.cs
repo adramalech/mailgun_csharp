@@ -72,6 +72,13 @@ namespace MailgunSharp.Routes
     IRoute CatchAll();
 
     /// <summary>
+    /// Add a complex expression of two match_header, match_recipient that can be chained together with multiple pairs.
+    /// </summary>
+    /// <param name="expression">The expression that was built.</param>
+    /// <returns>An instance of the route.</returns>
+    IRoute SetExpression(string expression);
+
+    /// <summary>
     /// Forwards the message to a specified destination URL.
     /// </summary>
     /// <param name="emailAddress">The URL address to forward to.</param>

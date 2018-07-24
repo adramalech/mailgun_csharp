@@ -65,6 +65,15 @@ namespace MailgunSharp.Request
     }
 
     /// <summary>
+    /// Return the built string result.
+    /// </summary>
+    /// <returns>The resulting string that was built.</returns>
+    public string Build()
+    {
+      return this.stb.ToString();
+    }
+
+    /// <summary>
     /// Override the object ToString method to return the result of the string builder.
     /// </summary>
     /// <returns>string</returns>

@@ -18,5 +18,11 @@ namespace MailgunSharp.Request
     /// <param name="value">The value of the parameter to be appended.</param>
     /// <returns>The instance of the query string builder.</returns>
     IQueryStringBuilder Append(string variable, string value);
+
+    /// <summary>
+    /// Return the built string result.
+    /// </summary>
+    /// <returns>The resulting string that was built.</returns>
+    string Build();
   }
 }

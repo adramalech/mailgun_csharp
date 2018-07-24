@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MailgunSharp.Enums;
 using MailgunSharp.Extensions;
+using MailgunSharp.Request;
 
 namespace MailgunSharp.Events
 {
@@ -122,53 +123,48 @@ namespace MailgunSharp.Events
     /// <returns>string</returns>
     public string ToQueryString()
     {
-      var strBuilder = new StringBuilder();
-
       if (this.Limit < 1 || this.Limit > MAX_RESULT_LIMIT)
       {
         throw new ArgumentOutOfRangeException("Limit has to be provided and cannot be less than 1!");
       }
 
-      strBuilder.Append($"limit={this.Limit}");
+      var queryStringBuilder = new QueryStringBuilder();
+
+      queryStringBuilder.Append("limit", this.Limit.ToString());
 
       if (this.Begin.HasValue)
       {
-        strBuilder.Append($"&begin={((DateTimeOffset)this.Begin.Value).ToUnixTimeSeconds()}");
+        queryStringBuilder.Append("begin", ((DateTimeOffset)this.Begin.Value).ToUnixTimeSeconds().ToString());
       }
 
       if (this.End.HasValue)
       {
-        strBuilder.Append($"&end={((DateTimeOffset)this.End.Value).ToUnixTimeSeconds()}");
+        queryStringBuilder.Append("end", ((DateTimeOffset)this.End.Value).ToUnixTimeSeconds().ToString());
       }
 
       if (this.Ascending.HasValue)
       {
-        strBuilder.Append($"&ascending={this.Ascending.Value.ToYesNo()}");
+        queryStringBuilder.Append("ascending",  this.Ascending.Value.ToYesNo());
       }
 
       if (this.Pretty.HasValue)
       {
-        strBuilder.Append($"&pretty={this.Pretty.Value.ToYesNo()}");
-      }
-
-      if (this.Size.HasValue)
-      {
-        strBuilder.Append($"size={this.Size}");
+        queryStringBuilder.Append("pretty", this.Pretty.Value.ToYesNo());
       }
 
       if (!this.MessageId.IsNullEmptyWhitespace())
       {
-        strBuilder.Append($"&message-id={this.MessageId}");
+        queryStringBuilder.Append("message-id", this.MessageId);
       }
 
       if (this.Recipient != null)
       {
-        strBuilder.Append($"&recipient={this.Recipient.Address}");
+        queryStringBuilder.Append("recipient", this.Recipient.Address);
       }
 
       if (this.To != null)
       {
-        strBuilder.Append($"&to={this.To.Address}");
+        queryStringBuilder.Append("to", this.To.Address);
       }
 
       if (this.Size.HasValue)
@@ -178,96 +174,106 @@ namespace MailgunSharp.Events
           throw new ArgumentOutOfRangeException("Message size cannot be less than 1 byte!");
         }
 
-        strBuilder.Append($"&size={this.Size}");
+        queryStringBuilder.Append("size", this.Size.ToString());
       }
 
       if (!this.AttachmentFileName.IsNullEmptyWhitespace())
       {
-        strBuilder.Append($"&attachment={this.AttachmentFileName}");
+        queryStringBuilder.Append("attachment", this.AttachmentFileName);
       }
 
       if (this.From != null)
       {
-        strBuilder.Append($"&from={this.From.Address}");
+        queryStringBuilder.Append("from", this.From.Address);
       }
 
       if (!this.Subject.IsNullEmptyWhitespace())
       {
-        strBuilder.Append($"&subject={this.Subject}");
+        queryStringBuilder.Append("subject", this.Subject);
       }
 
       var eventTypeCount = this.EventTypes.Count;
 
       if (this.EventTypes != null && eventTypeCount > 0)
       {
-        if (eventTypeCount == 1)
+        var stringBuilder = new StringBuilder();
+
+        if (eventTypeCount > 1)
         {
-          strBuilder.Append("&event=");
-        }
-        else
-        {
-          strBuilder.Append("&event=(");
+          stringBuilder.Append("(");
         }
 
         var i = 0;
 
         foreach (var type in this.EventTypes)
         {
-          strBuilder.Append(EnumLookup.GetEventTypeName(type));
+          stringBuilder.Append(EnumLookup.GetEventTypeName(type));
 
           i++;
 
           if (eventTypeCount > 1 && i >= eventTypeCount)
           {
-            strBuilder.Append(" or ");
+            stringBuilder.Append(" or ");
           }
         }
 
         if (eventTypeCount > 1)
         {
-          strBuilder.Append(")");
+          stringBuilder.Append(")");
+        }
+
+        if (!stringBuilder.IsEmpty())
+        {
+          queryStringBuilder.Append("event", stringBuilder.ToString());
         }
       }
 
       if (this.SeverityType.HasValue)
       {
-        strBuilder.Append($"&severity={EnumLookup.GetSeverityTypeName(this.SeverityType.Value)}");
+        queryStringBuilder.Append("severity", EnumLookup.GetSeverityTypeName(this.SeverityType.Value));
       }
 
       var tagCount = this.EventTypes.Count;
 
       if (this.Tags != null && tagCount > 0)
       {
+        var stringBuilder = new StringBuilder();
+
         if (tagCount == 1)
         {
-          strBuilder.Append("&tags=");
+          stringBuilder.Append("");
         }
         else
         {
-          strBuilder.Append("&tags=(");
+          stringBuilder.Append("(");
         }
 
         var i = 0;
 
         foreach (var tag in this.Tags)
         {
-          strBuilder.Append(tag);
+          stringBuilder.Append(tag);
 
           i++;
 
           if (tagCount > 1 && i >= tagCount)
           {
-            strBuilder.Append(" or ");
+            stringBuilder.Append(" or ");
           }
         }
 
         if (tagCount > 1)
         {
-          strBuilder.Append(")");
+          stringBuilder.Append(")");
+        }
+
+        if (!stringBuilder.IsEmpty())
+        {
+          queryStringBuilder.Append("tags", stringBuilder.ToString());
         }
       }
 
-      return strBuilder.ToString();
+      return queryStringBuilder.ToString();
     }
   }
 }

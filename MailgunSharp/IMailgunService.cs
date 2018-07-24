@@ -568,5 +568,48 @@ namespace MailgunSharp
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> GetPage(Uri uri, CancellationToken ct = default(CancellationToken));
+
+    /// <summary>
+    /// Fetches the list of routes.
+    /// </summary>
+    /// <param name="limit">Number of entries to return.</param>
+    /// <param name="skip">Number of records to skip.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    Task<HttpResponseMessage> GetRoutes(int limit = 100, int skip = 0, CancellationToken ct = default(CancellationToken));
+
+    /// <summary>
+    /// Returns a single route object based on its ID.
+    /// </summary>
+    /// <param name="id">ID of the route.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    Task<HttpResponseMessage> GetRoute(string id, CancellationToken ct = default(CancellationToken));
+
+    /// <summary>
+    /// Create a new route.
+    /// </summary>
+    /// <param name="route">The route to be created.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    Task<HttpResponseMessage> AddRoute(IRoute route, CancellationToken ct = default(CancellationToken));
+
+    /// <summary>
+    /// Update a given route by ID.
+    /// </summary>
+    /// <param name="id">ID of the route.</param>
+    /// <param name="route">The route to be updated.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    Task<HttpResponseMessage> UpdateRoute(string id, IRoute route, CancellationToken ct = default(CancellationToken));
+
+
+    /// <summary>
+    /// Delete a route based on the id.
+    /// </summary>
+    /// <param name="id">ID of the route.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    Task<HttpResponseMessage> DeleteRoute(string id, CancellationToken ct = default(CancellationToken));
   }
 }

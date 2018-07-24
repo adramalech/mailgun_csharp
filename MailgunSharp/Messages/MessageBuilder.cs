@@ -250,6 +250,7 @@ namespace MailgunSharp.Messages
       if (recipient.Variables != null)
       {
         this.message.RecipientVariables[recipient.Address] = recipient.Variables;
+
         this.recipientVarCount++;
 
         if (this.recipientVarCount > 0 && this.recipientCount != this.recipientVarCount)

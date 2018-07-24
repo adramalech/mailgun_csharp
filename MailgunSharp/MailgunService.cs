@@ -1511,6 +1511,106 @@ namespace MailgunSharp
     }
 
     /// <summary>
+    /// Fetches the list of routes.
+    /// </summary>
+    /// <param name="limit">Number of entries to return.</param>
+    /// <param name="skip">Number of records to skip.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    public Task<HttpResponseMessage> GetRoutes(int limit = 100, int skip = 0, CancellationToken ct = default(CancellationToken))
+    {
+      if (limit < 1)
+      {
+        throw new ArgumentOutOfRangeException("Limit cannot have a value less than one!");
+      }
+
+      if (skip < 0)
+      {
+        throw new ArgumentOutOfRangeException("You cannot skip less than zero records!");
+      }
+
+      return this.httpClient.GetAsync($"/routes?limit={limit}&skip={skip}", ct);
+    }
+
+    /// <summary>
+    /// Returns a single route object based on its ID.
+    /// </summary>
+    /// <param name="id">ID of the route.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    public Task<HttpResponseMessage> GetRoute(string id, CancellationToken ct = default(CancellationToken))
+    {
+      if (id.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Id cannot be null or empty!");
+      }
+
+      return this.httpClient.GetAsync($"/routes/{id}", ct);
+    }
+
+    /// <summary>
+    /// Create a new route.
+    /// </summary>
+    /// <param name="route">The route to be created.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    public Task<HttpResponseMessage> AddRoute(IRoute route, CancellationToken ct = default(CancellationToken))
+    {
+      if (route == null)
+      {
+        throw new ArgumentNullException("Route cannot be null or empty!");
+      }
+
+      var content = route.AsFormContent();
+
+      var formContent = new FormUrlEncodedContent(content);
+
+      return this.httpClient.PostAsync("/routes", formContent, ct);
+    }
+
+    /// <summary>
+    /// Update a given route by ID.
+    /// </summary>
+    /// <param name="id">ID of the route.</param>
+    /// <param name="route">The route to be updated.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    public Task<HttpResponseMessage> UpdateRoute(string id, IRoute route, CancellationToken ct = default(CancellationToken))
+    {
+      if (id.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Id cannot be null or empty!");
+      }
+
+      if (route == null)
+      {
+        throw new ArgumentNullException("Route cannot be null or empty!");
+      }
+
+      var content = route.AsFormContent();
+
+      var formContent = new FormUrlEncodedContent(content);
+
+      return this.httpClient.PutAsync($"/routes/{id}", formContent, ct);
+    }
+
+    /// <summary>
+    /// Delete a route based on the id.
+    /// </summary>
+    /// <param name="id">ID of the route.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    public Task<HttpResponseMessage> DeleteRoute(string id, CancellationToken ct = default(CancellationToken))
+    {
+      if (id.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Id cannot be null or empty!");
+      }
+
+      return this.httpClient.DeleteAsync($"/routes/{id}", ct);
+    }
+
+    /// <summary>
     /// Check if the IP Address is a valid IP v4 formatted address in the range of 0.0.0.0 to 255.255.255.255.
     /// </summary>
     /// <param name="ipV4Address">The ip v4 address to check.</param>

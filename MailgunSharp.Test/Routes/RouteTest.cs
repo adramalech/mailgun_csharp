@@ -19,7 +19,7 @@ namespace MailgunSharp.Test.Routes
     }
 
     [Fact]
-    public void Route_Should_Not_Allow_Two_Or_More_Expressions()
+    public void Route_Should_Not_Allow_Two_Or_More_Seperate_Expressions()
     {
       var route = new Route();
 
@@ -69,6 +69,45 @@ namespace MailgunSharp.Test.Routes
       Assert.NotNull(route.Expression);
       Assert.Equal(priority, route.Priority);
       Assert.NotEmpty(route.Actions);
+    }
+
+    [Theory]
+    [InlineData(int.MinValue)]
+    [InlineData(-1)]
+    public void Route_Should_Throw_Exception_When_Priority_Set_To_Less_Than_Zero(int priority)
+    {
+      var route = new Route();
+
+      Assert.Throws<ArgumentOutOfRangeException>(() =>
+      {
+        route.SetPriority(priority);
+      });
+    }
+
+    [Fact]
+    public void Route_Should_Throw_Exception_When_Expression_Not_Set()
+    {
+      var route = new Route();
+
+      Assert.Throws<InvalidOperationException>(() => {
+        route
+          .SetDescription("Failed attempt")
+          .MatchHeader("headerName", new Regex(@"^test$"))
+          .AsFormContent();
+      });
+    }
+
+    [Fact]
+    public void Route_Should_Throw_Exception_When_Action_Not_Set()
+    {
+      var route = new Route();
+
+      Assert.Throws<InvalidOperationException>(() => {
+        route
+          .SetDescription("Failed attempt")
+          .Forward(new Uri("https://forward.example.com"))
+          .AsFormContent();
+      });
     }
   }
 }

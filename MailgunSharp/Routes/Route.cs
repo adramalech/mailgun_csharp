@@ -218,12 +218,12 @@ namespace MailgunSharp.Routes
     {
       if (this.actions == null || this.actions.Count < 1)
       {
-        throw new ArgumentNullException("Unable to create route without any actions!");
+        throw new InvalidOperationException("Unable to create route without any actions!");
       }
 
       if (this.expression.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Unable to create route without an expression!");
+        throw new InvalidOperationException("Unable to create route without an expression!");
       }
 
       var formContent = new Collection<KeyValuePair<string, string>>()

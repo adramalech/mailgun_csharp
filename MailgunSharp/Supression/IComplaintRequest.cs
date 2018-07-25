@@ -28,7 +28,7 @@ namespace MailgunSharp.Supression
     /// <summary>
     /// Get Complaint Request object represented as key-value string pair form content for http request.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>List key-value string pairs</returns>
     ICollection<KeyValuePair<string, string>> ToFormContent();
   }
 }

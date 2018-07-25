@@ -12,7 +12,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetDomainClickTrackingActiveName(type);
 
-      Assert.True(name == "htmlonly");
+      Assert.Equal("htmlonly", name);
     }
 
     [Fact]
@@ -22,7 +22,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetDomainClickTrackingActiveName(type);
 
-      Assert.True(name == "no");
+      Assert.Equal("no", name);
     }
 
     [Fact]
@@ -32,7 +32,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetDomainClickTrackingActiveName(type);
 
-      Assert.True(name == "yes");
+      Assert.Equal("yes", name);
     }
   }
 }

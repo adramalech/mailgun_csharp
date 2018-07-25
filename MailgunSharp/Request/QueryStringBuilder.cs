@@ -70,6 +70,11 @@ namespace MailgunSharp.Request
     /// <returns>The resulting string that was built.</returns>
     public string Build()
     {
+      if (this.stb.IsEmpty())
+      {
+        throw new InvalidOperationException("Query string is empty!");
+      }
+
       return this.stb.ToString();
     }
 

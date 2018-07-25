@@ -12,7 +12,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetEventTypeName(type);
 
-      Assert.True(name == "accepted");
+      Assert.Equal("accepted", name);
     }
 
     [Fact]
@@ -22,7 +22,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetEventTypeName(type);
 
-      Assert.True(name == "clicked");
+      Assert.Equal("clicked", name);
     }
 
     [Fact]
@@ -32,7 +32,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetEventTypeName(type);
 
-      Assert.True(name == "complained");
+      Assert.Equal("complained", name);
     }
 
     [Fact]
@@ -42,7 +42,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetEventTypeName(type);
 
-      Assert.True(name == "delivered");
+      Assert.Equal("delivered", name);
     }
 
     [Fact]
@@ -52,7 +52,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetEventTypeName(type);
 
-      Assert.True(name == "failed");
+      Assert.Equal("failed", name);
     }
 
     [Fact]
@@ -62,7 +62,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetEventTypeName(type);
 
-      Assert.True(name == "opened");
+      Assert.Equal("opened", name);
     }
 
     [Fact]
@@ -72,7 +72,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetEventTypeName(type);
 
-      Assert.True(name == "stored");
+      Assert.Equal("stored", name);
     }
 
     [Fact]
@@ -82,7 +82,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetEventTypeName(type);
 
-      Assert.True(name == "unsubscribed");
+      Assert.Equal("unsubscribed", name);
     }
   }
 }

@@ -12,10 +12,10 @@ namespace MailgunSharp.Test.Routes
     {
       var route = new Route();
 
-      Assert.True(route.Description == string.Empty);
-      Assert.True(route.Expression == string.Empty);
-      Assert.True(route.Priority == 0);
-      Assert.True(route.Actions.Count == 0);
+      Assert.Equal(string.Empty, route.Description);
+      Assert.Equal(string.Empty, route.Expression);
+      Assert.Equal(0, route.Priority);
+      Assert.Equal(0, route.Actions.Count);
     }
 
     [Fact]
@@ -46,15 +46,15 @@ namespace MailgunSharp.Test.Routes
         .MatchHeader(headerName, new Regex(pattern))
         .Stop();
 
-      Assert.True(route.Description == description);
-      Assert.True(route.Expression != null);
-      Assert.True(route.Priority == priority);
-      Assert.True(route.Actions.Count == 1);
+      Assert.Equal(description, route.Description);
+      Assert.NotNull(route.Expression);
+      Assert.Equal(priority, route.Priority);
+      Assert.NotEmpty(route.Actions);
     }
 
     [Theory]
-    [InlineData("test", 1, "from", @"^*@postmaster.example.com$")]
-    public void Route_Should_Allow_Multiple_Actions(string description, int priority, string headerName, string pattern)
+    [InlineData("test", 1, "from", @"^*@postmaster.example.com$", @"https://example.com")]
+    public void Route_Should_Allow_Multiple_Actions(string description, int priority, string headerName, string pattern, string url)
     {
       var route = new Route();
 
@@ -62,13 +62,13 @@ namespace MailgunSharp.Test.Routes
         .SetDescription(description)
         .SetPriority(priority)
         .MatchHeader(headerName, new Regex(pattern))
-        .Forward(new Uri(@"https://example.com"))
+        .Forward(new Uri(url))
         .Stop();
 
-      Assert.True(route.Description == description);
-      Assert.True(route.Expression != null);
-      Assert.True(route.Priority == priority);
-      Assert.True(route.Actions.Count == 2);
+      Assert.Equal(description, route.Description);
+      Assert.NotNull(route.Expression);
+      Assert.Equal(priority, route.Priority);
+      Assert.NotEmpty(route.Actions);
     }
   }
 }

@@ -12,7 +12,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetSpamActionName(type);
 
-      Assert.True(name == "blocked");
+      Assert.Equal("blocked", name);
     }
 
     [Fact]
@@ -22,7 +22,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetSpamActionName(type);
 
-      Assert.True(name == "disabled");
+      Assert.Equal("disabled", name);
     }
 
     [Fact]
@@ -32,7 +32,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetSpamActionName(type);
 
-      Assert.True(name == "tag");
+      Assert.Equal("tag", name);
     }
   }
 }

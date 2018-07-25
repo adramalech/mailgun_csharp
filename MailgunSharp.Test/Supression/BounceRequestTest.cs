@@ -16,11 +16,11 @@ namespace MailgunSharp.Test.Supression
     {
       var bounceRequest = new BounceRequest(new MailAddress(@"john.doe@example.com"));
 
-      Assert.True(bounceRequest.EmailAddress.Address == @"john.doe@example.com");
+      Assert.Equal(@"john.doe@example.com", bounceRequest.EmailAddress.Address);
 
-      Assert.True(bounceRequest.Code == SmtpErrorCode.MAILBOX_UNAVAILABLE);
+      Assert.Equal(SmtpErrorCode.MAILBOX_UNAVAILABLE, bounceRequest.Code);
 
-      Assert.True(bounceRequest.Error == String.Empty);
+      Assert.Equal(string.Empty, bounceRequest.Error);
     }
 
     [Theory]
@@ -29,11 +29,11 @@ namespace MailgunSharp.Test.Supression
     {
       var bounceRequest = new BounceRequest(new MailAddress(emailAddress), code, error, createdAt, tzInfo);
 
-      Assert.True(bounceRequest.EmailAddress.Address == emailAddress);
+      Assert.Equal(emailAddress, bounceRequest.EmailAddress.Address);
 
-      Assert.True(bounceRequest.Code == code);
+      Assert.Equal(code, bounceRequest.Code);
 
-      Assert.True(bounceRequest.Error == error);
+      Assert.Equal(error, bounceRequest.Error);
     }
   }
 

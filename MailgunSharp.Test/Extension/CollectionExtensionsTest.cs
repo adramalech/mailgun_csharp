@@ -15,13 +15,13 @@ namespace MailgunSharp.Test.Extension
 
       collection.Add(key, value);
 
-      Assert.True(collection.Count == 1);
+      Assert.NotEmpty(collection);
 
       foreach (var kvp in collection)
       {
-        Assert.True(key == kvp.Key);
+        Assert.Equal(key, kvp.Key);
 
-        Assert.True(value == kvp.Value);
+        Assert.Equal(value,  kvp.Value);
       }
     }
 

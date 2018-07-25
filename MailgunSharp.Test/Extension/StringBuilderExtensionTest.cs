@@ -40,7 +40,7 @@ namespace MailgunSharp.Test.Extension
 
       Assert.False(flag);
 
-      Assert.True(stringBuilder.Length == 0);
+      Assert.Equal(0, stringBuilder.Length);
     }
 
     [Theory]
@@ -56,7 +56,7 @@ namespace MailgunSharp.Test.Extension
 
       Assert.True(flag);
 
-      Assert.False(stringBuilder.Length == 0);
+      Assert.NotEqual(0, stringBuilder.Length);
     }
   }
 }

@@ -7,6 +7,12 @@ namespace MailgunSharp.Webhooks
   public interface IWebhook
   {
     /// <summary>
+    /// Get the webhook type assigned to this webhook.
+    /// </summary>
+    /// <value>WebhookType enum.</value>
+    WebHookType Type { get; }
+
+    /// <summary>
     /// The type id of the webhook.
     /// </summary>
     /// <value>Type id of the webhook.</value>

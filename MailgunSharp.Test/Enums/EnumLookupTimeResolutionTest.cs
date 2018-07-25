@@ -12,7 +12,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetTimeResolutionName(type);
 
-      Assert.True(name == "h");
+      Assert.Equal("h", name);
     }
 
     [Fact]
@@ -22,7 +22,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetTimeResolutionName(type);
 
-      Assert.True(name == "d");
+      Assert.Equal("d", name);
     }
 
     [Fact]
@@ -32,7 +32,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetTimeResolutionName(type);
 
-      Assert.True(name == "m");
+      Assert.Equal("m", name);
     }
   }
 }

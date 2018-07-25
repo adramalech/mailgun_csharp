@@ -12,7 +12,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetSeverityTypeName(type);
 
-      Assert.True(name == "permanent");
+      Assert.Equal("permanent", name);
     }
 
     [Fact]
@@ -22,7 +22,7 @@ namespace MailgunSharp.Test.Enums
 
       var name = EnumLookup.GetSeverityTypeName(type);
 
-      Assert.True(name == "temporary");
+      Assert.Equal("temporary", name);
     }
   }
 }

@@ -1,4 +1,7 @@
 using System;
+using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using Xunit;
 using MailgunSharp.Request;
 
@@ -11,9 +14,7 @@ namespace MailgunSharp.Test.Request
     {
       var queryStringBuilder = new QueryStringBuilder();
 
-      Assert.True(queryStringBuilder != null);
-
-      Assert.True(queryStringBuilder.Count == 0);
+      Assert.Equal(0, queryStringBuilder.Count);
     }
 
     [Theory]
@@ -24,7 +25,7 @@ namespace MailgunSharp.Test.Request
 
       queryStringBuilder.Append(variable, value);
 
-      Assert.True(queryStringBuilder.Count == 1);
+      Assert.Equal(1, queryStringBuilder.Count);
     }
 
     [Theory]
@@ -39,42 +40,65 @@ namespace MailgunSharp.Test.Request
     {
       var queryStringBuilder = new QueryStringBuilder();
 
-      Assert.Throws<ArgumentNullException>(() => queryStringBuilder.Append(variable, value));
+      Assert.Throws<ArgumentNullException>(() =>
+      {
+        queryStringBuilder.Append(variable, value);
+      });
     }
 
     [Fact]
-    public void QueryStringBuilder_AppendParam_Should_Have_Correct_Formatted_ToString()
+    public void QueryStringBuilder_AppendParam_Should_Start_With_QuestionMarkSymbol()
     {
       var queryStringBuilder = new QueryStringBuilder();
 
       var queryString = queryStringBuilder
                           .Append("var1", "val1")
-                          .ToString();
+                          .Build();
 
-      Assert.True(queryString.IndexOf('?') == 0);
-
-      Assert.True(queryString.Contains('='));
-
-      Assert.False(queryString.Contains('&'));
+      Assert.StartsWith("?", queryString);
     }
 
     [Fact]
-    public void QueryStringBuilder_AppendMultipleParam_Should_Have_Correct_Formatted_ToString()
+    public void QueryStringBuilder_AppendMultipleParam_Should_Have_Correct_Amount_Of_Equal_Symbols()
     {
       var queryStringBuilder = new QueryStringBuilder();
 
       var queryString = queryStringBuilder
                           .Append("var1", "val1")
                           .Append("var2", "val2")
+                          .Append("var3", "val3")
                           .ToString();
 
-      Assert.True(queryString.IndexOf('?') == 0);
+      var countEqualSymbol = queryString.Count(q => q == '=');
 
-      var equalStrSplit = queryString.Split('=');
+      Assert.Equal(3, countEqualSymbol);
+    }
 
-      Assert.True(equalStrSplit != null && equalStrSplit.Length == 3);
+    [Fact]
+    public void QueryStringBuilder_AppendMultipleParam_Should_Have_Correct_Amount_Of_Ampersand_Symbols()
+    {
+      var queryStringBuilder = new QueryStringBuilder();
 
-      Assert.True(queryString.Contains('&'));
+      var queryString = queryStringBuilder
+                          .Append("var1", "val1")
+                          .Append("var2", "val2")
+                          .Append("var3", "val3")
+                          .ToString();
+
+      var countAmpersandSymbol = queryString.Count(q => q == '&');
+
+      Assert.Equal(2, countAmpersandSymbol);
+    }
+
+    [Fact]
+    public void QueryStringBuilder_Build_Empty_QueryString_Should_Throw_Error()
+    {
+      var queryStringBuilder = new QueryStringBuilder();
+
+      Assert.Throws<InvalidOperationException>(() =>
+      {
+        var str = queryStringBuilder.Build();
+      });
     }
   }
 }

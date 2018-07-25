@@ -13,6 +13,20 @@ namespace MailgunSharp.Webhooks
     /// </summary>
     private const int MAX_URL_COUNT = 3;
 
+    private WebHookType type;
+
+    /// <summary>
+    /// Get the webhook type assigned to this webhook.
+    /// </summary>
+    /// <value>WebhookType enum.</value>
+    public WebHookType Type
+    {
+      get
+      {
+        return this.type;
+      }
+    }
+
     private string id;
 
     /// <summary>
@@ -56,6 +70,7 @@ namespace MailgunSharp.Webhooks
     /// <returns>The instance of the webhook.</returns>
     public IWebhook SetTypeId(WebHookType type)
     {
+      this.type = type;
       this.id = EnumLookup.GetWebhookTypeName(type);
 
       return this;
@@ -68,7 +83,7 @@ namespace MailgunSharp.Webhooks
     /// <returns>The instance of the webhook.</returns>
     public IWebhook AppendUrl(Uri uri)
     {
-      if (this.urls.Count > MAX_URL_COUNT)
+      if (this.urls.Count >= MAX_URL_COUNT)
       {
         throw new InvalidOperationException("The webhook cannot have more than a maximum of three urls!");
       }
@@ -86,12 +101,12 @@ namespace MailgunSharp.Webhooks
     {
       if (this.id.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Cannot create a webhook form content without a type!");
+        throw new InvalidOperationException("Cannot create a webhook form content without a type!");
       }
 
       if (this.urls.Count < 1)
       {
-        throw new ArgumentNullException("Cannot create a webhook form content without atleast one url!");
+        throw new InvalidOperationException("Cannot create a webhook form content without atleast one url!");
       }
 
       var content = new Collection<KeyValuePair<string, string>>();

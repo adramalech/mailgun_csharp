@@ -14,7 +14,7 @@ namespace MailgunSharp.Test.Extension
 
       Assert.True(!string.IsNullOrEmpty(str) && !string.IsNullOrWhiteSpace(str));
 
-      Assert.True(str == "yes");
+      Assert.Equal("yes", str);
     }
 
     [Fact]
@@ -26,7 +26,7 @@ namespace MailgunSharp.Test.Extension
 
       Assert.True(!string.IsNullOrEmpty(str) && !string.IsNullOrWhiteSpace(str));
 
-      Assert.True(str == "no");
+      Assert.Equal("no", str);
     }
   }
 }

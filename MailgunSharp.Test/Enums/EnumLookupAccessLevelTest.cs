@@ -12,7 +12,7 @@ namespace MailgunSharp.Test.Enums
 
       string name = EnumLookup.GetAccessLevelName(type);
 
-      Assert.True(name == "readonly");
+      Assert.Equal("readonly", name);
     }
 
     [Fact]
@@ -22,7 +22,7 @@ namespace MailgunSharp.Test.Enums
 
       string name = EnumLookup.GetAccessLevelName(type);
 
-      Assert.True(name == "members");
+      Assert.Equal("members", name);
     }
 
     [Fact]
@@ -32,7 +32,7 @@ namespace MailgunSharp.Test.Enums
 
       string name = EnumLookup.GetAccessLevelName(type);
 
-      Assert.True(name == "everyone");
+      Assert.Equal("everyone", name);
     }
   }
 }

@@ -23,7 +23,7 @@ namespace MailgunSharp.Webhooks
     /// </summary>
     /// <param name="type">The type of webhook.</param>
     /// <returns>The instance of the webhook.</returns>
-    IWebhook SetType(WebHookType type);
+    IWebhook SetTypeId(WebHookType type);
 
     /// <summary>
     /// Add a webhook to the list of urls, maximum of three urls allowed, to the webhook.

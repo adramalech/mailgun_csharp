@@ -54,7 +54,7 @@ namespace MailgunSharp.Webhooks
     /// </summary>
     /// <param name="type">The type of webhook.</param>
     /// <returns>The instance of the webhook.</returns>
-    public IWebhook SetType(WebHookType type)
+    public IWebhook SetTypeId(WebHookType type)
     {
       this.id = EnumLookup.GetWebhookTypeName(type);
 

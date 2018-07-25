@@ -637,12 +637,13 @@ namespace MailgunSharp
     Task<HttpResponseMessage> CreateWebhook(IWebhook webhook, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
-    /// Update a webhook.
+    /// Update a webhook's URLs.
     /// </summary>
-    /// <param name="webhook">The new webhook to be updated.</param>
+    /// <param name="type">The webhook's type to be updated.</param>
+    /// <param name="urls">The webhook's list of urls to be updated.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    Task<HttpResponseMessage> UpdateWebhook(IWebhook webhook, CancellationToken ct = default(CancellationToken));
+    Task<HttpResponseMessage> UpdateWebhook(WebHookType type, ICollection<Uri> urls, CancellationToken ct = default(CancellationToken));
 
     /// <summary>
     /// Deletes an existing webhook.

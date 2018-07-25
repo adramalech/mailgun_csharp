@@ -67,6 +67,11 @@ namespace MailgunSharp
     private const int MIN_SMTP_PASSWORD_LENGTH = 5;
 
     /// <summary>
+    /// The maximum allowed number of urls to be attached to the webhook.
+    /// </summary>
+    private const int MAX_URL_COUNT = 3;
+
+    /// <summary>
     /// The company's domain name registered in the Mailgun Account.
     /// </summary>
     private readonly string companyDomain;
@@ -1658,23 +1663,36 @@ namespace MailgunSharp
     }
 
     /// <summary>
-    /// Update a webhook.
+    /// Update a webhook's URLs.
     /// </summary>
-    /// <param name="webhook">The new webhook to be updated.</param>
+    /// <param name="type">The webhook's type to be updated.</param>
+    /// <param name="urls">The webhook's list of urls to be updated.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
-    public Task<HttpResponseMessage> UpdateWebhook(IWebhook webhook, CancellationToken ct = default(CancellationToken))
+    public Task<HttpResponseMessage> UpdateWebhook(WebHookType type, ICollection<Uri> urls, CancellationToken ct = default(CancellationToken))
     {
-      if (webhook == null)
+      if (urls == null || urls.Count < 1)
       {
-        throw new ArgumentNullException("Webhook cannot be null or empty!");
+        throw new ArgumentNullException("Webhook urls cannot be null or empty!");
       }
 
-      var content = webhook.AsFormContent();
+      if (urls.Count > MAX_URL_COUNT)
+      {
+        throw new ArgumentNullException("Webhook urls cannot exceed maximum length of three!");
+      }
+
+      var content = new Collection<KeyValuePair<string, string>>();
+
+      foreach (var url in urls)
+      {
+        content.Add("url", url.ToString());
+      }
+
+      var name = EnumLookup.GetWebhookTypeName(type);
 
       var formContent = new FormUrlEncodedContent(content);
 
-      return this.httpClient.PutAsync($"/domains/{this.companyDomain}/webhooks/{webhook.Id}", formContent, ct);
+      return this.httpClient.PutAsync($"/domains/{this.companyDomain}/webhooks/{name}", formContent, ct);
     }
 
     /// <summary>

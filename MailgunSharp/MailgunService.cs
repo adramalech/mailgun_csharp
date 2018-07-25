@@ -20,6 +20,7 @@ using MailgunSharp.Stats;
 using MailgunSharp.Enums;
 using MailgunSharp.Extensions;
 using MailgunSharp.Routes;
+using MailgunSharp.Webhooks;
 
 namespace MailgunSharp
 {
@@ -1608,6 +1609,88 @@ namespace MailgunSharp
       }
 
       return this.httpClient.DeleteAsync($"/routes/{id}", ct);
+    }
+
+    /// <summary>
+    /// Returns a list of webhooks for the given domain.
+    /// </summary>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    public Task<HttpResponseMessage> GetWebhooks(CancellationToken ct = default(CancellationToken))
+    {
+      return this.httpClient.GetAsync($"/domains/{this.companyDomain}/webhooks", ct);
+    }
+
+    /// <summary>
+    /// Return details about the webhook specified.
+    /// </summary>
+    /// <param name="name">The name of the webhook.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    public Task<HttpResponseMessage> GetWebhookDetails(string name, CancellationToken ct = default(CancellationToken))
+    {
+      if (name.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Webhook name cannot be null or empty!");
+      }
+
+      return this.httpClient.GetAsync($"/domains/{this.companyDomain}/webhooks/{name}", ct);
+    }
+
+    /// <summary>
+    /// Create a new webhook.
+    /// </summary>
+    /// <param name="webhook">The new webhook to be created.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    public Task<HttpResponseMessage> CreateWebhook(IWebhook webhook, CancellationToken ct = default(CancellationToken))
+    {
+      if (webhook == null)
+      {
+        throw new ArgumentNullException("Webhook cannot be null or empty!");
+      }
+
+      var content = webhook.AsFormContent();
+
+      var formContent = new FormUrlEncodedContent(content);
+
+      return this.httpClient.PostAsync($"/domains/{this.companyDomain}/webhooks", formContent, ct);
+    }
+
+    /// <summary>
+    /// Update a webhook.
+    /// </summary>
+    /// <param name="webhook">The new webhook to be updated.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    public Task<HttpResponseMessage> UpdateWebhook(IWebhook webhook, CancellationToken ct = default(CancellationToken))
+    {
+      if (webhook == null)
+      {
+        throw new ArgumentNullException("Webhook cannot be null or empty!");
+      }
+
+      var content = webhook.AsFormContent();
+
+      var formContent = new FormUrlEncodedContent(content);
+
+      return this.httpClient.PutAsync($"/domains/{this.companyDomain}/webhooks/{webhook.Id}", formContent, ct);
+    }
+
+    /// <summary>
+    /// Deletes an existing webhook.
+    /// </summary>
+    /// <param name="name">The name of the webhook.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    public Task<HttpResponseMessage> DeleteWebhook(string name, CancellationToken ct = default(CancellationToken))
+    {
+      if (name.IsNullEmptyWhitespace())
+      {
+        throw new ArgumentNullException("Webhook name cannot be null or empty!");
+      }
+
+      return this.httpClient.DeleteAsync($"/domains/{this.companyDomain}/webhooks/{name}", ct);
     }
 
     /// <summary>

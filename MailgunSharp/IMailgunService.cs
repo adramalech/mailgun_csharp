@@ -12,6 +12,7 @@ using MailgunSharp.Events;
 using MailgunSharp.Stats;
 using MailgunSharp.Enums;
 using MailgunSharp.Routes;
+using MailgunSharp.Webhooks;
 
 namespace MailgunSharp
 {
@@ -611,5 +612,44 @@ namespace MailgunSharp
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
     /// <returns>An async Task with the http response message.</returns>
     Task<HttpResponseMessage> DeleteRoute(string id, CancellationToken ct = default(CancellationToken));
+
+    /// <summary>
+    /// Returns a list of webhooks for the given domain.
+    /// </summary>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    Task<HttpResponseMessage> GetWebhooks(CancellationToken ct = default(CancellationToken));
+
+    /// <summary>
+    /// Return details about the webhook specified.
+    /// </summary>
+    /// <param name="name">The name of the webhook.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    Task<HttpResponseMessage> GetWebhookDetails(string name, CancellationToken ct = default(CancellationToken));
+
+    /// <summary>
+    /// Create a new webhook.
+    /// </summary>
+    /// <param name="webhook">The new webhook to be created.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    Task<HttpResponseMessage> CreateWebhook(IWebhook webhook, CancellationToken ct = default(CancellationToken));
+
+    /// <summary>
+    /// Update a webhook.
+    /// </summary>
+    /// <param name="webhook">The new webhook to be updated.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    Task<HttpResponseMessage> UpdateWebhook(IWebhook webhook, CancellationToken ct = default(CancellationToken));
+
+    /// <summary>
+    /// Deletes an existing webhook.
+    /// </summary>
+    /// <param name="name">The name of the webhook.</param>
+    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <returns>An async Task with the http response message.</returns>
+    Task<HttpResponseMessage> DeleteWebhook(string name, CancellationToken ct = default(CancellationToken));
   }
 }

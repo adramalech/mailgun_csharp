@@ -177,5 +177,42 @@ namespace MailgunSharp.Enums
 
       return name;
     }
+
+    /// <summary>
+    /// Get the name of the webhook type.
+    /// </summary>
+    /// <param name="type">The webhook type.</param>
+    /// <returns>Name of the webhook type.</returns>
+    public static string GetWebhookTypeName(WebHookType type)
+    {
+      var name = string.Empty;
+
+      switch (type)
+      {
+        case WebHookType.CLICKED:
+          name = "clicked";
+          break;
+        case WebHookType.COMPLAINED:
+          name = "complained";
+          break;
+        case WebHookType.DELIVERED:
+          name = "delivered";
+          break;
+        case WebHookType.OPENED:
+          name = "opened";
+          break;
+        case WebHookType.PERMANENT_FAIL:
+          name = "permanent_fail";
+          break;
+        case WebHookType.TEMPORARY_FAIL:
+          name = "temporary_fail";
+          break;
+        case WebHookType.UNSUBSCRIBED:
+          name = "unsubscribed";
+          break;
+      }
+
+      return name;
+    }
   }
 }

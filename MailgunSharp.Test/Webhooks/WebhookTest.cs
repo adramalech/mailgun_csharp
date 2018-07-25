@@ -67,20 +67,27 @@ namespace MailgunSharp.Test.Webhooks
     }
 
     [Theory]
-    [InlineData(WebHookType.UNSUBSCRIBED, @"https://example.com/", 1)]
-    public void Webhook_Should_Have_Applied_Properties_That_Are_Set(WebHookType type, string urlString, int expectedCount)
+    [InlineData(WebHookType.CLICKED)]
+    public void Webhook_Should_Have_Applied_Properties_That_Are_Set(WebHookType type)
     {
       var webhook = new Webhook();
 
-      var uri = new Uri(urlString);
-
-      webhook
-        .SetTypeId(type)
-        .AppendUrl(uri);
+      webhook.SetTypeId(type);
 
       Assert.Equal(type, webhook.Type);
+    }
 
-      Assert.Equal(expectedCount, webhook.Urls.Count);
+    [Theory]
+    [InlineData(@"https://sample.example.com")]
+    public void Webhook_Should_Have_Not_Empty_Urls_When_Url_Is_Appended(string url)
+    {
+      var webhook = new Webhook();
+
+      var uri = new Uri(url);
+
+      webhook.AppendUrl(uri);
+
+      Assert.NotEmpty(webhook.Urls);
     }
   }
 }

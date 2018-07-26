@@ -63,7 +63,7 @@ namespace MailgunSharp.Domains
         throw new ArgumentNullException("Password cannot be null or empty!");
       }
 
-      if (checkPasswordLengthRequirement(password))
+      if (!isPasswordLengthWithinRequiredRange(password))
       {
         throw new ArgumentOutOfRangeException("Password must have a minimum length of 5, and maximum length of 32!");
       }
@@ -107,7 +107,7 @@ namespace MailgunSharp.Domains
     /// </summary>
     /// <param name="password">The password string.</param>
     /// <returns>True if the password meets the minumum length requirement of 5, and a maximum length of 32.</returns>
-    private bool checkPasswordLengthRequirement(string password)
+    private bool isPasswordLengthWithinRequiredRange(string password)
     {
       var length = password.Length;
 

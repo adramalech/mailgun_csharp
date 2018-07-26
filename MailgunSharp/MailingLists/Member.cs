@@ -10,17 +10,17 @@ namespace MailgunSharp.MailingLists
 {
   public sealed class Member : IMember
   {
-    private readonly MailAddress address;
+    private readonly MailAddress emailAddress;
 
     /// <summary>
     /// The email address of the mailing list member.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    public MailAddress Address
+    public MailAddress EmailAddress
     {
       get
       {
-        return this.address;
+        return this.emailAddress;
       }
     }
 
@@ -88,19 +88,20 @@ namespace MailgunSharp.MailingLists
     /// <summary>
     /// Create an instance of the member class.
     /// </summary>
-    /// <param name="address">The email address of the member.</param>
+    /// <param name="mailAddress">The email address of the member.</param>
     /// <param name="name">The optional name of the member.</param>
     /// <param name="vars">The optional custom variables as a json object.</param>
     /// <param name="subscribed">Is the member subscribed to the mailing list. defaults to true.</param>
     /// <param name="upsert">True, update duplicate member found in list; false, raise an error if duplicate member found in list. Default false.</param>
-    public Member(MailAddress address, string name = "", JObject vars = null,  bool subscribed = true, bool upsert = false)
+    public Member(string mailAddress, string name = "", JObject vars = null,  bool subscribed = true, bool upsert = false)
     {
-      if (this.address == null)
+      if (mailAddress.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Address cannot be null or empty!");
       }
 
-      this.address = address;
+      this.emailAddress = (!name.IsNullEmptyWhitespace()) ? new MailAddress(mailAddress, name) : new MailAddress(mailAddress);
+
       this.name = name;
       this.vars = vars;
       this.subscribed = subscribed;
@@ -115,12 +116,16 @@ namespace MailgunSharp.MailingLists
     {
       var jsonObject = new JObject
       {
-        ["address"] = this.address.ToString(),
+        ["address"] = this.emailAddress.ToString(),
         ["name"] = this.name,
-        ["vars"] = this.vars.ToString(Formatting.None),
         ["subscribed"] = this.subscribed.ToYesNo(),
         ["upsert"] = this.upsert.ToYesNo()
       };
+
+      if (vars != null && vars.Count > 0)
+      {
+        jsonObject.Add("vars", this.vars.ToString(Formatting.None));
+      }
 
       return jsonObject;
     }
@@ -133,12 +138,16 @@ namespace MailgunSharp.MailingLists
     {
       var content = new Collection<KeyValuePair<string, string>>()
       {
-        new KeyValuePair<string, string>("address", this.address.ToString()),
+        new KeyValuePair<string, string>("address", this.emailAddress.ToString()),
         new KeyValuePair<string, string>("name", this.name),
-        new KeyValuePair<string, string>("vars", this.vars.ToString(Formatting.None)),
         new KeyValuePair<string, string>("subscribed", this.subscribed.ToYesNo()),
         new KeyValuePair<string, string>("upsert", this.upsert.ToYesNo())
       };
+
+      if (vars != null && vars.Count > 0)
+      {
+        content.Add("vars", this.vars.ToString(Formatting.None));
+      }
 
       return content;
     }

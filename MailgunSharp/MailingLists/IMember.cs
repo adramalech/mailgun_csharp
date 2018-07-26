@@ -10,7 +10,7 @@ namespace MailgunSharp.MailingLists
     /// The email address of the mailing list member.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    MailAddress Address { get; }
+    MailAddress EmailAddress { get; }
 
     /// <summary>
     /// The name of the mailing list member.

@@ -93,7 +93,7 @@ namespace MailgunSharp.Test.Routes
         route
           .SetDescription("Failed attempt")
           .MatchHeader("headerName", new Regex(@"^test$"))
-          .AsFormContent();
+          .ToFormContent();
       });
     }
 
@@ -106,7 +106,7 @@ namespace MailgunSharp.Test.Routes
         route
           .SetDescription("Failed attempt")
           .Forward(new Uri("https://forward.example.com"))
-          .AsFormContent();
+          .ToFormContent();
       });
     }
   }

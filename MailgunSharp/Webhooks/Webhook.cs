@@ -97,7 +97,7 @@ namespace MailgunSharp.Webhooks
     /// Get the webhook as form content to be used in http requests.
     /// </summary>
     /// <returns>A keyvalue string pair representation of the webhook.</returns>
-    public ICollection<KeyValuePair<string, string>> AsFormContent()
+    public ICollection<KeyValuePair<string, string>> ToFormContent()
     {
       if (this.id.IsNullEmptyWhitespace())
       {

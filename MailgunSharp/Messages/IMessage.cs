@@ -165,6 +165,6 @@ namespace MailgunSharp.Messages
     /// Get the message as a httpcontent to be used in sending an http request.
     /// </summary>
     /// <returns>System.Net.Http.HttpContent</returns>
-    HttpContent AsFormContent();
+    HttpContent ToFormContent();
   }
 }

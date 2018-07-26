@@ -126,7 +126,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Message cannot be null or empty!");
       }
 
-      return this.httpClient.PostAsync($"{this.companyDomain}/messages", message.AsFormContent(), ct);
+      return this.httpClient.PostAsync($"{this.companyDomain}/messages", message.ToFormContent(), ct);
     }
 
     /// <summary>
@@ -1567,7 +1567,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Route cannot be null or empty!");
       }
 
-      var content = route.AsFormContent();
+      var content = route.ToFormContent();
 
       var formContent = new FormUrlEncodedContent(content);
 
@@ -1593,7 +1593,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Route cannot be null or empty!");
       }
 
-      var content = route.AsFormContent();
+      var content = route.ToFormContent();
 
       var formContent = new FormUrlEncodedContent(content);
 
@@ -1655,7 +1655,7 @@ namespace MailgunSharp
         throw new ArgumentNullException("Webhook cannot be null or empty!");
       }
 
-      var content = webhook.AsFormContent();
+      var content = webhook.ToFormContent();
 
       var formContent = new FormUrlEncodedContent(content);
 

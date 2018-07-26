@@ -33,36 +33,36 @@ namespace MailgunSharp.Test.Webhooks
     }
 
     [Fact]
-    public void Webhook_Should_Throw_Error_If_Webhook_AsFormContent_Called_Before_Setting_Required_Properties()
+    public void Webhook_Should_Throw_Error_If_Webhook_ToFormContent_Called_Before_Setting_Required_Properties()
     {
       var webhook = new Webhook();
 
       Assert.Throws<InvalidOperationException>(() => {
-        webhook.AsFormContent();
+        webhook.ToFormContent();
       });
     }
 
     [Fact]
-    public void Webhook_Should_Throw_Error_If_Webhook_AsFormContent_Called_Before_Setting_Atleast_One_Required_Url()
+    public void Webhook_Should_Throw_Error_If_Webhook_ToFormContent_Called_Before_Setting_Atleast_One_Required_Url()
     {
       var webhook = new Webhook();
 
       webhook.SetTypeId(WebHookType.CLICKED);
 
       Assert.Throws<InvalidOperationException>(() => {
-        webhook.AsFormContent();
+        webhook.ToFormContent();
       });
     }
 
     [Fact]
-    public void Webhook_Should_Throw_Error_If_Webhook_AsFormContent_Called_Before_Setting__Required_IdType()
+    public void Webhook_Should_Throw_Error_If_Webhook_ToFormContent_Called_Before_Setting__Required_IdType()
     {
       var webhook = new Webhook();
 
       webhook.AppendUrl(new Uri(@"https://example.com"));
 
       Assert.Throws<InvalidOperationException>(() => {
-        webhook.AsFormContent();
+        webhook.ToFormContent();
       });
     }
 

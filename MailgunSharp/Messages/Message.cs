@@ -196,7 +196,7 @@ namespace MailgunSharp.Messages
     /// Get the message as a httpcontent to be used in sending an http request.
     /// </summary>
     /// <returns>System.Net.Http.HttpContent</returns>
-    public HttpContent AsFormContent()
+    public HttpContent ToFormContent()
     {
       var formContent = new MultipartFormDataContent();
 

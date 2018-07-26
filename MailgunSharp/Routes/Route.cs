@@ -214,7 +214,7 @@ namespace MailgunSharp.Routes
     /// Get the Route object as a form content to submit in an http request.
     /// </summary>
     /// <returns>The form content as a keyvalue string pairs.</returns>
-    public ICollection<KeyValuePair<string, string>> AsFormContent()
+    public ICollection<KeyValuePair<string, string>> ToFormContent()
     {
       if (this.actions == null || this.actions.Count < 1)
       {

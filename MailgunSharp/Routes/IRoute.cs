@@ -104,6 +104,6 @@ namespace MailgunSharp.Routes
     /// Get the Route object as a form content to submit in an http request.
     /// </summary>
     /// <returns>The form content as a keyvalue string pairs.</returns>
-    ICollection<KeyValuePair<string, string>> AsFormContent();
+    ICollection<KeyValuePair<string, string>> ToFormContent();
   }
 }

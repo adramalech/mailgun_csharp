@@ -12,7 +12,7 @@ namespace MailgunSharp.Test.Supression
   public class BounceRequestTest
   {
     [Fact]
-    public void Initialized_Bounce_Request_Check_Default_Values()
+    public void Initialized_BounceRequest_Check_Default_Values()
     {
       var bounceRequest = new BounceRequest(new MailAddress(@"john.doe@example.com"));
 
@@ -25,7 +25,7 @@ namespace MailgunSharp.Test.Supression
 
     [Theory]
     [ClassData(typeof(BounceRequestGenerator))]
-    public void Bounce_Request_Should_Set_Optional_Params(string emailAddress, SmtpErrorCode code, string error, DateTime createdAt, TimeZoneInfo tzInfo)
+    public void BounceRequest_Should_Set_Optional_Params(string emailAddress, SmtpErrorCode code, string error, DateTime createdAt, TimeZoneInfo tzInfo)
     {
       var bounceRequest = new BounceRequest(new MailAddress(emailAddress), code, error, createdAt, tzInfo);
 
@@ -34,6 +34,28 @@ namespace MailgunSharp.Test.Supression
       Assert.Equal(code, bounceRequest.Code);
 
       Assert.Equal(error, bounceRequest.Error);
+    }
+
+    [Theory]
+    [ClassData(typeof(BounceRequestGenerator))]
+    public void BounceRequest_When_Converted_To_FormContent_Should_Not_Be_Empty(string emailAddress, SmtpErrorCode code, string error, DateTime createdAt, TimeZoneInfo tzInfo)
+    {
+      var bounceRequest = new BounceRequest(new MailAddress(emailAddress), code, error, createdAt, tzInfo);
+
+      var formContent = bounceRequest.ToFormContent();
+
+      Assert.NotEmpty(formContent);
+    }
+
+    [Theory]
+    [ClassData(typeof(BounceRequestGenerator))]
+    public void BounceRequest_When_Converted_To_JsonObject_Should_Not_Be_Empty(string emailAddress, SmtpErrorCode code, string error, DateTime createdAt, TimeZoneInfo tzInfo)
+    {
+      var bounceRequest = new BounceRequest(new MailAddress(emailAddress), code, error, createdAt, tzInfo);
+
+      var json = bounceRequest.ToJson();
+
+      Assert.NotEmpty(json);
     }
   }
 

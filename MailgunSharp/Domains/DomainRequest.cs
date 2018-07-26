@@ -98,14 +98,14 @@ namespace MailgunSharp.Domains
         throw new ArgumentNullException("DomainName cannot be ");
       }
 
-      if (!isHostnameValid(domainName))
-      {
-        throw new FormatException("Domain name is incorrectly formatted!");
-      }
-
       if (smtpPassword.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Smtp Password cannot be null or empty!");
+      }
+
+      if (!isHostnameValid(domainName))
+      {
+        throw new FormatException("Domain name is incorrectly formatted!");
       }
 
       this.domainName = domainName;
@@ -158,7 +158,16 @@ namespace MailgunSharp.Domains
     /// <returns>True, if valid, false if not valid.</returns>
     private bool isHostnameValid(string hostname)
     {
-      return Uri.CheckHostName(hostname) == UriHostNameType.Dns;
+      Uri uri;
+
+      var result = Uri.TryCreate(hostname, UriKind.Absolute, out uri);
+
+      if (!result)
+      {
+        return result;
+      }
+
+      return uri.IsWellFormedOriginalString();
     }
   }
 }

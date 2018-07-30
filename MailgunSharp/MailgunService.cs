@@ -1749,24 +1749,18 @@ namespace MailgunSharp
     }
 
     /// <summary>
-    /// Dispose of the httpclient when the Mailgun service dispose is called.
-    /// </summary>
-    private void dispose(bool disposing)
-    {
-      if (disposing && this.httpClient != null)
-      {
-        this.httpClient.Dispose();
-      }
-    }
-
-    /// <summary>
-    /// Call dispose which will collect the httpclient instance.
+    /// Call dispose which will garbage collect the httpclient instance.
+    ///
     /// SuppressFinalize tells the GC that the object was cleaned up properly
     /// and doesn't need to go onto the finalizer queue.
     /// </summary>
     public void Dispose()
     {
-      dispose(true);
+      if (this.httpClient != null)
+      {
+        this.httpClient.Dispose();
+      }
+
       GC.SuppressFinalize(this);
     }
   }

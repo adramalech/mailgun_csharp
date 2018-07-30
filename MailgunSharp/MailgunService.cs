@@ -89,7 +89,7 @@ namespace MailgunSharp
     /// <param name="httpClient">The httpclient can be optionally passed in to use one given instead of generating a new one.</param>
     public MailgunService(string companyDomain, string apiKey, HttpClient httpClient = null)
     {
-      if (companyDomain == null)
+      if (companyDomain.IsNullEmptyWhitespace())
       {
         throw new ArgumentNullException("Company domain cannot be null!");
       }

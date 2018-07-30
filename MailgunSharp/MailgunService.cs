@@ -24,7 +24,7 @@ using MailgunSharp.Webhooks;
 
 namespace MailgunSharp
 {
-  public sealed class MailgunService : IMailgunService
+  public sealed class MailgunService : IMailgunService, IDisposable
   {
     /// <summary>
     /// The maximum string length of a list of email addresses to be used in a email address parse validation request.
@@ -1746,6 +1746,28 @@ namespace MailgunSharp
     private bool isHostnameValid(string hostname)
     {
       return Uri.CheckHostName(hostname) == UriHostNameType.Dns;
+    }
+
+    /// <summary>
+    /// Dispose of the httpclient when the Mailgun service dispose is called.
+    /// </summary>
+    private void dispose(bool disposing)
+    {
+      if (disposing && this.httpClient != null)
+      {
+        this.httpClient.Dispose();
+      }
+    }
+
+    /// <summary>
+    /// Call dispose which will collect the httpclient instance.
+    /// SuppressFinalize tells the GC that the object was cleaned up properly
+    /// and doesn't need to go onto the finalizer queue.
+    /// </summary>
+    public void Dispose()
+    {
+      dispose(true);
+      GC.SuppressFinalize(this);
     }
   }
 }

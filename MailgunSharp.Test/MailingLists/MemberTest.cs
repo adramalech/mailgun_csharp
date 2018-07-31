@@ -1,7 +1,6 @@
 using System;
 using Xunit;
 using MailgunSharp.MailingLists;
-using Newtonsoft.Json;
 
 namespace MailgunSharp.Test.MailingLists
 {

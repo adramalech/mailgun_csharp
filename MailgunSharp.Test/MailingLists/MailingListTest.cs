@@ -12,7 +12,7 @@ namespace MailgunSharp.Test.MailingLists
     public void Initialized_MailingList_With_Null_Address_Should_Throw_Exception()
     {
       Assert.Throws<ArgumentNullException>(() => {
-        var list = new MailgunSharp.MailingLists.MailingList(null);
+        var list = new MailingList(null);
       });
     }
 
@@ -22,7 +22,7 @@ namespace MailgunSharp.Test.MailingLists
     {
       Assert.Throws<ArgumentNullException>(() =>
       {
-        var list = new MailgunSharp.MailingLists.MailingList(null, name, description, accessLevel);
+        var list = new MailingList(null, name, description, accessLevel);
       });
     }
 
@@ -30,7 +30,7 @@ namespace MailgunSharp.Test.MailingLists
     [InlineData(@"john.doe@example.com")]
     public void Initialized_MailingList_Should_Only_Require_EmailAddress(string emailAddress)
     {
-      var list = new MailgunSharp.MailingLists.MailingList(new MailAddress(emailAddress));
+      var list = new MailingList(new MailAddress(emailAddress));
 
       Assert.Equal(emailAddress, list.EmailAddress.Address);
     }
@@ -39,7 +39,7 @@ namespace MailgunSharp.Test.MailingLists
     [InlineData(@"john.doe@example.com", "Test Name", "test description", AccessLevel.EVERYONE)]
     public void Initialized_MailingList_With_Optional_Fields_Should_Have_Same_Values(string emailAddress, string name, string description, AccessLevel accessLevel)
     {
-      var list = new MailgunSharp.MailingLists.MailingList(new MailAddress(emailAddress), name, description, accessLevel);
+      var list = new MailingList(new MailAddress(emailAddress), name, description, accessLevel);
 
       Assert.Equal(emailAddress, list.EmailAddress.Address);
       Assert.Equal(name, list.Name);
@@ -51,7 +51,7 @@ namespace MailgunSharp.Test.MailingLists
     [InlineData(@"john.doe@example.com", "Test Name", "test description", AccessLevel.EVERYONE)]
     public void Initialized_MailingList_With_Optional_Fields_Should_Produce_A_NonEmpty_FormContent(string emailAddress, string name, string description, AccessLevel accessLevel)
     {
-      var list = new MailgunSharp.MailingLists.MailingList(new MailAddress(emailAddress), name, description, accessLevel);
+      var list = new MailingList(new MailAddress(emailAddress), name, description, accessLevel);
 
       var formContent = list.ToFormContent();
 
@@ -62,7 +62,7 @@ namespace MailgunSharp.Test.MailingLists
     [InlineData(@"john.doe@example.com", "Test Name", "test description", AccessLevel.EVERYONE)]
     public void Initialized_MailingList_With_Optional_Fields_Should_Produce_A_NonEmpty_JsonObject(string emailAddress, string name, string description, AccessLevel accessLevel)
     {
-      var list = new MailgunSharp.MailingLists.MailingList(new MailAddress(emailAddress), name, description, accessLevel);
+      var list = new MailingList(new MailAddress(emailAddress), name, description, accessLevel);
 
       var json = list.ToJson();
 

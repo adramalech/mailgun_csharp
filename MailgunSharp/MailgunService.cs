@@ -1048,7 +1048,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1071,7 +1071,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1110,7 +1110,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1133,7 +1133,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty!");
       }
 
       if (!isHostnameValid(domainName))
@@ -1165,7 +1165,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty!");
       }
 
       if (!isHostnameValid(domainName))
@@ -1195,7 +1195,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty!");
       }
 
       if (!isHostnameValid(domainName))
@@ -1251,7 +1251,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty!");
       }
 
       if (!isHostnameValid(domainName))
@@ -1301,7 +1301,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1330,7 +1330,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1352,7 +1352,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1367,7 +1367,7 @@ namespace MailgunSharp
 
       var formContent = new FormUrlEncodedContent(content);
 
-      return this.httpClient.GetAsync($"/domains/{domainName}/tracking/open", ct);
+      return this.httpClient.PutAsync($"/domains/{domainName}/tracking/open", formContent, ct);
     }
 
     /// <summary>
@@ -1381,7 +1381,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1414,7 +1414,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1448,7 +1448,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))

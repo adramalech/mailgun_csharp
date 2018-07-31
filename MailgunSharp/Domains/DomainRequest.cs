@@ -158,9 +158,7 @@ namespace MailgunSharp.Domains
     /// <returns>True, if valid, false if not valid.</returns>
     private bool isHostnameValid(string hostname)
     {
-      Uri uri;
-
-      var result = Uri.TryCreate(hostname, UriKind.Absolute, out uri);
+      var result = Uri.TryCreate(hostname, UriKind.Absolute, out Uri uri);
 
       if (!result)
       {

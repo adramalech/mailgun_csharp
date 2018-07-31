@@ -1745,7 +1745,14 @@ namespace MailgunSharp
     /// <returns>True, if valid, false if not valid.</returns>
     private bool isHostnameValid(string hostname)
     {
-      return Uri.CheckHostName(hostname) == UriHostNameType.Dns;
+      var result = Uri.TryCreate(hostname, UriKind.Absolute, out Uri uri);
+
+      if (!result)
+      {
+        return result;
+      }
+
+      return uri.IsWellFormedOriginalString();
     }
 
     /// <summary>
@@ -1756,10 +1763,7 @@ namespace MailgunSharp
     /// </summary>
     public void Dispose()
     {
-      if (this.httpClient != null)
-      {
-        this.httpClient.Dispose();
-      }
+      this.httpClient?.Dispose();
 
       GC.SuppressFinalize(this);
     }

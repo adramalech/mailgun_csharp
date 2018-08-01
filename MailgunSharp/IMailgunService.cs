@@ -438,7 +438,7 @@ namespace MailgunSharp
     /// <summary>
     /// Returns a list of SMTP credentials for the defined domain.
     /// </summary>
-    /// <<param name="domainName">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="skip">Number of records to skip.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>

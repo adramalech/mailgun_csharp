@@ -1,3 +1,5 @@
+using System;
+
 namespace MailgunSharp.Enums
 {
   public static class EnumLookup
@@ -6,7 +8,7 @@ namespace MailgunSharp.Enums
     /// Get the description name of the event type.
     /// </summary>
     /// <param name="eventType">The event type to get the description of.</param>
-    /// <returns>string</returns>
+    /// <returns>The name of the event type.</returns>
     public static string GetEventTypeName(EventType eventType)
     {
       var name = string.Empty;

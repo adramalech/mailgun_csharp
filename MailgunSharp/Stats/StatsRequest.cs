@@ -33,14 +33,14 @@ namespace MailgunSharp.Stats
     /// Defaults to 7 days, one week, from the current datetime.
     /// </summary>
     /// <value>DateTime UTC.</value>
-    public DateTime Start  { get; set; }
+    public DateTime Start { get; set; }
 
     /// <summary>
     /// The end date.
     /// Defaults to current datetime UTC.
     /// </summary>
     /// <value>DateTime UTC.</value>
-    public DateTime End  { get; set; }
+    public DateTime End { get; set; }
 
     /// <summary>
     /// Create a new instance of stats request object.

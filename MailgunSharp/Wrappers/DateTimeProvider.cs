@@ -2,7 +2,7 @@ using System;
 
 namespace MailgunSharp.Wrappers
 {
-  public class DateTimeProvider : IDateTimeProvider
+  public sealed class DateTimeProvider : IDateTimeProvider
   {
     public DateTime Now
     {

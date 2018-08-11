@@ -4,19 +4,33 @@ using NodaTime;
 
 namespace MailgunSharp.Wrappers
 {
-  public class NodaTimeInstantBuilder : INodaTimeInstantBuilder
+  public sealed class NodaTimeBuilder : INodaTimeBuilder
   {
     private readonly IClock clock;
 
     private Instant now;
 
-    public NodaTimeInstantBuilder(IClock clock)
+    public NodaTimeBuilder(IClock clock)
     {
       this.clock = clock;
       this.now = this.clock.GetCurrentInstant();
     }
 
-    public INodaTimeInstantBuilder AddDays(int days)
+    public INodaTimeBuilder SetDateTimeUtc(int year, int month, int day, int hour, int minute, int second)
+    {
+      this.now = Instant.FromUtc(year, month, day, hour, minute, second);
+
+      return this;
+    }
+
+    public INodaTimeBuilder SetDateTimeUtc(DateTime datetime)
+    {
+      this.now = Instant.FromDateTimeUtc(datetime);
+
+      return this;
+    }
+
+    public INodaTimeBuilder AddDays(int days)
     {
       var duration = Duration.FromDays(days);
 
@@ -25,7 +39,7 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
-    public INodaTimeInstantBuilder SubtractDays(int days)
+    public INodaTimeBuilder SubtractDays(int days)
     {
       var duration = Duration.FromDays(days);
 
@@ -34,7 +48,7 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
-    public INodaTimeInstantBuilder AddHours(int hours)
+    public INodaTimeBuilder AddHours(int hours)
     {
       var duration = Duration.FromHours(hours);
 
@@ -43,7 +57,7 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
-    public INodaTimeInstantBuilder SubtractHours(int hours)
+    public INodaTimeBuilder SubtractHours(int hours)
     {
       var duration = Duration.FromHours(hours);
 
@@ -52,7 +66,7 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
-    public INodaTimeInstantBuilder AddMinutes(int minutes)
+    public INodaTimeBuilder AddMinutes(int minutes)
     {
       var duration = Duration.FromMinutes(minutes);
 
@@ -61,7 +75,7 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
-    public INodaTimeInstantBuilder SubtractMinutes(int minutes)
+    public INodaTimeBuilder SubtractMinutes(int minutes)
     {
       var duration = Duration.FromMinutes(minutes);
 
@@ -70,7 +84,7 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
-    public INodaTimeInstantBuilder AddSeconds(int seconds)
+    public INodaTimeBuilder AddSeconds(int seconds)
     {
       var duration = Duration.FromMinutes(seconds);
 
@@ -79,7 +93,7 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
-    public INodaTimeInstantBuilder SubtractSeconds(int seconds)
+    public INodaTimeBuilder SubtractSeconds(int seconds)
     {
       var duration = Duration.FromMinutes(seconds);
 

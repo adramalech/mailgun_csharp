@@ -58,5 +58,17 @@ namespace MailgunSharp.Test.Wrappers
       Assert.Equal(1, dt.Second);
       Assert.Equal(0, dt.Millisecond);
     }
+
+    [Theory]
+    [InlineData(DateTimeKind.Local)]
+    [InlineData(DateTimeKind.Unspecified)]
+    public void NodaTimeBuilder_Should_Throw_Exception_When_DateTimeKind_NotUtc(DateTimeKind kind)
+    {
+      Assert.Throws<ArgumentException>(() => {
+        var dateTimeLocal = new NodaTimeBuilder(this.clock)
+                              .SetDateTimeUtc(new DateTime(1970, 1, 1, 1, 1, 1, kind))
+                              .Build();
+      });
+    }
   }
 }

@@ -85,7 +85,7 @@ namespace MailgunSharp.Wrappers
 
     public INodaTimeBuilder AddSeconds(int seconds)
     {
-      var duration = Duration.FromMinutes(seconds);
+      var duration = Duration.FromSeconds(seconds);
 
       this.now = this.now.Plus(duration);
 
@@ -94,7 +94,7 @@ namespace MailgunSharp.Wrappers
 
     public INodaTimeBuilder SubtractSeconds(int seconds)
     {
-      var duration = Duration.FromMinutes(seconds);
+      var duration = Duration.FromSeconds(seconds);
 
       this.now = this.now.Minus(duration);
 

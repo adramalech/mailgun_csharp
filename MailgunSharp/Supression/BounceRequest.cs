@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Net.Mail;
 using Newtonsoft.Json.Linq;
 using MailgunSharp.Enums;
+using MailgunSharp.Wrappers;
+using NodaTime;
 
 namespace MailgunSharp.Supression
 {
@@ -100,7 +102,7 @@ namespace MailgunSharp.Supression
     /// <returns>Json object</returns>
     public JObject ToJson()
     {
-      var jsonObject = new JObject
+      var jsonObject = new JObject()
       {
         ["address"] = this.emailAddress.Address,
         ["code"] = ((int) this.code).ToString(),

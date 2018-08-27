@@ -55,7 +55,7 @@ namespace MailgunSharp.Supression
     {
       if (emailAddress == null)
       {
-        throw new ArgumentNullException("Address cannot be null or emtpy!");
+        throw new ArgumentNullException(nameof(emailAddress), "Address cannot be null or emtpy!");
       }
 
       this.emailAddress = emailAddress;

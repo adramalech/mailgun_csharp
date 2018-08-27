@@ -66,7 +66,7 @@ namespace MailgunSharp.Messages
     {
       if (attachment == null)
       {
-        throw new ArgumentNullException("Attachment cannot be null!");
+        throw new ArgumentNullException(nameof(attachment), "Attachment cannot be null!");
       }
 
       if (this.message.FileAttachments == null)
@@ -74,9 +74,11 @@ namespace MailgunSharp.Messages
         this.message.FileAttachments = new Collection<IFileAttachment>();
       }
 
-      if (this.messageSize + attachment.Data.Length > MAX_TOTAL_MESSAGE_SIZE)
+      var size = this.messageSize + attachment.Data.Length;
+
+      if (size > MAX_TOTAL_MESSAGE_SIZE)
       {
-        throw new ArgumentOutOfRangeException("Cannot exceed total message size of 25MB!");
+        throw new ArgumentOutOfRangeException(nameof(this.messageSize), size, "Cannot exceed total message size of 25MB!");
       }
 
       this.messageSize += attachment.Data.Length;
@@ -103,9 +105,11 @@ namespace MailgunSharp.Messages
         this.message.Attachments = new Collection<FileInfo>();
       }
 
-      if (this.messageSize + attachment.Length > MAX_TOTAL_MESSAGE_SIZE)
+      var size = this.messageSize + attachment.Length;
+
+      if (size > MAX_TOTAL_MESSAGE_SIZE)
       {
-        throw new ArgumentOutOfRangeException("Cannot exceed total message size of 25MB!");
+        throw new ArgumentOutOfRangeException(nameof(this.messageSize), size, "Cannot exceed total message size of 25MB!");
       }
 
       messageSize += attachment.Length;
@@ -124,7 +128,7 @@ namespace MailgunSharp.Messages
     {
       if (bcc == null)
       {
-        throw new ArgumentNullException("Bcc cannot be null!");
+        throw new ArgumentNullException(nameof(bcc), "Bcc cannot be null!");
       }
 
       if (this.message.Bcc == null) {
@@ -145,7 +149,7 @@ namespace MailgunSharp.Messages
     {
       if (cc == null)
       {
-        throw new ArgumentNullException("Cc cannot be null!");
+        throw new ArgumentNullException(nameof(cc), "Cc cannot be null!");
       }
 
       if (this.message.Cc == null) {
@@ -166,7 +170,7 @@ namespace MailgunSharp.Messages
     {
       if (image == null)
       {
-        throw new ArgumentNullException("Image cannot be null!");
+        throw new ArgumentNullException(nameof(image), "Image cannot be null!");
       }
 
       if (this.message.Inline == null)
@@ -174,9 +178,11 @@ namespace MailgunSharp.Messages
         this.message.Inline = new Collection<FileInfo>();
       }
 
-      if (this.messageSize + image.Length > MAX_TOTAL_MESSAGE_SIZE)
+      var size = this.messageSize + image.Length;
+
+      if (size > MAX_TOTAL_MESSAGE_SIZE)
       {
-        throw new ArgumentOutOfRangeException("Cannot exceed total message size of 25MB!");
+        throw new ArgumentOutOfRangeException(nameof(this.messageSize), size, "Cannot exceed total message size of 25MB!");
       }
 
       this.messageSize += image.Length;
@@ -195,7 +201,7 @@ namespace MailgunSharp.Messages
     {
       if (image == null)
       {
-        throw new ArgumentNullException("Image cannot be null!");
+        throw new ArgumentNullException(nameof(image), "Image cannot be null!");
       }
 
       if (this.message.FileInline == null)
@@ -203,9 +209,11 @@ namespace MailgunSharp.Messages
         this.message.FileInline = new Collection<IFileAttachment>();
       }
 
-      if (this.messageSize + image.Data.Length > MAX_TOTAL_MESSAGE_SIZE)
+      var size = this.messageSize + image.Data.Length;
+
+      if (size > MAX_TOTAL_MESSAGE_SIZE)
       {
-        throw new ArgumentOutOfRangeException("Cannot exceed total message size of 25MB!");
+        throw new ArgumentOutOfRangeException(nameof(this.messageSize), size, "Cannot exceed total message size of 25MB!");
       }
 
       messageSize += image.Data.Length;
@@ -224,14 +232,14 @@ namespace MailgunSharp.Messages
     {
       if (recipient == null)
       {
-        throw new ArgumentNullException("Recipients cannot be null!");
+        throw new ArgumentNullException(nameof(recipient), "Recipients cannot be null!");
       }
 
       var count = this.recipientCount + 1;
 
       if (count > MAX_RECIPIENT_SIZE)
       {
-        throw new ArgumentOutOfRangeException("Maximum number of 1,000 recipients cannot be exceeded!");
+        throw new ArgumentOutOfRangeException(nameof(this.recipientCount), count, "Maximum number of 1,000 recipients cannot be exceeded!");
       }
 
       if (this.message.To == null)
@@ -255,7 +263,7 @@ namespace MailgunSharp.Messages
 
         if (this.recipientVarCount > 0 && this.recipientCount != this.recipientVarCount)
         {
-          throw new ArgumentOutOfRangeException("Did not have matching amount of recipient variables and recipients!");
+          throw new ArgumentOutOfRangeException(nameof(this.message.RecipientVariables), this.recipientVarCount, "Did not have matching amount of recipient variables and recipients!");
         }
       }
 
@@ -271,7 +279,7 @@ namespace MailgunSharp.Messages
     {
       if (recipients == null)
       {
-        throw new ArgumentNullException("Recipients cannot be null!");
+        throw new ArgumentNullException(nameof(recipients), "Recipients cannot be null!");
       }
 
       if (this.message.To == null)
@@ -286,7 +294,7 @@ namespace MailgunSharp.Messages
 
       if (this.recipientCount + recipients.Count > MAX_RECIPIENT_SIZE)
       {
-        throw new ArgumentOutOfRangeException("Maximum number of 1,000 recipients cannot be exceeded!");
+        throw new ArgumentOutOfRangeException(nameof(this.recipientCount), (this.recipientCount + recipients.Count), "Maximum number of 1,000 recipients cannot be exceeded!");
       }
 
       foreach (var recipient in recipients)
@@ -301,7 +309,7 @@ namespace MailgunSharp.Messages
 
           if (this.recipientVarCount > 0 && this.recipientCount != this.recipientVarCount)
           {
-            throw new ArgumentOutOfRangeException("Did not have matching amount of recipient variables and recipients!");
+            throw new ArgumentOutOfRangeException(nameof(recipient.Variables), this.recipientVarCount, "Did not have matching amount of recipient variables and recipients!");
           }
         }
       }
@@ -318,7 +326,7 @@ namespace MailgunSharp.Messages
     {
       if (sender == null)
       {
-        throw new ArgumentNullException("From cannot be null!");
+        throw new ArgumentNullException(nameof(sender), "From cannot be null!");
       }
 
       this.message.From = sender;
@@ -342,7 +350,7 @@ namespace MailgunSharp.Messages
 
       if (exceedsMaxMessageSize(sizeInBytes))
       {
-        throw new ArgumentOutOfRangeException("Cannot exceed total message size of 25MB!");
+        throw new ArgumentOutOfRangeException(nameof(html), sizeInBytes, "Cannot exceed total message size of 25MB!");
       }
 
       this.messageSize += sizeInBytes;
@@ -361,14 +369,14 @@ namespace MailgunSharp.Messages
     {
       if (subject.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Subject cannot be null!");
+        throw new ArgumentNullException(nameof(subject), "Subject cannot be null!");
       }
 
       var sizeInBytes = (long)(subject.Length * sizeof(char));
 
       if (exceedsMaxMessageSize(sizeInBytes))
       {
-        throw new ArgumentOutOfRangeException("Cannot exceed total message size of 25MB!");
+        throw new ArgumentOutOfRangeException(nameof(subject), sizeInBytes, "Cannot exceed total message size of 25MB!");
       }
 
       this.message.Subject = subject;
@@ -397,7 +405,7 @@ namespace MailgunSharp.Messages
     {
       if (text.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Text Body cannot be null!");
+        throw new ArgumentNullException(nameof(text), "Text Body cannot be null!");
       }
 
       this.message.Text = text;
@@ -414,7 +422,7 @@ namespace MailgunSharp.Messages
     {
       if (tag.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Tag cannot be null!");
+        throw new ArgumentNullException(nameof(tag), "Tag cannot be null!");
       }
 
       if (this.message.Tags == null)
@@ -485,12 +493,12 @@ namespace MailgunSharp.Messages
     {
       if (headerName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Custom header name cannot be null!");
+        throw new ArgumentNullException(nameof(headerName), "Custom header name cannot be null!");
       }
 
       if (value.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Custom header value cannot be null!");
+        throw new ArgumentNullException(nameof(value), "Custom header value cannot be null!");
       }
 
       if (this.message.CustomHeaders == null)
@@ -551,7 +559,7 @@ namespace MailgunSharp.Messages
 
       if (difference.Days > 3)
       {
-        throw new ArgumentOutOfRangeException("Delivery DateTime cannot exceed 3 days into the future!");
+        throw new ArgumentOutOfRangeException(nameof(datetime), datetime, "Delivery DateTime cannot exceed 3 days into the future!");
       }
 
       this.message.DeliveryTime = localUtcDateTime;
@@ -569,12 +577,12 @@ namespace MailgunSharp.Messages
     {
       if (name.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Name cannot be null!");
+        throw new ArgumentNullException(nameof(name), "Name cannot be null!");
       }
 
       if (value == null)
       {
-        throw new ArgumentNullException("Value cannot be null!");
+        throw new ArgumentNullException(nameof(value), "Value cannot be null!");
       }
 
       if (this.message.CustomData == null)
@@ -596,7 +604,7 @@ namespace MailgunSharp.Messages
     {
       if (replyTo == null)
       {
-        throw new ArgumentNullException("replyTo cannot be null!");
+        throw new ArgumentNullException(nameof(replyTo), "replyTo cannot be null!");
       }
 
       if (this.message.CustomHeaders == null)

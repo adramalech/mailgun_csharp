@@ -79,7 +79,7 @@ namespace MailgunSharp.Events
     {
       if (limit > MAX_RESULT_LIMIT)
       {
-        throw new ArgumentOutOfRangeException("Limit of resulting events cannot exceed a maximum integer value of 300!");
+        throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit of resulting events cannot exceed a maximum integer value of 300!");
       }
 
       this.eventRequest.Limit = limit;
@@ -96,7 +96,7 @@ namespace MailgunSharp.Events
     {
       if (size < 1)
       {
-        throw new ArgumentOutOfRangeException("Message size cannot be less than 1 byte!");
+        throw new ArgumentOutOfRangeException(nameof(size), size, "Message size cannot be less than 1 byte!");
       }
 
       this.eventRequest.Size = size;
@@ -113,7 +113,7 @@ namespace MailgunSharp.Events
     {
       if (name.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Attachment Filename cannot be null or empty!");
+        throw new ArgumentNullException(nameof(name), "Attachment Filename cannot be null or empty!");
       }
 
       this.eventRequest.AttachmentFileName = name;
@@ -130,7 +130,7 @@ namespace MailgunSharp.Events
     {
       if (id.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Message Id cannot be null or empty!");
+        throw new ArgumentNullException(nameof(id), "Message Id cannot be null or empty!");
       }
 
       this.eventRequest.MessageId = id;
@@ -142,7 +142,7 @@ namespace MailgunSharp.Events
     /// Set the severity to filter by.
     /// Disclaimer: Will only work if the event type "failed" has been added.
     /// </summary>
-    /// <param name="severity">The severity to filter by.</param>
+    /// <param name="severityType">The severity to filter by.</param>
     /// <returns>The instance of the builder.</returns>
     public IEventRequestBuilder SetSeverityType(Severity severityType)
     {
@@ -206,7 +206,7 @@ namespace MailgunSharp.Events
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       this.eventRequest.From = address;
@@ -223,7 +223,7 @@ namespace MailgunSharp.Events
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Recipient address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Recipient address cannot be null or empty!");
       }
 
       this.eventRequest.Recipient = address;
@@ -240,7 +240,7 @@ namespace MailgunSharp.Events
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Recipient address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Recipient address cannot be null or empty!");
       }
 
       this.eventRequest.To = address;

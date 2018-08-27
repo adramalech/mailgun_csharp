@@ -43,17 +43,17 @@ namespace MailgunSharp.Domains
     {
       if (username.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Username cannot be null or empty!");
+        throw new ArgumentNullException(nameof(username), "Username cannot be null or empty!");
       }
 
       if (password.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Password cannot be null or empty!");
+        throw new ArgumentNullException(nameof(password), "Password cannot be null or empty!");
       }
 
       if (!isPasswordLengthWithinRequiredRange(password))
       {
-        throw new ArgumentOutOfRangeException("Password must have a minimum length of 5, and maximum length of 32!");
+        throw new ArgumentOutOfRangeException(nameof(password), "Password must have a minimum length of 5, and maximum length of 32!");
       }
 
       this.username = username;
@@ -78,7 +78,7 @@ namespace MailgunSharp.Domains
     /// <summary>
     /// Get the Domain Credential as a form content key-value pair strings.
     /// </summary>
-    /// <returns>List of keyvalue string pairs.</returns>
+    /// <returns>List of key-value string pairs.</returns>
     public JObject ToJson()
     {
       var jsonObject = new JObject
@@ -94,7 +94,7 @@ namespace MailgunSharp.Domains
     /// Check the characteristics of the password.
     /// </summary>
     /// <param name="password">The password string.</param>
-    /// <returns>True if the password meets the minumum length requirement of 5, and a maximum length of 32.</returns>
+    /// <returns>True if the password meets the minimum length requirement of 5, and a maximum length of 32.</returns>
     private bool isPasswordLengthWithinRequiredRange(string password)
     {
       var length = password.Length;

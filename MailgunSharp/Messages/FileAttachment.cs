@@ -30,12 +30,12 @@ namespace MailgunSharp.Messages
     {
       if (filename.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Filename cannot be null or empty!");
+        throw new ArgumentNullException(nameof(filename), "Filename cannot be null or empty!");
       }
 
       if (data == null || data.Length < 1)
       {
-        throw new ArgumentNullException("File data be null or empty!");
+        throw new ArgumentNullException(nameof(data), "File data be null or empty!");
       }
 
       this.filename = filename;

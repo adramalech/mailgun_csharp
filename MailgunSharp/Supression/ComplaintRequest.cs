@@ -34,7 +34,7 @@ namespace MailgunSharp.Supression
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       this.address = address;

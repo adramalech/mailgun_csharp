@@ -67,7 +67,7 @@ namespace MailgunSharp.MailingLists
     {
       if (mailAddress.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(mailAddress), "Address cannot be null or empty!");
       }
 
       this.emailAddress = (!name.IsNullEmptyWhitespace()) ? new MailAddress(mailAddress, name) : new MailAddress(mailAddress);

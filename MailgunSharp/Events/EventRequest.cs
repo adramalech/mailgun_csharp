@@ -125,7 +125,7 @@ namespace MailgunSharp.Events
     {
       if (this.Limit < 1 || this.Limit > MAX_RESULT_LIMIT)
       {
-        throw new ArgumentOutOfRangeException("Limit has to be provided and cannot be less than 1!");
+        throw new ArgumentOutOfRangeException(nameof(this.Limit), this.Limit, "Limit has to be provided and cannot be less than 1!");
       }
 
       var queryStringBuilder = new QueryStringBuilder();
@@ -171,7 +171,7 @@ namespace MailgunSharp.Events
       {
         if (this.Size.Value < 1)
         {
-          throw new ArgumentOutOfRangeException("Message size cannot be less than 1 byte!");
+          throw new ArgumentOutOfRangeException(nameof(this.Size), this.Size, "Message size cannot be less than 1 byte!");
         }
 
         queryStringBuilder.Append("size", this.Size.ToString());

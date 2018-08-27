@@ -248,22 +248,22 @@ namespace MailgunSharp.Messages
     {
       if (this.To == null)
       {
-        throw new ArgumentNullException("Recipients cannot be empty!");
+        throw new ArgumentNullException(nameof(this.To), "Recipients cannot be empty!");
       }
 
       if (this.To.Count > MAX_RECIPIENT_SIZE)
       {
-        throw new ArgumentOutOfRangeException("Maximum number of 1,000 recipients cannot be exceeded!");
+        throw new ArgumentOutOfRangeException(nameof(this.To), this.To.Count, "Maximum number of 1,000 recipients cannot be exceeded!");
       }
 
       if (this.RecipientVariables != null && this.RecipientVariables.Count != this.To.Count)
       {
-        throw new ArgumentOutOfRangeException("Did not have matching amount of recipient variables and recipients!");
+        throw new ArgumentOutOfRangeException(nameof(this.RecipientVariables), this.RecipientVariables.Count, "Did not have matching amount of recipient variables and recipients!");
       }
 
       if (this.From == null)
       {
-        throw new ArgumentNullException("Sender cannot be null!");
+        throw new ArgumentNullException(nameof(this.From), "Sender cannot be null!");
       }
 
       var content = new Collection<KeyValuePair<string, string>>()
@@ -341,7 +341,7 @@ namespace MailgunSharp.Messages
         }
       }
 
-      if (this.DeliveryTime != null && this.DeliveryTime.HasValue)
+      if (this.DeliveryTime.HasValue)
       {
         content.Add("o:deliverytime", ((DateTimeOffset)this.DeliveryTime.Value).ToUnixTimeSeconds().ToString());
       }

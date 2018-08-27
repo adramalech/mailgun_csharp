@@ -65,12 +65,12 @@ namespace MailgunSharp.Domains
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty!");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty!");
       }
 
       if (smtpPassword.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Smtp Password cannot be null or empty!");
+        throw new ArgumentNullException(nameof(smtpPassword), "Smtp Password cannot be null or empty!");
       }
 
       if (!isHostnameValid(domainName))

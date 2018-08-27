@@ -91,12 +91,12 @@ namespace MailgunSharp
     {
       if (companyDomain.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Company domain cannot be null!");
+        throw new ArgumentNullException(nameof(companyDomain), "Company domain cannot be null!");
       }
 
       if (apiKey.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Api key cannot be null!");
+        throw new ArgumentNullException(nameof(apiKey), "Api key cannot be null!");
       }
 
       if (!isHostnameValid(companyDomain))
@@ -123,7 +123,7 @@ namespace MailgunSharp
     {
       if (message == null)
       {
-        throw new ArgumentNullException("Message cannot be null or empty!");
+        throw new ArgumentNullException(nameof(message), "Message cannot be null or empty!");
       }
 
       return this.httpClient.PostAsync($"{this.companyDomain}/messages", message.ToFormContent(), ct);
@@ -142,7 +142,7 @@ namespace MailgunSharp
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       return this.httpClient.GetAsync($"address/private/validate?address={address.Address}&mailbox_verification={validateMailbox.ToString()}", ct);
@@ -161,7 +161,7 @@ namespace MailgunSharp
     {
       if (address.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Recipients cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Recipients cannot be null or empty!");
       }
 
       return parseAddressesAsync(address, syntaxOnly, ct);
@@ -180,7 +180,7 @@ namespace MailgunSharp
     {
       if (addresses == null || addresses.Count < 1)
       {
-        throw new ArgumentNullException("Recipients cannot be null or empty!");
+        throw new ArgumentNullException(nameof(addresses), "Recipients cannot be null or empty!");
       }
 
       var addressList = addresses.ToString();
@@ -201,7 +201,7 @@ namespace MailgunSharp
     {
       if (addressList.Length > MAX_ADDRESS_LENGTH)
       {
-        throw new ArgumentOutOfRangeException("List of email addresses to parse cannot exceed a maximum length of 8,000 characters!");
+        throw new ArgumentOutOfRangeException(nameof(addressList), "List of email addresses to parse cannot exceed a maximum length of 8,000 characters!");
       }
 
       return this.httpClient.GetAsync($"address/private/validate?addresses={addressList}&syntax_only={syntaxOnly.ToString()}", ct);
@@ -281,7 +281,7 @@ namespace MailgunSharp
     }
 
     /// <summary>
-    /// Return a list of tags for the domain. Providees pagination urls if the result set is too long to be returned in a single response.
+    /// Return a list of tags for the domain. Provides pagination urls if the result set is too long to be returned in a single response.
     /// </summary>
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
@@ -290,7 +290,7 @@ namespace MailgunSharp
     {
       if (limit < 1)
       {
-        throw new ArgumentOutOfRangeException("The limit of returned tags cannot be less than 1.");
+        throw new ArgumentOutOfRangeException(nameof(limit), "The limit of returned tags cannot be less than 1.");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/tags?limit={limit}", ct);
@@ -306,7 +306,7 @@ namespace MailgunSharp
     {
       if (tagName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Tag cannot be null or empty!");
+        throw new ArgumentNullException(nameof(tagName), "Tag cannot be null or empty!");
       }
 
       if (doesTagNameHaveCorrectFormatting(tagName))
@@ -328,7 +328,7 @@ namespace MailgunSharp
     {
       if (tagName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Tag cannot be null or empty!");
+        throw new ArgumentNullException(nameof(tagName), "Tag cannot be null or empty!");
       }
 
       if (doesTagNameHaveCorrectFormatting(tagName))
@@ -355,7 +355,7 @@ namespace MailgunSharp
     {
       if (tagName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Tag cannot be null or empty!");
+        throw new ArgumentNullException(nameof(tagName), "Tag cannot be null or empty!");
       }
 
       if (doesTagNameHaveCorrectFormatting(tagName))
@@ -376,7 +376,7 @@ namespace MailgunSharp
     {
       if (tagName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Tag cannot be null or empty!");
+        throw new ArgumentNullException(nameof(tagName), "Tag cannot be null or empty!");
       }
 
       if (doesTagNameHaveCorrectFormatting(tagName))
@@ -397,7 +397,7 @@ namespace MailgunSharp
     {
       if (tagName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Tag cannot be null or empty!");
+        throw new ArgumentNullException(nameof(tagName), "Tag cannot be null or empty!");
       }
 
       if (doesTagNameHaveCorrectFormatting(tagName))
@@ -418,7 +418,7 @@ namespace MailgunSharp
     {
       if (tagName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Tag cannot be null or empty!");
+        throw new ArgumentNullException(nameof(tagName), "Tag cannot be null or empty!");
       }
 
       if (doesTagNameHaveCorrectFormatting(tagName))
@@ -439,7 +439,7 @@ namespace MailgunSharp
     {
       if (tagName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Tag cannot be null or empty!");
+        throw new ArgumentNullException(nameof(tagName), "Tag cannot be null or empty!");
       }
 
       if (doesTagNameHaveCorrectFormatting(tagName))
@@ -460,12 +460,12 @@ namespace MailgunSharp
     {
       if (limit < 1)
       {
-        throw new ArgumentOutOfRangeException("Limit cannot be an integer value less than 1!");
+        throw new ArgumentOutOfRangeException(nameof(limit), "Limit cannot be an integer value less than 1!");
       }
 
       if (limit > MAX_RECORD_LIMIT)
       {
-        throw new ArgumentOutOfRangeException("Limit of records returned has a maximum limit of 10,000 records!");
+        throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit of records returned has a maximum limit of 10,000 records!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/bounces?limit={limit}", ct);
@@ -481,7 +481,7 @@ namespace MailgunSharp
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/bounces/{address.Address}", ct);
@@ -497,7 +497,7 @@ namespace MailgunSharp
     {
       if (bounce == null)
       {
-        throw new ArgumentNullException("Bounce object cannot be null or empty!");
+        throw new ArgumentNullException(nameof(bounce), "Bounce object cannot be null or empty!");
       }
 
       var formContent = new FormUrlEncodedContent(bounce.ToFormContent());
@@ -515,12 +515,12 @@ namespace MailgunSharp
     {
       if (bounces == null)
       {
-        throw new ArgumentNullException("Bounce records cannot be null or empty!");
+        throw new ArgumentNullException(nameof(bounces), "Bounce records cannot be null or empty!");
       }
 
       if (bounces.Count > MAX_JSON_OBJECTS)
       {
-        throw new ArgumentNullException("Bounce Records cannot exceed maximum limit of 1,000 records!");
+        throw new ArgumentOutOfRangeException(nameof(bounces), bounces.Count, "Bounce Records cannot exceed maximum limit of 1,000 records!");
       }
 
       var json = new JArray();
@@ -543,7 +543,7 @@ namespace MailgunSharp
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       return this.httpClient.DeleteAsync($"{this.companyDomain}/bounces/{address.Address}", ct);
@@ -569,12 +569,12 @@ namespace MailgunSharp
     {
       if (limit < 1)
       {
-        throw new ArgumentOutOfRangeException("Limit cannot be an integer value less than 1!");
+        throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit cannot be an integer value less than 1!");
       }
 
       if (limit > MAX_RECORD_LIMIT)
       {
-        throw new ArgumentOutOfRangeException("Limit of records returned has a maximum limit of 10,000 records!");
+        throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit of records returned has a maximum limit of 10,000 records!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/unsubscribes?limit={limit}", ct);
@@ -590,7 +590,7 @@ namespace MailgunSharp
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/unsubscribes/{address}", ct);
@@ -606,7 +606,7 @@ namespace MailgunSharp
     {
       if (unsubscriber == null)
       {
-        throw new ArgumentNullException("Unsubscriber object cannot be null or empty!");
+        throw new ArgumentNullException(nameof(unsubscriber), "Unsubscriber object cannot be null or empty!");
       }
 
       var formContent = new FormUrlEncodedContent(unsubscriber.ToFormContent());
@@ -624,12 +624,12 @@ namespace MailgunSharp
     {
       if (unsubscribers == null)
       {
-        throw new ArgumentNullException("Unsubscribers object cannot be null or empty!");
+        throw new ArgumentNullException(nameof(unsubscribers), "Unsubscribers object cannot be null or empty!");
       }
 
       if (unsubscribers.Count > MAX_JSON_OBJECTS)
       {
-        throw new ArgumentNullException("Unsubscribers object cannot exceed maximum limit of 1,000 records!");
+        throw new ArgumentOutOfRangeException(nameof(unsubscribers), unsubscribers.Count, "Unsubscribers object cannot exceed maximum limit of 1,000 records!");
       }
 
       var json = new JArray();
@@ -654,12 +654,12 @@ namespace MailgunSharp
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       if (tag.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Tag cannot be null or empty!");
+        throw new ArgumentNullException(nameof(tag), "Tag cannot be null or empty!");
       }
 
       if (doesTagNameHaveCorrectFormatting(tag))
@@ -682,12 +682,12 @@ namespace MailgunSharp
     {
       if (limit < 1)
       {
-        throw new ArgumentOutOfRangeException("Limit cannot be an integer value less than 1!");
+        throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit cannot be an integer value less than 1!");
       }
 
       if (limit > MAX_RECORD_LIMIT)
       {
-        throw new ArgumentOutOfRangeException("Limit of records returned has a maximum limit of 10,000 records!");
+        throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit of records returned has a maximum limit of 10,000 records!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/complaints?limit={limit}", ct);
@@ -703,7 +703,7 @@ namespace MailgunSharp
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       return this.httpClient.GetAsync($"{this.companyDomain}/complaints/{address.Address}", ct);
@@ -719,7 +719,7 @@ namespace MailgunSharp
     {
       if (complaint == null)
       {
-        throw new ArgumentNullException("Unsubscriber object cannot be null or empty!");
+        throw new ArgumentNullException(nameof(complaint), "Unsubscriber object cannot be null or empty!");
       }
 
       var formContent = new FormUrlEncodedContent(complaint.ToFormContent());
@@ -737,12 +737,12 @@ namespace MailgunSharp
     {
       if (complaints == null)
       {
-        throw new ArgumentNullException("Complaints object cannot be null or empty!");
+        throw new ArgumentNullException(nameof(complaints), "Complaints object cannot be null or empty!");
       }
 
       if (complaints.Count > MAX_JSON_OBJECTS)
       {
-        throw new ArgumentNullException("Complaints object cannot exceed maximum limit of 1,000 records!");
+        throw new ArgumentOutOfRangeException(nameof(complaints), complaints.Count, "Complaints object cannot exceed maximum limit of 1,000 records!");
       }
 
       var json = new JArray();
@@ -765,7 +765,7 @@ namespace MailgunSharp
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       return this.httpClient.DeleteAsync($"{this.companyDomain}/complaints/{address.Address}", ct);
@@ -792,7 +792,7 @@ namespace MailgunSharp
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       return this.httpClient.DeleteAsync($"lists/{address.Address}", ct);
@@ -808,7 +808,7 @@ namespace MailgunSharp
     {
       if (mailingList == null)
       {
-        throw new ArgumentNullException("Mailing List object cannot be null or empty!");
+        throw new ArgumentNullException(nameof(mailingList), "Mailing List object cannot be null or empty!");
       }
 
       var formContent = new FormUrlEncodedContent(mailingList.ToFormContent());
@@ -827,12 +827,12 @@ namespace MailgunSharp
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       if (mailingList == null)
       {
-        throw new ArgumentNullException("Mailing List object cannot be null or empty!");
+        throw new ArgumentNullException(nameof(mailingList), "Mailing List object cannot be null or empty!");
       }
 
       var formContent = new FormUrlEncodedContent(mailingList.ToFormContent());
@@ -850,7 +850,7 @@ namespace MailgunSharp
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       return this.httpClient.DeleteAsync($"lists/{address.Address}", ct);
@@ -868,7 +868,7 @@ namespace MailgunSharp
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       var subbed = (subscribed.HasValue) ? subscribed.Value.ToYesNo() : "";
@@ -889,12 +889,12 @@ namespace MailgunSharp
     {
       if (mailingListAddress == null)
       {
-        throw new ArgumentNullException("Mailing List Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(mailingListAddress), "Mailing List Address cannot be null or empty!");
       }
 
       if (memberAddress == null)
       {
-        throw new ArgumentNullException("Member Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(memberAddress), "Member Address cannot be null or empty!");
       }
 
       return this.httpClient.GetAsync($"lists/{mailingListAddress.Address}/members/{memberAddress.Address}", ct);
@@ -911,12 +911,12 @@ namespace MailgunSharp
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       if (member == null)
       {
-        throw new ArgumentNullException("Member object cannot be null or empty!");
+        throw new ArgumentNullException(nameof(member), "Member object cannot be null or empty!");
       }
 
       var formContent = new FormUrlEncodedContent(member.ToFormContent());
@@ -936,17 +936,17 @@ namespace MailgunSharp
     {
       if (address == null)
       {
-        throw new ArgumentNullException("Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       if (members == null)
       {
-        throw new ArgumentNullException("Members object cannot be null or empty!");
+        throw new ArgumentNullException(nameof(members), "Members object cannot be null or empty!");
       }
 
       if (members.Count > MAX_JSON_OBJECTS)
       {
-        throw new ArgumentNullException("Members object cannot exceed maximum limit of 1,000 records!");
+        throw new ArgumentOutOfRangeException(nameof(members), members.Count, "Members object cannot exceed maximum limit of 1,000 records!");
       }
 
       var json = new JObject();
@@ -976,17 +976,17 @@ namespace MailgunSharp
     {
       if (mailingListAddress == null)
       {
-        throw new ArgumentNullException("Mailing List Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(mailingListAddress), "Mailing List Address cannot be null or empty!");
       }
 
       if (memberAddress == null)
       {
-        throw new ArgumentNullException("Member Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(memberAddress), "Member Address cannot be null or empty!");
       }
 
       if (member == null)
       {
-        throw new ArgumentNullException("Member object cannot be null or empty!");
+        throw new ArgumentNullException(nameof(member), "Member object cannot be null or empty!");
       }
 
       var formContent = new FormUrlEncodedContent(member.ToFormContent());
@@ -1005,12 +1005,12 @@ namespace MailgunSharp
     {
       if (mailingListAddress == null)
       {
-        throw new ArgumentNullException("Mailing List Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(mailingListAddress), "Mailing List Address cannot be null or empty!");
       }
 
       if (memberAddress == null)
       {
-        throw new ArgumentNullException("Member Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(memberAddress), "Member Address cannot be null or empty!");
       }
 
       return this.httpClient.DeleteAsync($"lists/{mailingListAddress.Address}/members/{memberAddress.Address}", ct);
@@ -1027,12 +1027,12 @@ namespace MailgunSharp
     {
       if (limit < 1)
       {
-        throw new ArgumentOutOfRangeException("Limit cannot be an integer value less than 1!");
+        throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit cannot be an integer value less than 1!");
       }
 
       if (skip < 0)
       {
-        throw new ArgumentOutOfRangeException("Skip cannot be an integer value less than 0!");
+        throw new ArgumentOutOfRangeException(nameof(skip), skip, "Skip cannot be an integer value less than 0!");
       }
 
       return this.httpClient.GetAsync($"/domains?limit={limit}&skip={skip}", ct);
@@ -1048,7 +1048,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty.");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1071,7 +1071,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty.");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1092,7 +1092,7 @@ namespace MailgunSharp
     {
       if (domain == null)
       {
-        throw new ArgumentNullException("Domain cannot be null or empty!");
+        throw new ArgumentNullException(nameof(domain), "Domain cannot be null or empty!");
       }
 
       var formContent = new FormUrlEncodedContent(domain.ToFormContent());
@@ -1110,7 +1110,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty.");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1124,7 +1124,7 @@ namespace MailgunSharp
     /// <summary>
     /// Returns a list of SMTP credentials for the defined domain.
     /// </summary>
-    /// <<param name="domainName">The domain name.</param>
+    /// <param name="domainName">The domain name.</param>
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="skip">Number of records to skip.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
@@ -1133,7 +1133,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty!");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty!");
       }
 
       if (!isHostnameValid(domainName))
@@ -1143,12 +1143,12 @@ namespace MailgunSharp
 
       if (limit < 1)
       {
-        throw new ArgumentOutOfRangeException("Limit cannot be an integer value less than 1!");
+        throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit cannot be an integer value less than 1!");
       }
 
       if (skip < 0)
       {
-        throw new ArgumentOutOfRangeException("Skip cannot be an integer value less than 0!");
+        throw new ArgumentOutOfRangeException(nameof(skip), skip, "Skip cannot be an integer value less than 0!");
       }
 
       return this.httpClient.GetAsync($"/domains/{domainName}/credentials?limit={limit}&skip={skip}", ct);
@@ -1165,7 +1165,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty!");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty!");
       }
 
       if (!isHostnameValid(domainName))
@@ -1175,7 +1175,7 @@ namespace MailgunSharp
 
       if (credential == null)
       {
-        throw new ArgumentNullException("Credential cannot be null or empty!");
+        throw new ArgumentNullException(nameof(credential), "Credential cannot be null or empty!");
       }
 
       var formContent = new FormUrlEncodedContent(credential.ToFormContent());
@@ -1195,7 +1195,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty!");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty!");
       }
 
       if (!isHostnameValid(domainName))
@@ -1205,17 +1205,17 @@ namespace MailgunSharp
 
       if (username.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Username cannot be null or empty!");
+        throw new ArgumentNullException(nameof(username), "Username cannot be null or empty!");
       }
 
       if (password.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Password cannot be null or empty!");
+        throw new ArgumentNullException(nameof(password), "Password cannot be null or empty!");
       }
 
       if (checkPasswordLengthRequirement(password))
       {
-        throw new ArgumentOutOfRangeException("Password must have a minimum length of 5, and maximum length of 32!");
+        throw new ArgumentOutOfRangeException(nameof(password), "Password must have a minimum length of 5, and maximum length of 32!");
       }
 
       var content = new Collection<KeyValuePair<string, string>>()
@@ -1251,7 +1251,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty!");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty!");
       }
 
       if (!isHostnameValid(domainName))
@@ -1272,7 +1272,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty!");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty!");
       }
 
       if (!isHostnameValid(domainName))
@@ -1301,7 +1301,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty.");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1330,7 +1330,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty.");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1352,7 +1352,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty.");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1381,7 +1381,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty.");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1414,7 +1414,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty.");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1448,7 +1448,7 @@ namespace MailgunSharp
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be null or empty.");
+        throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
       if (!isHostnameValid(domainName))
@@ -1476,7 +1476,7 @@ namespace MailgunSharp
     {
       if (statsRequest == null)
       {
-        throw new ArgumentNullException("Stats Request object cannot be null or empty!");
+        throw new ArgumentNullException(nameof(statsRequest), "Stats Request object cannot be null or empty!");
       }
 
       return this.httpClient.GetAsync($"/{this.companyDomain}/stats/total?{statsRequest.ToQueryString()}", ct);
@@ -1492,7 +1492,7 @@ namespace MailgunSharp
     {
       if (eventRequest == null)
       {
-        throw new ArgumentNullException("Event Request object cannot be null or empty!");
+        throw new ArgumentNullException(nameof(eventRequest), "Event Request object cannot be null or empty!");
       }
 
       return this.httpClient.GetAsync($"/{this.companyDomain}/events?{eventRequest.ToQueryString()}", ct);
@@ -1508,7 +1508,7 @@ namespace MailgunSharp
     {
       if (uri == null)
       {
-        throw new ArgumentNullException("Uri of page cannot be null or empty!");
+        throw new ArgumentNullException(nameof(uri), "Uri of page cannot be null or empty!");
       }
 
       var url = uri.ToString().Replace($"{MAILGUN_BASE_URL}/{this.companyDomain}", "");
@@ -1527,12 +1527,12 @@ namespace MailgunSharp
     {
       if (limit < 1)
       {
-        throw new ArgumentOutOfRangeException("Limit cannot have a value less than one!");
+        throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit cannot have a value less than one!");
       }
 
       if (skip < 0)
       {
-        throw new ArgumentOutOfRangeException("You cannot skip less than zero records!");
+        throw new ArgumentOutOfRangeException(nameof(skip), skip, "You cannot skip less than zero records!");
       }
 
       return this.httpClient.GetAsync($"/routes?limit={limit}&skip={skip}", ct);
@@ -1548,7 +1548,7 @@ namespace MailgunSharp
     {
       if (id.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Id cannot be null or empty!");
+        throw new ArgumentNullException(nameof(id), "Id cannot be null or empty!");
       }
 
       return this.httpClient.GetAsync($"/routes/{id}", ct);
@@ -1564,7 +1564,7 @@ namespace MailgunSharp
     {
       if (route == null)
       {
-        throw new ArgumentNullException("Route cannot be null or empty!");
+        throw new ArgumentNullException(nameof(route), "Route cannot be null or empty!");
       }
 
       var content = route.ToFormContent();
@@ -1585,12 +1585,12 @@ namespace MailgunSharp
     {
       if (id.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Id cannot be null or empty!");
+        throw new ArgumentNullException(nameof(id), "Id cannot be null or empty!");
       }
 
       if (route == null)
       {
-        throw new ArgumentNullException("Route cannot be null or empty!");
+        throw new ArgumentNullException(nameof(route), "Route cannot be null or empty!");
       }
 
       var content = route.ToFormContent();
@@ -1610,7 +1610,7 @@ namespace MailgunSharp
     {
       if (id.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Id cannot be null or empty!");
+        throw new ArgumentNullException(nameof(id), "Id cannot be null or empty!");
       }
 
       return this.httpClient.DeleteAsync($"/routes/{id}", ct);
@@ -1636,7 +1636,7 @@ namespace MailgunSharp
     {
       if (name.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Webhook name cannot be null or empty!");
+        throw new ArgumentNullException(nameof(name), "Webhook name cannot be null or empty!");
       }
 
       return this.httpClient.GetAsync($"/domains/{this.companyDomain}/webhooks/{name}", ct);
@@ -1652,7 +1652,7 @@ namespace MailgunSharp
     {
       if (webhook == null)
       {
-        throw new ArgumentNullException("Webhook cannot be null or empty!");
+        throw new ArgumentNullException(nameof(webhook), "Webhook cannot be null or empty!");
       }
 
       var content = webhook.ToFormContent();
@@ -1673,12 +1673,12 @@ namespace MailgunSharp
     {
       if (urls == null || urls.Count < 1)
       {
-        throw new ArgumentNullException("Webhook urls cannot be null or empty!");
+        throw new ArgumentNullException(nameof(urls), "Webhook urls cannot be null or empty!");
       }
 
       if (urls.Count > MAX_URL_COUNT)
       {
-        throw new ArgumentNullException("Webhook urls cannot exceed maximum length of three!");
+        throw new ArgumentOutOfRangeException(nameof(urls), urls.Count, "Webhook urls cannot exceed maximum length of three!");
       }
 
       var content = new Collection<KeyValuePair<string, string>>();
@@ -1705,7 +1705,7 @@ namespace MailgunSharp
     {
       if (name.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Webhook name cannot be null or empty!");
+        throw new ArgumentNullException(nameof(name), "Webhook name cannot be null or empty!");
       }
 
       return this.httpClient.DeleteAsync($"/domains/{this.companyDomain}/webhooks/{name}", ct);
@@ -1749,7 +1749,7 @@ namespace MailgunSharp
 
       if (!result)
       {
-        return result;
+        return false;
       }
 
       return uri.IsWellFormedOriginalString();

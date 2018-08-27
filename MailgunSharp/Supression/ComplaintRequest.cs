@@ -14,13 +14,7 @@ namespace MailgunSharp.Supression
     /// Valid email address.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    public MailAddress Address
-    {
-      get
-      {
-        return this.address;
-      }
-    }
+    public MailAddress Address => this.address;
 
     private readonly DateTime createdAt;
 
@@ -28,13 +22,7 @@ namespace MailgunSharp.Supression
     /// Timestamp of a complaint event.
     /// </summary>
     /// <value>DateTime</value>
-    public DateTime CreatedAt
-    {
-      get
-      {
-        return this.createdAt;
-      }
-    }
+    public DateTime CreatedAt => this.createdAt;
 
     /// <summary>
     /// Create an instance of complaint request class.

@@ -14,13 +14,7 @@ namespace MailgunSharp.Supression
     /// A valid email address.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    public MailAddress Address
-    {
-      get
-      {
-        return this.address;
-      }
-    }
+    public MailAddress Address => this.address;
 
     private readonly string tag;
 
@@ -30,13 +24,7 @@ namespace MailgunSharp.Supression
     /// Use "*", to unsubscribe an address from all domain's correspondence.
     /// </summary>
     /// <value>string</value>
-    public string Tag
-    {
-      get
-      {
-        return this.tag;
-      }
-    }
+    public string Tag => this.tag;
 
     private readonly DateTime createdAt;
 
@@ -44,13 +32,7 @@ namespace MailgunSharp.Supression
     /// Timestamp of an unsubscribe event.
     /// </summary>
     /// <value>DateTime</value>
-    public DateTime CreatedAt
-    {
-      get
-      {
-        return this.createdAt;
-      }
-    }
+    public DateTime CreatedAt => this.createdAt;
 
     /// <summary>
     /// Create an instance of unsubscriber request class.

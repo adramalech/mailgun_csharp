@@ -16,13 +16,7 @@ namespace MailgunSharp.MailingLists
     /// The email address of the mailing list member.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    public MailAddress EmailAddress
-    {
-      get
-      {
-        return this.emailAddress;
-      }
-    }
+    public MailAddress EmailAddress => this.emailAddress;
 
     private readonly string name;
 
@@ -30,13 +24,7 @@ namespace MailgunSharp.MailingLists
     /// The name of the mailing list member.
     /// </summary>
     /// <value>string</value>
-    public string Name
-    {
-      get
-      {
-        return this.name;
-      }
-    }
+    public string Name => this.name;
 
     private readonly JObject vars;
 
@@ -44,13 +32,7 @@ namespace MailgunSharp.MailingLists
     /// JSON-encoded dictionary string with arbitrary parameters.
     /// </summary>
     /// <value>Json Object</value>
-    public JObject Vars
-    {
-      get
-      {
-        return this.vars;
-      }
-    }
+    public JObject Vars => this.vars;
 
     private readonly bool subscribed;
 
@@ -58,13 +40,7 @@ namespace MailgunSharp.MailingLists
     /// Is the member subscribed to the mailing list or not.
     /// </summary>
     /// <value>boolean</value>
-    public bool Subscribed
-    {
-      get
-      {
-        return this.subscribed;
-      }
-    }
+    public bool Subscribed => this.subscribed;
 
     private readonly bool upsert;
 
@@ -77,13 +53,7 @@ namespace MailgunSharp.MailingLists
     ///   False - raise error if duplicate member found. (default)
     /// </summary>
     /// <value>boolean</value>
-    public bool Upsert
-    {
-      get
-      {
-        return this.upsert;
-      }
-    }
+    public bool Upsert => this.upsert;
 
     /// <summary>
     /// Create an instance of the member class.

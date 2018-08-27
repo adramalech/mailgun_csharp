@@ -24,13 +24,7 @@ namespace MailgunSharp.Domains
     /// The username for the smtp domain credentials.
     /// </summary>
     /// <value>string</value>
-    public string Username
-    {
-      get
-      {
-        return this.username;
-      }
-    }
+    public string Username => this.username;
 
     private readonly string password;
 
@@ -38,13 +32,7 @@ namespace MailgunSharp.Domains
     /// The password for the smtp domain credentials.
     /// </summary>
     /// <value>string</value>
-    public string Password
-    {
-      get
-      {
-        return this.password;
-      }
-    }
+    public string Password => this.password;
 
     /// <summary>
     /// Create an instance of the domain credential.

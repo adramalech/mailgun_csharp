@@ -646,7 +646,7 @@ namespace MailgunSharp.Messages
 
       var lines = text.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-      if (lines == null || lines.Length < 1) {
+      if (lines.Length < 1) {
         return true;
       }
 

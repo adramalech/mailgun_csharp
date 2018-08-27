@@ -15,13 +15,7 @@ namespace MailgunSharp.Domains
     /// The domain name.
     /// </summary>
     /// <value>string</value>
-    public string DomainName
-    {
-      get
-      {
-        return this.domainName;
-      }
-    }
+    public string DomainName => this.domainName;
 
     private readonly string smtpPassword;
 
@@ -29,13 +23,7 @@ namespace MailgunSharp.Domains
     /// Password for SMTP authentication.
     /// </summary>
     /// <value>System.Net.NetworkCredential</value>
-    public string SmtpPassword
-    {
-      get
-      {
-        return this.smtpPassword;
-      }
-    }
+    public string SmtpPassword => this.smtpPassword;
 
     private readonly SpamAction spamAction;
 
@@ -43,13 +31,7 @@ namespace MailgunSharp.Domains
     /// The action the domain will have for handling spam.
     /// </summary>
     /// <value>SpamAction type.</value>
-    public SpamAction SpamAction
-    {
-      get
-      {
-        return this.spamAction;
-      }
-    }
+    public SpamAction SpamAction => this.spamAction;
 
     private readonly bool wildcard;
 
@@ -57,13 +39,7 @@ namespace MailgunSharp.Domains
     /// Determines wherether the domain will accept email for sub-domains.
     /// </summary>
     /// <value>boolean</value>
-    public bool Wildcard
-    {
-      get
-      {
-        return this.wildcard;
-      }
-    }
+    public bool Wildcard => this.wildcard;
 
     private readonly bool forceDKIMAuthority;
 
@@ -75,13 +51,7 @@ namespace MailgunSharp.Domains
     /// True, the domain will be DKIM authority for itself;
     /// false, will be the same DKIM Authority as the root domain registered.
     /// </value>
-    public bool ForceDKIMAuthority
-    {
-      get
-      {
-        return this.forceDKIMAuthority;
-      }
-    }
+    public bool ForceDKIMAuthority => this.forceDKIMAuthority;
 
     /// <summary>
     /// Create an instance of the domain request.
@@ -95,7 +65,7 @@ namespace MailgunSharp.Domains
     {
       if (domainName.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("DomainName cannot be ");
+        throw new ArgumentNullException("DomainName cannot be null or empty!");
       }
 
       if (smtpPassword.IsNullEmptyWhitespace())
@@ -160,12 +130,7 @@ namespace MailgunSharp.Domains
     {
       var result = Uri.TryCreate(hostname, UriKind.Absolute, out Uri uri);
 
-      if (!result)
-      {
-        return result;
-      }
-
-      return uri.IsWellFormedOriginalString();
+      return result && uri.IsWellFormedOriginalString();
     }
   }
 }

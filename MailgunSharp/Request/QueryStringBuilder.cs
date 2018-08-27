@@ -21,13 +21,7 @@ namespace MailgunSharp.Request
     /// The current count of appended query string parameters.
     /// </summary>
     /// <value>int</value>
-    public int Count
-    {
-      get
-      {
-        return this.count;
-      }
-    }
+    public int Count => this.count;
 
     /// <summary>
     /// Create an instance of query string class with new stringbuilder and a zero appended parameter count.

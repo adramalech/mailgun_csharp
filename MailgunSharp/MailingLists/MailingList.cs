@@ -15,13 +15,7 @@ namespace MailgunSharp.MailingLists
     /// A valid email address for the mailing list.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    public MailAddress EmailAddress
-    {
-      get
-      {
-        return this.emailAddress;
-      }
-    }
+    public MailAddress EmailAddress => this.emailAddress;
 
     private readonly string name;
 
@@ -29,13 +23,7 @@ namespace MailgunSharp.MailingLists
     /// The name of the mailing list.
     /// </summary>
     /// <value>String</value>
-    public string Name
-    {
-      get
-      {
-        return this.name;
-      }
-    }
+    public string Name => this.name;
 
     private readonly string description;
 
@@ -43,13 +31,7 @@ namespace MailgunSharp.MailingLists
     /// A description of the mailing list.
     /// </summary>
     /// <value>String</value>
-    public string Description
-    {
-      get
-      {
-        return this.description;
-      }
-    }
+    public string Description => this.description;
 
     private readonly AccessLevel accessLevel;
 
@@ -57,13 +39,7 @@ namespace MailgunSharp.MailingLists
     /// The level of access for a user to interface with this mailing list.
     /// </summary>
     /// <value>Access Level type.</value>
-    public AccessLevel AccessLevel
-    {
-      get
-      {
-        return accessLevel;
-      }
-    }
+    public AccessLevel AccessLevel => accessLevel;
 
     /// <summary>
     /// Create a mailing list will default to requiring only the mailing list's email address.

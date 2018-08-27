@@ -15,13 +15,7 @@ namespace MailgunSharp.Messages
     /// A valid email address of a recipient to send a message to.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    public MailAddress Address
-    {
-      get
-      {
-        return address;
-      }
-    }
+    public MailAddress Address => address;
 
     private readonly JObject variables;
 
@@ -29,13 +23,7 @@ namespace MailgunSharp.Messages
     /// A set of variables to be referenced in the message template.
     /// </summary>
     /// <value>Json object</value>
-    public JObject Variables
-    {
-      get
-      {
-        return variables;
-      }
-    }
+    public JObject Variables => variables;
 
     /// <summary>
     /// Create an instance of Recipient class.

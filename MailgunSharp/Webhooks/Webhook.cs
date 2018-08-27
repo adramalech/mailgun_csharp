@@ -19,13 +19,7 @@ namespace MailgunSharp.Webhooks
     /// Get the webhook type assigned to this webhook.
     /// </summary>
     /// <value>WebhookType enum.</value>
-    public WebHookType Type
-    {
-      get
-      {
-        return this.type;
-      }
-    }
+    public WebHookType Type => this.type;
 
     private string id;
 
@@ -33,13 +27,7 @@ namespace MailgunSharp.Webhooks
     /// The type id of the webhook.
     /// </summary>
     /// <value>Type id of the webhook.</value>
-    public string Id
-    {
-      get
-      {
-        return this.id;
-      }
-    }
+    public string Id => this.id;
 
     private ICollection<Uri> urls;
 
@@ -47,13 +35,7 @@ namespace MailgunSharp.Webhooks
     /// Up to three urls can be added to the webhook.
     /// </summary>
     /// <value>The three urls that are attached to the webhook.</value>
-    public ICollection<Uri> Urls
-    {
-      get
-      {
-        return this.urls;
-      }
-    }
+    public ICollection<Uri> Urls => this.urls;
 
     /// <summary>
     /// Create an instance of the webhook.

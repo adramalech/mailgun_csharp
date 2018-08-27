@@ -16,13 +16,7 @@ namespace MailgunSharp.Routes
     /// Currently you can use the following three actions in your routes: "forward", "store", and/or "stop".
     /// </summary>
     /// <value>A list of actions the route will take.</value>
-    public ICollection<string> Actions
-    {
-      get
-      {
-        return this.actions;
-      }
-    }
+    public ICollection<string> Actions => this.actions;
 
     private string expression;
 
@@ -33,13 +27,7 @@ namespace MailgunSharp.Routes
     /// Filters support regular expressions in the pattern.
     /// </summary>
     /// <value>string</value>
-    public string Expression
-    {
-      get
-      {
-        return this.expression;
-      }
-    }
+    public string Expression => this.expression;
 
     private string description;
 
@@ -47,13 +35,7 @@ namespace MailgunSharp.Routes
     /// A description of the route.
     /// </summary>
     /// <value>string</value>
-    public string Description
-    {
-      get
-      {
-        return this.description;
-      }
-    }
+    public string Description => this.description;
 
     private int priority;
 
@@ -61,13 +43,7 @@ namespace MailgunSharp.Routes
     /// Smaller number indicates higher priority. Higher priority routes are handled first.
     /// </summary>
     /// <value>int</value>
-    public int Priority
-    {
-      get
-      {
-        return this.priority;
-      }
-    }
+    public int Priority => this.priority;
 
     /// <summary>
     /// Create a new instance of the route class.
@@ -118,7 +94,7 @@ namespace MailgunSharp.Routes
     /// Matches arbitrary MIME header of the message against the regular expression pattern.
     /// </summary>
     /// <param name="name">The name of the MIME header.</param>
-    /// <param name="value">The regular expression pattern.</param>
+    /// <param name="regex">The regular expression pattern.</param>
     /// <returns>An instance of the route.</returns>
     public IRoute MatchHeader(string name, Regex regex)
     {
@@ -144,7 +120,7 @@ namespace MailgunSharp.Routes
         throw new InvalidOperationException("Expression can only be set once!");
       }
 
-      this.expression = $"match_recipient({regex.ToString()})";
+      this.expression = $"match_recipient({regex})";
 
       return this;
     }
@@ -168,7 +144,7 @@ namespace MailgunSharp.Routes
     /// <returns>An instance of the route.</returns>
     public IRoute Forward(Uri uri)
     {
-      this.actions.Add($"forward({uri.ToString()})");
+      this.actions.Add($"forward({uri})");
 
       return this;
     }
@@ -193,7 +169,7 @@ namespace MailgunSharp.Routes
     /// <returns>An instance of the route.</returns>
     public IRoute Store(Uri uri)
     {
-      this.actions.Add($"forward({uri.ToString()})");
+      this.actions.Add($"forward({uri})");
 
       return this;
     }

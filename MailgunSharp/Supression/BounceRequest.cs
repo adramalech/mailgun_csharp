@@ -17,13 +17,7 @@ namespace MailgunSharp.Supression
     /// A valid email address.
     /// </summary>
     /// <value>System.Net.Mail.MailAddress</value>
-    public MailAddress EmailAddress
-    {
-      get
-      {
-        return this.emailAddress;
-      }
-    }
+    public MailAddress EmailAddress => this.emailAddress;
 
     private readonly SmtpErrorCode code;
 
@@ -31,13 +25,7 @@ namespace MailgunSharp.Supression
     /// SMTP Error code.
     /// </summary>
     /// <value>SmtpErrorCode type.</value>
-    public SmtpErrorCode Code
-    {
-      get
-      {
-        return this.code;
-      }
-    }
+    public SmtpErrorCode Code => this.code;
 
     private readonly string error;
 
@@ -45,13 +33,7 @@ namespace MailgunSharp.Supression
     /// Error description.
     /// </summary>
     /// <value>string</value>
-    public string Error
-    {
-      get
-      {
-        return this.error;
-      }
-    }
+    public string Error => this.error;
 
     private readonly DateTime createdAt;
 
@@ -59,13 +41,7 @@ namespace MailgunSharp.Supression
     /// Timestamp of a bounce event.
     /// </summary>
     /// <value>DateTime</value>
-    public DateTime CreatedAt
-    {
-      get
-      {
-        return this.createdAt;
-      }
-    }
+    public DateTime CreatedAt => this.createdAt;
 
     /// <summary>
     /// Create an instance of the bounce request class.

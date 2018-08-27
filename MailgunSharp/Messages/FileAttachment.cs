@@ -11,13 +11,7 @@ namespace MailgunSharp.Messages
     /// The name of the file to be attached to a message.
     /// </summary>
     /// <value>string</value>
-    public string FileName
-    {
-      get
-      {
-        return this.filename;
-      }
-    }
+    public string FileName => this.filename;
 
     private readonly byte[] data;
 
@@ -25,13 +19,7 @@ namespace MailgunSharp.Messages
     /// The contents of a file represented as a byte array.
     /// </summary>
     /// <value>byte[]</value>
-    public byte[] Data
-    {
-      get
-      {
-        return this.data;
-      }
-    }
+    public byte[] Data => this.data;
 
     /// <summary>
     /// Create an instance of file attachment.

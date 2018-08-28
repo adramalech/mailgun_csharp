@@ -41,12 +41,12 @@ namespace MailgunSharp.Request
     {
       if (variable.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Variable cannot be null or empty!");
+        throw new ArgumentNullException(nameof(variable), "Variable cannot be null or empty!");
       }
 
       if (value.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Value cannot be null or empty!");
+        throw new ArgumentNullException(nameof(value), "Value cannot be null or empty!");
       }
 
       var prefix = (this.stb.IsEmpty()) ? "?" : "&";

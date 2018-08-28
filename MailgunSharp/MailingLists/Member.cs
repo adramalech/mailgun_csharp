@@ -92,7 +92,7 @@ namespace MailgunSharp.MailingLists
         ["upsert"] = this.upsert.ToYesNo()
       };
 
-      if (vars != null && vars.Count > 0)
+      if (this.vars != null && this.vars.Count > 0)
       {
         jsonObject.Add("vars", this.vars.ToString(Formatting.None));
       }
@@ -114,7 +114,7 @@ namespace MailgunSharp.MailingLists
         new KeyValuePair<string, string>("upsert", this.upsert.ToYesNo())
       };
 
-      if (vars != null && vars.Count > 0)
+      if (this.vars != null && this.vars.Count > 0)
       {
         content.Add("vars", this.vars.ToString(Formatting.None));
       }

@@ -65,7 +65,7 @@ namespace MailgunSharp.Routes
     {
       if (priority < 0)
       {
-        throw new ArgumentOutOfRangeException("Priority cannot have a value less than zero!");
+        throw new ArgumentOutOfRangeException(nameof(priority), priority, "Priority cannot have a value less than zero!");
       }
 
       this.priority = priority;
@@ -82,7 +82,7 @@ namespace MailgunSharp.Routes
     {
       if (description.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("Description cannot be null or empty!");
+        throw new ArgumentNullException(nameof(description), "Description cannot be null or empty!");
       }
 
       this.description = description;

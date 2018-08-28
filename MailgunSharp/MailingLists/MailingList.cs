@@ -39,7 +39,7 @@ namespace MailgunSharp.MailingLists
     /// The level of access for a user to interface with this mailing list.
     /// </summary>
     /// <value>Access Level type.</value>
-    public AccessLevel AccessLevel => accessLevel;
+    public AccessLevel AccessLevel => this.accessLevel;
 
     /// <summary>
     /// Create a mailing list will default to requiring only the mailing list's email address.

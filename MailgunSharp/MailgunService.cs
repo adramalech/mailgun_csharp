@@ -1747,12 +1747,7 @@ namespace MailgunSharp
     {
       var result = Uri.TryCreate(hostname, UriKind.Absolute, out Uri uri);
 
-      if (!result)
-      {
-        return false;
-      }
-
-      return uri.IsWellFormedOriginalString();
+      return result && uri.IsWellFormedOriginalString();
     }
 
     /// <summary>

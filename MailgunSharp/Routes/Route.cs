@@ -103,7 +103,7 @@ namespace MailgunSharp.Routes
         throw new InvalidOperationException("Expression can only be set once!");
       }
 
-      this.expression = $"match_header({name}, {regex.ToString()})";
+      this.expression = $"match_header({name}, {regex})";
 
       return this;
     }
@@ -140,7 +140,7 @@ namespace MailgunSharp.Routes
     /// <summary>
     /// Forwards the message to a specified destination URL.
     /// </summary>
-    /// <param name="emailAddress">The URL address to forward to.</param>
+    /// <param name="uri">The URL address to forward to.</param>
     /// <returns>An instance of the route.</returns>
     public IRoute Forward(Uri uri)
     {

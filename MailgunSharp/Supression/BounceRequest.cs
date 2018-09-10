@@ -99,7 +99,7 @@ namespace MailgunSharp.Supression
       {
         new KeyValuePair<string, string>("address", this.emailAddress.ToString()),
         new KeyValuePair<string, string>("code", ((int)this.code).ToString()),
-        new KeyValuePair<string, string>("error", this.error),
+        new KeyValuePair<string, string>($"error", this.error),
         new KeyValuePair<string, string>("created_at", (((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds()).ToString())
       };
 

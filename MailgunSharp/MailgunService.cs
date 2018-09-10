@@ -77,7 +77,7 @@ namespace MailgunSharp
     private readonly string companyDomain;
 
     /// <summary>
-    /// The http client instance to be used to make http requests to mailgun's api.
+    /// The http client instance to be used to make http requests to Mailgun's api.
     /// </summary>
     private readonly HttpClient httpClient;
 
@@ -99,7 +99,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(apiKey), "Api key cannot be null!");
       }
 
-      if (!isHostnameValid(companyDomain))
+      if (!this.isHostnameValid(companyDomain))
       {
         throw new FormatException("Hostname is incorrectly formatted!");
       }
@@ -185,7 +185,7 @@ namespace MailgunSharp
 
       var addressList = addresses.ToString();
 
-      return parseAddressesAsync(addressList, syntaxOnly, ct);
+      return this.parseAddressesAsync(addressList, syntaxOnly, ct);
     }
 
     /// <summary>
@@ -309,7 +309,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(tagName), "Tag cannot be null or empty!");
       }
 
-      if (doesTagNameHaveCorrectFormatting(tagName))
+      if (this.doesTagNameHaveCorrectFormatting(tagName))
       {
         throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
@@ -331,7 +331,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(tagName), "Tag cannot be null or empty!");
       }
 
-      if (doesTagNameHaveCorrectFormatting(tagName))
+      if (this.doesTagNameHaveCorrectFormatting(tagName))
       {
         throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
@@ -358,7 +358,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(tagName), "Tag cannot be null or empty!");
       }
 
-      if (doesTagNameHaveCorrectFormatting(tagName))
+      if (this.doesTagNameHaveCorrectFormatting(tagName))
       {
         throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
@@ -379,7 +379,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(tagName), "Tag cannot be null or empty!");
       }
 
-      if (doesTagNameHaveCorrectFormatting(tagName))
+      if (this.doesTagNameHaveCorrectFormatting(tagName))
       {
         throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
@@ -400,7 +400,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(tagName), "Tag cannot be null or empty!");
       }
 
-      if (doesTagNameHaveCorrectFormatting(tagName))
+      if (this.doesTagNameHaveCorrectFormatting(tagName))
       {
         throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
@@ -421,7 +421,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(tagName), "Tag cannot be null or empty!");
       }
 
-      if (doesTagNameHaveCorrectFormatting(tagName))
+      if (this.doesTagNameHaveCorrectFormatting(tagName))
       {
         throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
@@ -442,7 +442,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(tagName), "Tag cannot be null or empty!");
       }
 
-      if (doesTagNameHaveCorrectFormatting(tagName))
+      if (this.doesTagNameHaveCorrectFormatting(tagName))
       {
         throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
@@ -662,7 +662,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(tag), "Tag cannot be null or empty!");
       }
 
-      if (doesTagNameHaveCorrectFormatting(tag))
+      if (this.doesTagNameHaveCorrectFormatting(tag))
       {
         throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
@@ -1051,7 +1051,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }
@@ -1074,7 +1074,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }
@@ -1113,7 +1113,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }
@@ -1136,7 +1136,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty!");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }
@@ -1168,7 +1168,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty!");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }
@@ -1198,7 +1198,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty!");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }
@@ -1213,7 +1213,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(password), "Password cannot be null or empty!");
       }
 
-      if (checkPasswordLengthRequirement(password))
+      if (this.checkPasswordLengthRequirement(password))
       {
         throw new ArgumentOutOfRangeException(nameof(password), "Password must have a minimum length of 5, and maximum length of 32!");
       }
@@ -1254,7 +1254,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty!");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }
@@ -1275,7 +1275,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty!");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }
@@ -1304,7 +1304,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }
@@ -1333,7 +1333,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }
@@ -1355,7 +1355,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }
@@ -1384,7 +1384,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }
@@ -1417,7 +1417,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }
@@ -1451,7 +1451,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(domainName), "DomainName cannot be null or empty.");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }

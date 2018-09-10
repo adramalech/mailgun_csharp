@@ -90,9 +90,6 @@ namespace MailgunSharp.Stats
     /// Build the request object.
     /// </summary>
     /// <returns>The instance of the stats request object the Request builder was building.</returns>
-    public IStatsRequest Build()
-    {
-      return this.statsRequest;
-    }
+    public IStatsRequest Build() => this.statsRequest;
   }
 }

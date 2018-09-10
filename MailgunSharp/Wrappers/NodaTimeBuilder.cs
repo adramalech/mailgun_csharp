@@ -101,9 +101,6 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
-    public DateTime Build()
-    {
-      return this.now.ToDateTimeUtc();
-    }
+    public DateTime Build() => this.now.ToDateTimeUtc();
   }
 }

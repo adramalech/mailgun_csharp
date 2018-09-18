@@ -20,7 +20,7 @@ namespace MailgunSharp.Stats
     }
 
     /// <summary>
-    /// Add an event type to the list of event types to retreive that events statistical data.
+    /// Add an event type to the list of event types to retrieve that events statistical data.
     /// </summary>
     /// <param name="eventType">The event type to be added to the list of event types.</param>
     /// <returns>The instance of builder.</returns>

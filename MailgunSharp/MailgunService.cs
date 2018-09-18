@@ -85,7 +85,7 @@ namespace MailgunSharp
     /// Create an instance of the Mailgun Service.
     /// </summary>
     /// <param name="companyDomain">The company's domain name registered in the mailgun account.</param>
-    /// <param name="apiKey">The company's mailgun account apikey.</param>
+    /// <param name="apiKey">The company's Mailgun account apikey.</param>
     /// <param name="httpClient">The httpclient can be optionally passed in to use one given instead of generating a new one.</param>
     public MailgunService(string companyDomain, string apiKey, HttpClient httpClient = null)
     {

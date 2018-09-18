@@ -2,7 +2,6 @@ using System;
 using Xunit;
 using MailgunSharp.Webhooks;
 using MailgunSharp.Enums;
-using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Test.Webhooks
 {

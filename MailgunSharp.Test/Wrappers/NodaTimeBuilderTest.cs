@@ -7,7 +7,7 @@ namespace MailgunSharp.Test.Wrappers
 {
   public class NodaTimeBuilderTest
   {
-    private FakeClock clock;
+    private readonly FakeClock clock;
 
     public NodaTimeBuilderTest()
     {

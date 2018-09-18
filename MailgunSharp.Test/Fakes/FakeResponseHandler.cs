@@ -21,9 +21,9 @@ namespace MailgunSharp.Test.Fakes
       this.responses.Add(uri, message);
     }
 
-    protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
     {
-      return this.responses.ContainsKey(request.RequestUri) ? this.responses[request.RequestUri] : new HttpResponseMessage(HttpStatusCode.NotFound) { RequestMessage = request };
+      return Task.FromResult(this.responses.ContainsKey(request.RequestUri) ? this.responses[request.RequestUri] : new HttpResponseMessage(HttpStatusCode.NotFound) { RequestMessage = request });
     }
   }
 }

@@ -61,7 +61,7 @@ namespace MailgunSharp.Test.Supression
 
   public class BounceRequestGenerator : IEnumerable<object[]>
   {
-    private static List<object[]> bounceRequests = new List<object[]>
+    private static readonly List<object[]> bounceRequests = new List<object[]>
     {
       new object [] { @"john.doe@example.com", SmtpErrorCode.EXCEEDS_STORAGE_ALLOCATION, "error occured", DateTime.UtcNow, null },
       new object [] { @"john.doe@example.com", SmtpErrorCode.COMMAND_NOT_IMPLEMENTED, "error occured", null, null }

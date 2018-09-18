@@ -10,7 +10,7 @@ namespace MailgunSharp.Test.Enums
     {
       AccessLevel type = AccessLevel.READ_ONLY;
 
-      string name = EnumLookup.GetAccessLevelName(type);
+      var name = EnumLookup.GetAccessLevelName(type);
 
       Assert.Equal("readonly", name);
     }
@@ -20,7 +20,7 @@ namespace MailgunSharp.Test.Enums
     {
       AccessLevel type = AccessLevel.MEMBERS;
 
-      string name = EnumLookup.GetAccessLevelName(type);
+      var name = EnumLookup.GetAccessLevelName(type);
 
       Assert.Equal("members", name);
     }
@@ -30,7 +30,7 @@ namespace MailgunSharp.Test.Enums
     {
       AccessLevel type = AccessLevel.EVERYONE;
 
-      string name = EnumLookup.GetAccessLevelName(type);
+      var name = EnumLookup.GetAccessLevelName(type);
 
       Assert.Equal("everyone", name);
     }

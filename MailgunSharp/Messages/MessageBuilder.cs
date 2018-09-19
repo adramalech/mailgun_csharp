@@ -112,7 +112,7 @@ namespace MailgunSharp.Messages
         throw new ArgumentOutOfRangeException(nameof(this.messageSize), size, "Cannot exceed total message size of 25MB!");
       }
 
-      messageSize += attachment.Length;
+      this.messageSize += attachment.Length;
 
       this.message.Attachments.Add(attachment);
 
@@ -216,7 +216,7 @@ namespace MailgunSharp.Messages
         throw new ArgumentOutOfRangeException(nameof(this.messageSize), size, "Cannot exceed total message size of 25MB!");
       }
 
-      messageSize += image.Data.Length;
+      this.messageSize += image.Data.Length;
 
       this.message.FileInline.Add(image);
 
@@ -348,7 +348,7 @@ namespace MailgunSharp.Messages
 
       var sizeInBytes = (long)(html.Length * sizeof(char));
 
-      if (exceedsMaxMessageSize(sizeInBytes))
+      if (this.exceedsMaxMessageSize(sizeInBytes))
       {
         throw new ArgumentOutOfRangeException(nameof(html), sizeInBytes, "Cannot exceed total message size of 25MB!");
       }
@@ -374,7 +374,7 @@ namespace MailgunSharp.Messages
 
       var sizeInBytes = (long)(subject.Length * sizeof(char));
 
-      if (exceedsMaxMessageSize(sizeInBytes))
+      if (this.exceedsMaxMessageSize(sizeInBytes))
       {
         throw new ArgumentOutOfRangeException(nameof(subject), sizeInBytes, "Cannot exceed total message size of 25MB!");
       }
@@ -631,10 +631,7 @@ namespace MailgunSharp.Messages
     /// </summary>
     /// <param name="size">The size of the current this.message.</param>
     /// <returns>True if it does exceed, false if it doesn't.</returns>
-    private bool exceedsMaxMessageSize(long size)
-    {
-      return ((this.messageSize + size) > MAX_TOTAL_MESSAGE_SIZE);
-    }
+    private bool exceedsMaxMessageSize(long size) => ((this.messageSize + size) > MAX_TOTAL_MESSAGE_SIZE);
 
     /// <summary>
     /// Does the lines of the recipient variables adhere to the RFC 2822 line folding.

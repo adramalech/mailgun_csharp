@@ -36,7 +36,7 @@ namespace MailgunSharp.Domains
     private readonly bool wildcard;
 
     /// <summary>
-    /// Determines wherether the domain will accept email for sub-domains.
+    /// Determines whether the domain will accept email for sub-domains.
     /// </summary>
     /// <value>boolean</value>
     public bool Wildcard => this.wildcard;
@@ -73,7 +73,7 @@ namespace MailgunSharp.Domains
         throw new ArgumentNullException(nameof(smtpPassword), "Smtp Password cannot be null or empty!");
       }
 
-      if (!isHostnameValid(domainName))
+      if (!this.isHostnameValid(domainName))
       {
         throw new FormatException("Domain name is incorrectly formatted!");
       }

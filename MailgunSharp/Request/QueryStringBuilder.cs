@@ -24,7 +24,7 @@ namespace MailgunSharp.Request
     public int Count => this.count;
 
     /// <summary>
-    /// Create an instance of query string class with new stringbuilder and a zero appended parameter count.
+    /// Create an instance of query string class with new string builder and a zero appended parameter count.
     /// </summary>
     public QueryStringBuilder()
     {
@@ -35,7 +35,7 @@ namespace MailgunSharp.Request
     /// <summary>
     /// Append a value with a variable name as a parameter to the querystring if not null or empty.
     /// </summary>
-    /// <param name="variable">The varaible name of the parameter to be appended.</param>
+    /// <param name="variable">The variable name of the parameter to be appended.</param>
     /// <param name="value">The value of the parameter to be appended.</param>
     public IQueryStringBuilder Append(string variable, string value)
     {
@@ -76,9 +76,6 @@ namespace MailgunSharp.Request
     /// Override the object ToString method to return the result of the string builder.
     /// </summary>
     /// <returns>string</returns>
-    public override string ToString()
-    {
-      return this.stb.ToString();
-    }
+    public override string ToString() => this.stb.ToString();
   }
 }

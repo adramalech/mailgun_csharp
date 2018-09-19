@@ -1,9 +1,6 @@
 using System;
 using System.Net.Mail;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
-using MailgunSharp.Extensions;
 
 namespace MailgunSharp.Messages
 {

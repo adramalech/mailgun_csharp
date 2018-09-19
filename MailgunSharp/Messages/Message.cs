@@ -80,7 +80,7 @@ namespace MailgunSharp.Messages
     public ICollection<FileInfo> Inline { get; set; }
 
     /// <summary>
-    /// List of user defined tags to help catagorize outgoing email traffic based on some critera.
+    /// List of user defined tags to help categorize outgoing email traffic based on some criteria.
     /// </summary>
     /// <value>List of strings</value>
     public ICollection<string> Tags { get; set; }
@@ -285,16 +285,16 @@ namespace MailgunSharp.Messages
         addressList.Add(t.Address);
       }
 
-      content.Add("to", generateCommaDelimenatedList(addressList));
+      content.Add("to", this.generateCommaDelimenatedList(addressList));
 
       if (this.Cc != null)
       {
-        content.Add("cc", generateCommaDelimenatedList(this.Cc));
+        content.Add("cc", this.generateCommaDelimenatedList(this.Cc));
       }
 
       if (this.Bcc != null)
       {
-        content.Add("bcc", generateCommaDelimenatedList(this.Bcc));
+        content.Add("bcc", this.generateCommaDelimenatedList(this.Bcc));
       }
 
       if (!this.Subject.IsNullEmptyWhitespace())
@@ -350,10 +350,10 @@ namespace MailgunSharp.Messages
     }
 
     /// <summary>
-    /// Create a list of email addresses with commas seperating each address.
+    /// Create a list of email addresses with commas separating each address.
     /// </summary>
-    /// <param name="addresses">List of email address to turn into a comma delimenated list of addresses.</param>
-    /// <returns>string representing the comma delimenated addresses.</returns>
+    /// <param name="addresses">List of email address to turn into a comma delimited list of addresses.</param>
+    /// <returns>string representing the comma delimited addresses.</returns>
     private string generateCommaDelimenatedList(ICollection<MailAddress> addresses)
     {
       var addressList = new StringBuilder();

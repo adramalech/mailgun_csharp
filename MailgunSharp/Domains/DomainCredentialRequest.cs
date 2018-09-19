@@ -51,7 +51,7 @@ namespace MailgunSharp.Domains
         throw new ArgumentNullException(nameof(password), "Password cannot be null or empty!");
       }
 
-      if (!isPasswordLengthWithinRequiredRange(password))
+      if (!this.isPasswordLengthWithinRequiredRange(password))
       {
         throw new ArgumentOutOfRangeException(nameof(password), "Password must have a minimum length of 5, and maximum length of 32!");
       }

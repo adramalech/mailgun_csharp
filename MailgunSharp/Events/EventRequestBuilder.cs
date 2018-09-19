@@ -252,9 +252,6 @@ namespace MailgunSharp.Events
     /// Get the event request that was build.
     /// </summary>
     /// <returns>Event Request</returns>
-    public IEventRequest Build()
-    {
-      return this.eventRequest;
-    }
+    public IEventRequest Build() => this.eventRequest;
   }
 }

@@ -41,23 +41,19 @@ namespace MailgunSharp.MailingLists
     /// <value>Access Level type.</value>
     public AccessLevel AccessLevel => this.accessLevel;
 
-    /// <summary>
-    /// Create a mailing list will default to requiring only the mailing list's email address.
-    ///
-    /// Defaults access_level to readonly.
-    /// </summary>
-    /// <param name="mailAddress">The email address of the mailing list.</param>
-    /// <param name="name">The name of the mailing list. Optional.</param>
-    /// <param name="description">The description of the mailing list. Optional.</param>
-    /// <param name="accessLevel">The access level settings of the mailing list. Defaults to readonly.</param>
-    public MailingList(MailAddress mailAddress, string name = "", string description = "", AccessLevel accessLevel = AccessLevel.READ_ONLY)
+    ///  <summary>
+    ///  Create a mailing list will default to requiring only the mailing list's email address.
+    /// 
+    ///  Defaults access_level to readonly.
+    ///  </summary>
+    ///  <param name="emailAddress">The email address of the mailing list.</param>
+    ///  <param name="name">The name of the mailing list. Optional.</param>
+    ///  <param name="description">The description of the mailing list. Optional.</param>
+    ///  <param name="accessLevel">The access level settings of the mailing list. Defaults to readonly.</param>
+    /// <exception cref="ArgumentNullException">The email address is required and cannot be empty.</exception>
+    public MailingList(MailAddress emailAddress, string name = "", string description = "", AccessLevel accessLevel = AccessLevel.READ_ONLY)
     {
-      if (mailAddress == null)
-      {
-        throw new ArgumentNullException(nameof(mailAddress), "Address cannot be null or empty!");
-      }
-
-      this.emailAddress = mailAddress;
+      this.emailAddress = emailAddress ?? throw new ArgumentNullException(nameof(emailAddress), "Address cannot be null or empty!");
       this.name = name;
       this.description = description;
       this.accessLevel = accessLevel;

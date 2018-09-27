@@ -58,19 +58,20 @@ namespace MailgunSharp.MailingLists
     /// <summary>
     /// Create an instance of the member class.
     /// </summary>
-    /// <param name="mailAddress">The email address of the member.</param>
+    /// <param name="emailAddress">The email address of the member.</param>
     /// <param name="name">The optional name of the member.</param>
     /// <param name="vars">The optional custom variables as a json object.</param>
     /// <param name="subscribed">Is the member subscribed to the mailing list. defaults to true.</param>
     /// <param name="upsert">True, update duplicate member found in list; false, raise an error if duplicate member found in list. Default false.</param>
-    public Member(string mailAddress, string name = "", JObject vars = null,  bool subscribed = true, bool upsert = false)
+    /// <exception cref="ArgumentNullException">The email address is required and cannot be empty.</exception>
+    public Member(string emailAddress, string name = "", JObject vars = null,  bool subscribed = true, bool upsert = false)
     {
-      if (mailAddress.IsNullEmptyWhitespace())
+      if (emailAddress.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException(nameof(mailAddress), "Address cannot be null or empty!");
+        throw new ArgumentNullException(nameof(emailAddress), "Address cannot be null or empty!");
       }
 
-      this.emailAddress = (!name.IsNullEmptyWhitespace()) ? new MailAddress(mailAddress, name) : new MailAddress(mailAddress);
+      this.emailAddress = (!name.IsNullEmptyWhitespace()) ? new MailAddress(emailAddress, name) : new MailAddress(emailAddress);
 
       this.name = name;
       this.vars = vars;

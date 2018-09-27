@@ -41,14 +41,10 @@ namespace MailgunSharp.Supression
     /// <param name="tag">A specific tag to unsubscribe from, will default to "*" which will unsubscribe an address from all domain's correspondence.</param>
     /// <param name="createdAt">Timestamp of an unsubscribe event.</param>
     /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
+    /// <exception cref="ArgumentNullException">The address is a required parameter.</exception>
     public UnsubscriberRequest(MailAddress address, string tag = "*", DateTime? createdAt = null, TimeZoneInfo tzInfo = null)
     {
-      if (address == null)
-      {
-        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
-      }
-
-      this.address = address;
+      this.address = address ?? throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       this.tag = tag;
 
       if (createdAt.HasValue)

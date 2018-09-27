@@ -27,14 +27,10 @@ namespace MailgunSharp.Messages
     /// </summary>
     /// <param name="address">A valid email address.</param>
     /// <param name="variables">Recipient variables will be referenced in message template.</param>
+    /// <exception cref="ArgumentNullException">Address cannot be null or empty.</exception>
     public Recipient(MailAddress address, JObject variables = null)
     {
-      if (address == null)
-      {
-        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
-      }
-
-      this.address = address;
+      this.address = address ?? throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       this.variables = variables;
     }
   }

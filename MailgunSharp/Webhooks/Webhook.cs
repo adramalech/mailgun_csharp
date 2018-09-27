@@ -62,6 +62,7 @@ namespace MailgunSharp.Webhooks
     /// Add a webhook to the list of urls, maximum of three urls allowed, to the webhook.
     /// </summary>
     /// <param name="uri">The url to be added to the webhook.</param>
+    /// <exception cref="InvalidOperationException">The webhook has a maximum of three urls, will error if more than three added.</exception>
     /// <returns>The instance of the webhook.</returns>
     public IWebhook AppendUrl(Uri uri)
     {
@@ -78,6 +79,7 @@ namespace MailgunSharp.Webhooks
     /// <summary>
     /// Get the webhook as form content to be used in http requests.
     /// </summary>
+    /// <exception cref="InvalidOperationException">If webhook doesn't have atleast one url, or doesn't have a type.</exception>
     /// <returns>A keyvalue string pair representation of the webhook.</returns>
     public ICollection<KeyValuePair<string, string>> ToFormContent()
     {

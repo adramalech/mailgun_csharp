@@ -164,7 +164,7 @@ namespace MailgunSharp
         throw new ArgumentNullException(nameof(address), "Recipients cannot be null or empty!");
       }
 
-      return parseAddressesAsync(address, syntaxOnly, ct);
+      return this.parseAddressesAsync(address, syntaxOnly, ct);
     }
 
     /// <summary>
@@ -226,7 +226,7 @@ namespace MailgunSharp
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetIPDetailsAsync(string ipV4Address, CancellationToken ct = default(CancellationToken))
     {
-      if (!isIPv4AddressValid(ipV4Address))
+      if (!this.isIPv4AddressValid(ipV4Address))
       {
         throw new FormatException("IP V4 Address is incorrectly formatted, must be in the format ###.###.###.###!");
       }
@@ -252,7 +252,7 @@ namespace MailgunSharp
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> AddIpAsync(string ipV4Address, CancellationToken ct = default(CancellationToken))
     {
-      if (!isIPv4AddressValid(ipV4Address))
+      if (!this.isIPv4AddressValid(ipV4Address))
       {
         throw new FormatException("IP V4 Address is incorrectly formatted, must be in the format ###.###.###.###!");
       }
@@ -272,7 +272,7 @@ namespace MailgunSharp
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> DeleteIpAsync(string ipV4Address, CancellationToken ct = default(CancellationToken))
     {
-      if (!isIPv4AddressValid(ipV4Address))
+      if (!this.isIPv4AddressValid(ipV4Address))
       {
         throw new FormatException("IP V4 Address is incorrectly formatted, must be in the format ###.###.###.###!");
       }

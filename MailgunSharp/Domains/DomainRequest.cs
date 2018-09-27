@@ -61,6 +61,8 @@ namespace MailgunSharp.Domains
     /// <param name="spamAction">The action the domain will have when handling spam.</param>
     /// <param name="wildcard">Will the domain accept email for sub-domains.</param>
     /// <param name="forceDKIMAuthority">Is the domain itself the DKIM Authority, or will it inherit DKIM Authority from root registered domain.</param>
+    /// <exception cref="FormatException">The domain name must be a correctly formatted, for reference check RFC 2396 and RFS 2732.</exception>
+    /// <exception cref="ArgumentNullException">The domain name and smtp password are required parameters and cannot be null, empty, or whitespace.</exception>
     public DomainRequest(string domainName, string smtpPassword, SpamAction spamAction = SpamAction.DISABLED, bool wildcard = false, bool forceDKIMAuthority = false)
     {
       if (domainName.IsNullEmptyWhitespace())

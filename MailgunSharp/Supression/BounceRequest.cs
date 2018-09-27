@@ -47,19 +47,15 @@ namespace MailgunSharp.Supression
     /// Create an instance of the bounce request class.
     /// </summary>
     /// <param name="emailAddress">The valid email address.</param>
-    /// <param name="statusCode">The STMP Error status code.  Defaults to 550, Mailbox Unavailable.</param>
+    /// <param name="code">The STMP Error status code.  Defaults to 550, Mailbox Unavailable.</param>
     /// <param name="error">The error description. Defaults to empty string.</param>
     /// <param name="createdAt">Timestamp of the bounced event. Defaults to current time UTC.</param>
     /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
-    public BounceRequest(MailAddress emailAddress, SmtpErrorCode statusCode = SmtpErrorCode.MAILBOX_UNAVAILABLE, string error = "", DateTime? createdAt = null, TimeZoneInfo tzInfo = null)
+    /// <exception cref="ArgumentNullException">The email address is a required parameter.</exception>
+    public BounceRequest(MailAddress emailAddress, SmtpErrorCode code = SmtpErrorCode.MAILBOX_UNAVAILABLE, string error = "", DateTime? createdAt = null, TimeZoneInfo tzInfo = null)
     {
-      if (emailAddress == null)
-      {
-        throw new ArgumentNullException(nameof(emailAddress), "Address cannot be null or empty!");
-      }
-
-      this.emailAddress = emailAddress;
-      this.code = statusCode;
+      this.emailAddress = emailAddress ?? throw new ArgumentNullException(nameof(emailAddress), "Address cannot be null or empty!");
+      this.code = code;
       this.error = error;
 
       if (createdAt.HasValue)

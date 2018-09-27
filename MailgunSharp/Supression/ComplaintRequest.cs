@@ -30,14 +30,10 @@ namespace MailgunSharp.Supression
     /// <param name="address">A valid email address.</param>
     /// <param name="createdAt">Timestamp as datetime UTC.</param>
     /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
+    /// <exception cref="ArgumentNullException">The address is a required parameter.</exception>
     public ComplaintRequest(MailAddress address, DateTime? createdAt = null, TimeZoneInfo tzInfo = null)
     {
-      if (address == null)
-      {
-        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
-      }
-
-      this.address = address;
+      this.address = address ?? throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
 
       if (createdAt.HasValue)
       {

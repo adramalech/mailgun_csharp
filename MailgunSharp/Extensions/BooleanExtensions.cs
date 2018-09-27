@@ -10,9 +10,6 @@ namespace MailgunSharp.Extensions
     /// </summary>
     /// <param name="flag">The boolean to get string.</param>
     /// <returns>String value of True will be "yes", and False, will be "no".</returns>
-    public static string ToYesNo(this bool flag)
-    {
-      return (flag ? "yes" : "no");
-    }
+    public static string ToYesNo(this bool flag) => (flag ? "yes" : "no");
   }
 }

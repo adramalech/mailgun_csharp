@@ -37,6 +37,7 @@ namespace MailgunSharp.Request
     /// </summary>
     /// <param name="variable">The variable name of the parameter to be appended.</param>
     /// <param name="value">The value of the parameter to be appended.</param>
+    /// <exception cref="ArgumentNullException">The variable name and the value cannot be null, empty, or whitespace.</exception>
     public IQueryStringBuilder Append(string variable, string value)
     {
       if (variable.IsNullEmptyWhitespace())
@@ -61,6 +62,7 @@ namespace MailgunSharp.Request
     /// <summary>
     /// Return the built string result.
     /// </summary>
+    /// <exception cref="InvalidOperationException">Query string cannot be null or empty.</exception>
     /// <returns>The resulting string that was built.</returns>
     public string Build()
     {

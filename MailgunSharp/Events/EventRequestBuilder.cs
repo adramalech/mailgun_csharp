@@ -70,16 +70,17 @@ namespace MailgunSharp.Events
 
     /// <summary>
     /// Set the result entries limit.
-    ///
-    /// The maximum limit cannot be greater than 300.
+    /// 
+    /// The maximum limit cannot be greater than 300 and must be greater than 0.
     /// </summary>
     /// <param name="limit">Integer value to limit entires by, must be a postive integer value greater than zero.</param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <returns>The instance of the builder.</returns>
     public IEventRequestBuilder SetResultLimit(int limit)
     {
-      if (limit > MAX_RESULT_LIMIT)
+      if (limit > MAX_RESULT_LIMIT || limit < 1)
       {
-        throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit of resulting events cannot exceed a maximum integer value of 300!");
+        throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit of resulting events cannot exceed a maximum integer value of 300, or the minimum of 1!");
       }
 
       this.eventRequest.Limit = limit;
@@ -91,6 +92,7 @@ namespace MailgunSharp.Events
     /// Set the size of the message represented in bytes to filter results by.
     /// </summary>
     /// <param name="size">Integer value representing the size in bytes of a message. Must be a positive integer value greater than zero.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Message size must be an integer value greater than 0 bytes.</exception>
     /// <returns>The instance of the builder.</returns>
     public IEventRequestBuilder SetMessageSize(int size)
     {
@@ -108,6 +110,7 @@ namespace MailgunSharp.Events
     /// Set the attachment filename to filter results by.
     /// </summary>
     /// <param name="name">The name of the file.</param>
+    /// <exception cref="ArgumentNullException">The filename must not be empty, null, or whitespace.</exception>
     /// <returns>The instance of the builder.</returns>
     public IEventRequestBuilder SetAttachmentFilename(string name)
     {
@@ -125,6 +128,7 @@ namespace MailgunSharp.Events
     /// Set the Mailgun message id returned by the messages API in the receipt of sending.
     /// </summary>
     /// <param name="id">The string message id.</param>
+    /// <exception cref="ArgumentNullException">The message id must not be empty, null, or whitespace.</exception>
     /// <returns>The instance of the builder.</returns>
     public IEventRequestBuilder SetMessageId(string id)
     {
@@ -201,15 +205,11 @@ namespace MailgunSharp.Events
     /// Filter the "from" MIME header by.
     /// </summary>
     /// <param name="address">The valid email address to filter "from" MIME header by.</param>
+    /// <exception cref="ArgumentNullException">Address cannot be null, empty, or whitespace.</exception>
     /// <returns>The instance of the builder.</returns>
     public IEventRequestBuilder SetFrom(MailAddress address)
     {
-      if (address == null)
-      {
-        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
-      }
-
-      this.eventRequest.From = address;
+      this.eventRequest.From = address ?? throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
 
       return this;
     }
@@ -218,15 +218,11 @@ namespace MailgunSharp.Events
     /// Filter the email address of a particular recipient.
     /// </summary>
     /// <param name="address">A valid email address of a recipient that was sent to.</param>
+    /// <exception cref="ArgumentNullException">Address cannot be null, empty, or whitespace.</exception>
     /// <returns>The instance of the builder.</returns>
     public IEventRequestBuilder SetRecipient(MailAddress address)
     {
-      if (address == null)
-      {
-        throw new ArgumentNullException(nameof(address), "Recipient address cannot be null or empty!");
-      }
-
-      this.eventRequest.Recipient = address;
+      this.eventRequest.Recipient = address ?? throw new ArgumentNullException(nameof(address), "Recipient address cannot be null or empty!");
 
       return this;
     }
@@ -235,15 +231,11 @@ namespace MailgunSharp.Events
     /// Filter the "to" MIME header.
     /// </summary>
     /// <param name="address">A valid email address found in the "to" MIME header.</param>
+    /// <exception cref="ArgumentNullException">Address cannot be null, empty, or whitespace.</exception>
     /// <returns>The instance of the builder.</returns>
     public IEventRequestBuilder SetTo(MailAddress address)
     {
-      if (address == null)
-      {
-        throw new ArgumentNullException(nameof(address), "Recipient address cannot be null or empty!");
-      }
-
-      this.eventRequest.To = address;
+      this.eventRequest.To = address ?? throw new ArgumentNullException(nameof(address), "Recipient address cannot be null or empty!");
 
       return this;
     }

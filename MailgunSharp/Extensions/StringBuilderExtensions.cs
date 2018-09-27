@@ -30,9 +30,6 @@ namespace MailgunSharp.Extensions
     /// </summary>
     /// <param name="stb">The string builder instance to check.</param>
     /// <returns>True if the string builder is empty, false if not empty.</returns>
-    public static bool IsEmpty(this StringBuilder stb)
-    {
-      return (stb.Length < 1);
-    }
+    public static bool IsEmpty(this StringBuilder stb) => (stb.Length < 1);
   }
 }

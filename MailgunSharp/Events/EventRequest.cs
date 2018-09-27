@@ -120,12 +120,13 @@ namespace MailgunSharp.Events
     /// <summary>
     /// Get the event request object as a query string to be used in an http request.
     /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException">The limit cannot have a minimum value less than an one or greater than maximum value 300, and message size cannot be less than 1 byte, if provided.</exception>
     /// <returns>string</returns>
     public string ToQueryString()
     {
       if (this.Limit < 1 || this.Limit > MAX_RESULT_LIMIT)
       {
-        throw new ArgumentOutOfRangeException(nameof(this.Limit), this.Limit, "Limit has to be provided and cannot be less than 1!");
+        throw new ArgumentOutOfRangeException(nameof(this.Limit), this.Limit, "Limit has to be provided and cannot be less than a minimum value of 1 or a maximum value of 300!");
       }
 
       var queryStringBuilder = new QueryStringBuilder();

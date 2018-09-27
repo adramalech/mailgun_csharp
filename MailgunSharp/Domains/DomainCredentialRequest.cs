@@ -39,6 +39,8 @@ namespace MailgunSharp.Domains
     /// </summary>
     /// <param name="username">The username as a string.</param>
     /// <param name="password">The smtp password of a string. Must be a minimum length of 5 and maximum length of 32.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Password has a required minimum length of 5 and a maximum length of 32.</exception>
+    /// <exception cref="ArgumentNullException">Domain Credential username and password are required and cannot be null, empty, or whitespace.</exception>
     public DomainCredentialRequest(string username, string password)
     {
       if (username.IsNullEmptyWhitespace())

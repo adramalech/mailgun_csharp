@@ -60,6 +60,7 @@ namespace MailgunSharp.Routes
     /// Sets the priority of the route 0 is highest and the bigger the number the lower the priority.
     /// </summary>
     /// <param name="priority">The priority value.</param>
+    /// <exception cref="ArgumentOutOfRangeException">The priority value must be an integer value greater than zero.</exception>
     /// <returns>An instance of the route.</returns>
     public IRoute SetPriority(int priority)
     {
@@ -77,6 +78,7 @@ namespace MailgunSharp.Routes
     /// Sets the description of the route.
     /// </summary>
     /// <param name="description">The description of the route.</param>
+    /// <exception cref="ArgumentNullException">Description cannot be null, empty, or whitespace.</exception>
     /// <returns>An instance of the route.</returns>
     public IRoute SetDescription(string description)
     {
@@ -95,6 +97,7 @@ namespace MailgunSharp.Routes
     /// </summary>
     /// <param name="name">The name of the MIME header.</param>
     /// <param name="regex">The regular expression pattern.</param>
+    /// <exception cref="InvalidOperationException">This regular expression match can only be applied once.</exception>
     /// <returns>An instance of the route.</returns>
     public IRoute MatchHeader(string name, Regex regex)
     {
@@ -112,6 +115,7 @@ namespace MailgunSharp.Routes
     /// Matches SMTP recipient of the incoming message against the regular expression pattern.
     /// </summary>
     /// <param name="regex">The regular expression pattern to match.</param>
+    /// <exception cref="InvalidOperationException">This regular expression match can only be applied once.</exception>
     /// <returns>An instance of the route.</returns>
     public IRoute MatchRecipient(Regex regex)
     {
@@ -189,6 +193,7 @@ namespace MailgunSharp.Routes
     /// <summary>
     /// Get the Route object as a form content to submit in an http request.
     /// </summary>
+    /// <exception cref="InvalidOperationException">If there are no actions, or if the regular expression value is empty.</exception>
     /// <returns>The form content as a keyvalue string pairs.</returns>
     public ICollection<KeyValuePair<string, string>> ToFormContent()
     {

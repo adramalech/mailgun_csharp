@@ -87,6 +87,8 @@ namespace MailgunSharp
     /// <param name="companyDomain">The company's domain name registered in the mailgun account.</param>
     /// <param name="apiKey">The company's Mailgun account apikey.</param>
     /// <param name="httpClient">The httpclient can be optionally passed in to use one given instead of generating a new one.</param>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.</exception>
+    /// <exception cref="ArgumentNullException">Company domain name cannot be null, emtpy, or whitespace.</exception>
     public MailgunService(string companyDomain, string apiKey, HttpClient httpClient = null)
     {
       if (companyDomain.IsNullEmptyWhitespace())
@@ -118,6 +120,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="message">The email message object to be sent in the request to Mailgun.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Message cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> SendMessageAsync(IMessage message, CancellationToken ct = default(CancellationToken))
     {
@@ -129,14 +132,15 @@ namespace MailgunSharp
       return this.httpClient.PostAsync($"{this.companyDomain}/messages", message.ToFormContent(), ct);
     }
 
-    /// <summary>
-    /// Given a arbitrary email address, validates address based off defined checks.
-    ///
-    /// Uses the private api call, using the private auth api key, and will not be subject to rate limits of the public api calls.
-    /// </summary>
-    /// <param name="address">The email address to be validated.</param>
-    /// <param name="validateMailbox">True, a mailbox verification check will be performed against the address, false will not.</param>
-    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    ///  <summary>
+    ///  Given a arbitrary email address, validates address based off defined checks.
+    /// 
+    ///  Uses the private api call, using the private auth api key, and will not be subject to rate limits of the public api calls.
+    ///  </summary>
+    ///  <param name="address">The email address to be validated.</param>
+    ///  <param name="validateMailbox">True, a mailbox verification check will be performed against the address, false will not.</param>
+    ///  <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Address cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> ValidateEmailAddressAsync(MailAddress address, bool validateMailbox = false, CancellationToken ct = default(CancellationToken))
     {
@@ -148,39 +152,41 @@ namespace MailgunSharp
       return this.httpClient.GetAsync($"address/private/validate?address={address.Address}&mailbox_verification={validateMailbox.ToString()}", ct);
     }
 
-    /// <summary>
-    /// Parses a single email address. Will determine if the address is syntactically valid, and optionally pass DNS and ESP specific grammar checks.
-    ///
-    /// Uses the private api call, using the private auth api key, and will not be subject to rate limits of the public api calls.
-    /// </summary>
-    /// <param name="address">The email address to check.</param>
-    /// <param name="syntaxOnly"></param>
-    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    ///  <summary>
+    ///  Parses a single email address. Will determine if the address is syntactically valid, and optionally pass DNS and ESP specific grammar checks.
+    /// 
+    ///  Uses the private api call, using the private auth api key, and will not be subject to rate limits of the public api calls.
+    ///  </summary>
+    ///  <param name="address">The email address to check.</param>
+    ///  <param name="syntaxOnly"></param>
+    ///  <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Address cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> ParseEmailAddressAsync(string address, bool syntaxOnly = true, CancellationToken ct = default(CancellationToken))
     {
       if (address.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException(nameof(address), "Recipients cannot be null or empty!");
+        throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       }
 
       return this.parseAddressesAsync(address, syntaxOnly, ct);
     }
 
-    /// <summary>
-    /// Parses a list of email addresses. Will determine if the addresses are syntactically valid, and optionally pass DNs and ESP specific grammar checks.
-    ///
-    /// Uses the private api call, using the private auth api key, and will not be subject to rate limits of the public api calls.
-    /// </summary>
-    /// <param name="addresses">The list of addresses to check.</param>
-    /// <param name="syntaxOnly">True, perform only syntax checks; false, DNS and ESP specific validation as well.</param>
-    /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    ///  <summary>
+    ///  Parses a list of email addresses. Will determine if the addresses are syntactically valid, and optionally pass DNs and ESP specific grammar checks.
+    /// 
+    ///  Uses the private api call, using the private auth api key, and will not be subject to rate limits of the public api calls.
+    ///  </summary>
+    ///  <param name="addresses">The list of addresses to check.</param>
+    ///  <param name="syntaxOnly">True, perform only syntax checks; false, DNS and ESP specific validation as well.</param>
+    ///  <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Addresses cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> ParseEmailAddressesAsync(ICollection<string> addresses, bool syntaxOnly = true, CancellationToken ct = default(CancellationToken))
     {
       if (addresses == null || addresses.Count < 1)
       {
-        throw new ArgumentNullException(nameof(addresses), "Recipients cannot be null or empty!");
+        throw new ArgumentNullException(nameof(addresses), "Addresses cannot be null or empty!");
       }
 
       var addressList = addresses.ToString();
@@ -188,14 +194,15 @@ namespace MailgunSharp
       return this.parseAddressesAsync(addressList, syntaxOnly, ct);
     }
 
-    /// <summary>
-    /// Make the request to parse a list of email addresses that are comma delimited.
-    ///
-    /// Maximum allowed character of email address list of 8,000 characters.
-    /// </summary>
-    /// <param name="addressList">List of email addresses to be parsed.</param>
-    /// <param name="syntaxOnly">Perform only syntax checks or DNS and ESP specific validation as well.</param>
-    /// <param name="ct">The async cancellation token.</param>
+    ///  <summary>
+    ///  Make the request to parse a list of email addresses that are comma delimited.
+    /// 
+    ///  Maximum allowed character of email address list of 8,000 characters.
+    ///  </summary>
+    ///  <param name="addressList">List of email addresses to be parsed.</param>
+    ///  <param name="syntaxOnly">Perform only syntax checks or DNS and ESP specific validation as well.</param>
+    ///  <param name="ct">The async cancellation token.</param>
+    /// <exception cref="ArgumentOutOfRangeException">List of addresses exceeds the maximum lenght of 8,000 characters.</exception>
     /// <returns></returns>
     private Task<HttpResponseMessage> parseAddressesAsync(string addressList, bool syntaxOnly, CancellationToken ct)
     {
@@ -223,6 +230,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="ipV4Address">The correctly formatted IP v4 address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="FormatException">The IP Address must be formatted in the correct octet format.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetIPDetailsAsync(string ipV4Address, CancellationToken ct = default(CancellationToken))
     {
@@ -249,6 +257,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="ipV4Address">The correctly formatted IP v4 address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="FormatException">The IP Address must be formatted in the correct octet format.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> AddIpAsync(string ipV4Address, CancellationToken ct = default(CancellationToken))
     {
@@ -269,6 +278,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="ipV4Address">The correctly formatted IP v4 address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="FormatException">The IP Address must be formatted in the correct octet format.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> DeleteIpAsync(string ipV4Address, CancellationToken ct = default(CancellationToken))
     {
@@ -285,6 +295,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentOutOfRangeException">The limit cannot be less than 1.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetTags(int limit = 100, CancellationToken ct = default(CancellationToken))
     {
@@ -301,6 +312,8 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="tagName">The tag to be returned.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Tag name cannot be null, empty, or whitespace.</exception>
+    /// <exception cref="FormatException">Tag must be ASCII character and not longer than 128 ASCII characters.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
@@ -323,6 +336,8 @@ namespace MailgunSharp
     /// <param name="tagName">Name of the tag.</param>
     /// <param name="description">Optional description of the tag.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Tag name cannot be null, empty, or whitespace.</exception>
+    /// <exception cref="FormatException">Tag must be ASCII character and not longer than 128 ASCII characters.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> UpdateTagDescription(string tagName, string description, CancellationToken ct = default(CancellationToken))
     {
@@ -350,6 +365,8 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="tagName">Name of the tag.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Tag name cannot be null, empty, or whitespace.</exception>
+    /// <exception cref="FormatException">Tag must be ASCII character and not longer than 128 ASCII characters.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> DeleteTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
@@ -371,6 +388,8 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="tagName">Name of the tag.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Tag name cannot be null, empty, or whitespace.</exception>
+    /// <exception cref="FormatException">Tag must be ASCII character and not longer than 128 ASCII characters.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetTagStats(string tagName, CancellationToken ct = default(CancellationToken))
     {
@@ -392,6 +411,8 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="tagName">Name of the tag.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Tag name cannot be null, empty, or whitespace.</exception>
+    /// <exception cref="FormatException">Tag must be ASCII character and not longer than 128 ASCII characters.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetListCountriesStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
@@ -413,6 +434,8 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="tagName">Name of the tag.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Tag name cannot be null, empty, or whitespace.</exception>
+    /// <exception cref="FormatException">Tag must be ASCII character and not longer than 128 ASCII characters.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetListEmailProviderStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
@@ -434,6 +457,8 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="tagName">Name of the tag.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Tag name cannot be null, empty, or whitespace.</exception>
+    /// <exception cref="FormatException">Tag must be ASCII character and not longer than 128 ASCII characters.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetListDeviceStatsByTag(string tagName, CancellationToken ct = default(CancellationToken))
     {
@@ -455,6 +480,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Limit value cannot be less than 1 or greater than 10,000.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetBounces(int limit = 100, CancellationToken ct = default(CancellationToken))
     {
@@ -476,6 +502,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="address">Valid email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Bounce address cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetBounce(MailAddress address, CancellationToken ct = default(CancellationToken))
     {
@@ -492,6 +519,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="bounce">The bounce record to add or update.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Bounce cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> AddBounce(IBounceRequest bounce, CancellationToken ct = default(CancellationToken))
     {
@@ -510,6 +538,8 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="bounces"></param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">List of bounces cannot be null or empty.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">List of bounces cannot exceed maximum limit of 1,000.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> AddBounces(ICollection<IBounceRequest> bounces, CancellationToken ct = default(CancellationToken))
     {
@@ -538,6 +568,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="address">Valid email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Bounce address cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> DeleteBounce(MailAddress address, CancellationToken ct = default(CancellationToken))
     {
@@ -564,6 +595,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentOutOfRangeException">The limit cannot be less than one or greater than 10,000.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetUnsubscribers(int limit = 100, CancellationToken ct = default(CancellationToken))
     {
@@ -601,6 +633,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="unsubscriber"></param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The unsubscriber cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> AddUnsubscriber(IUnsubscriberRequest unsubscriber, CancellationToken ct = default(CancellationToken))
     {
@@ -619,6 +652,8 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="unsubscribers"></param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">List of unsubscribers cannot be null or empty.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The list of unsubcribers cannot exceed the maximum limit of 1,000.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> AddUnsubscribers(ICollection<IUnsubscriberRequest> unsubscribers, CancellationToken ct = default(CancellationToken))
     {
@@ -649,17 +684,14 @@ namespace MailgunSharp
     /// <param name="address">The address of the unsubscribed person.</param>
     /// <param name="tag">The tag the unsubscriber is wanting to remove.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Unsubscriber address cannot be null or empty.</exception>
+    /// <exception cref="FormatException">Tag must be ASCII with a maximum length of 128 ASCII characters.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> DeleteUnsubscriber(MailAddress address, string tag = "", CancellationToken ct = default(CancellationToken))
     {
       if (address == null)
       {
         throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
-      }
-
-      if (tag.IsNullEmptyWhitespace())
-      {
-        throw new ArgumentNullException(nameof(tag), "Tag cannot be null or empty!");
       }
 
       if (this.doesTagNameHaveCorrectFormatting(tag))
@@ -677,6 +709,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentOutOfRangeException">The limit cannot be less than 1, and the limit has a maximum value of 10,000.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetComplaints(int limit = 100, CancellationToken ct = default(CancellationToken))
     {
@@ -698,6 +731,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="address">Valid email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The address cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetComplaint(MailAddress address, CancellationToken ct = default(CancellationToken))
     {
@@ -712,8 +746,9 @@ namespace MailgunSharp
     /// <summary>
     /// Add an address to the complaints list.
     /// </summary>
-    /// <param name="complaint"></param>
+    /// <param name="complaint">The complaint address to be added to the complaint supression list.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Complaint cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> AddComplaint(IComplaintRequest complaint, CancellationToken ct = default(CancellationToken))
     {
@@ -732,6 +767,8 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="complaints">Multiple complaint records.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">List of complaints cannot be null or empty.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">List of complaints cannot exceed maximum limit of 1,000.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> AddComplaints(ICollection<IComplaintRequest> complaints, CancellationToken ct = default(CancellationToken))
     {
@@ -760,6 +797,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="address">Valid email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Address cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> DeleteComplaint(MailAddress address, CancellationToken ct = default(CancellationToken))
     {
@@ -776,9 +814,15 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentOutOfRangeException">The limit value cannot be less than 1.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetMailingLists(int limit = 100, CancellationToken ct = default(CancellationToken))
     {
+      if (limit < 1)
+      {
+        throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit cannot be an integer value less than 1!");
+      }
+
       return this.httpClient.GetAsync($"lists/pages?limit={limit}", ct);
     }
 
@@ -787,6 +831,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="address">Valid email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The mailing list address cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetMailingList(MailAddress address, CancellationToken ct = default(CancellationToken))
     {
@@ -803,6 +848,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="mailingList">The mailing list to be added.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Mailing list cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> AddMailingList(IMailingList mailingList, CancellationToken ct = default(CancellationToken))
     {
@@ -822,6 +868,7 @@ namespace MailgunSharp
     /// <param name="address">Valid email address.</param>
     /// <param name="mailingList">The mailing list to be updated.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Mailing list address cannot be null or empty, and mailing list cannot be null.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> UpdateMailingList(MailAddress address, IMailingList mailingList, CancellationToken ct = default(CancellationToken))
     {
@@ -845,6 +892,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="address">Valid email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Mailing list address cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> DeleteMailingList(MailAddress address, CancellationToken ct = default(CancellationToken))
     {
@@ -863,12 +911,19 @@ namespace MailgunSharp
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="subscribed">True, lists subscribed; false, for list unsubscribed. If null will list all.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Mailing List address cannot be null or empty.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The limit value cannot be less than 1.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetMailingListMembers(MailAddress address, int limit = 100, bool? subscribed = null, CancellationToken ct = default(CancellationToken))
     {
       if (address == null)
       {
         throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
+      }
+
+      if (limit < 1)
+      {
+        throw new ArgumentOutOfRangeException(nameof(limit), limit, "Limit cannot be an integer value less than 1!");
       }
 
       var subbed = (subscribed.HasValue) ? subscribed.Value.ToYesNo() : "";
@@ -884,6 +939,7 @@ namespace MailgunSharp
     /// <param name="mailingListAddress">The mailing list's email address.</param>
     /// <param name="memberAddress">The member's email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Mailing List member address and Mailing List address cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetMailingListMember(MailAddress mailingListAddress, MailAddress memberAddress, CancellationToken ct = default(CancellationToken))
     {
@@ -906,6 +962,7 @@ namespace MailgunSharp
     /// <param name="address">Valid email address.</param>
     /// <param name="member">A mailing list member.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Mailing List member and Mailing List address cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> AddMailingListMember(MailAddress address, IMember member, CancellationToken ct = default(CancellationToken))
     {
@@ -931,6 +988,8 @@ namespace MailgunSharp
     /// <param name="members">List of members to be added to the mailing list.</param>
     /// <param name="upsert">True, to update existing members; false, to ignore duplicates.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">List of Members and Mailing List address cannot be null or empty.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">List of members cannot exceed a maximum limit of 1,000 records.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> AddMailingListMembers(MailAddress address, ICollection<IMember> members, bool upsert, CancellationToken ct = default(CancellationToken))
     {
@@ -971,6 +1030,7 @@ namespace MailgunSharp
     /// <param name="memberAddress">The member's email address.</param>
     /// <param name="member">A mailing list member.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Mailing list, member, and member address cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> UpdateMailingListMember(MailAddress mailingListAddress, MailAddress memberAddress, IMember member, CancellationToken ct = default(CancellationToken))
     {
@@ -1000,6 +1060,7 @@ namespace MailgunSharp
     /// <param name="mailingListAddress">The mailing list's email address.</param>
     /// <param name="memberAddress">The member's email address.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Mailing list and member cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> DeleteMailingListMember(MailAddress mailingListAddress, MailAddress memberAddress, CancellationToken ct = default(CancellationToken))
     {

@@ -243,6 +243,8 @@ namespace MailgunSharp.Messages
     /// <summary>
     /// Get the message as a list of key-value string pairs to be used in sending an http request.
     /// </summary>
+    /// <exception cref="ArgumentNullException">Recipients cannot be null or empty, and the sender cannot be null or empty.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The maximum number of recipients is 1,000 and cannot be exceeded.  Will throw if not having same number of recipients as recipient variables.</exception>
     /// <returns>List of key-value string pairs.</returns>
     public ICollection<KeyValuePair<string, string>> AsKeyValueCollection()
     {

@@ -61,6 +61,8 @@ namespace MailgunSharp.Messages
     /// Add a file to be attached to the this.message.
     /// </summary>
     /// <param name="attachment">A file attachment object with the file contents and filename.</param>
+    /// <exception cref="ArgumentNullException">The attachment cannot be null or empty.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The maximum message size cannot exceed 25 MB in size.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder AddAttachment(IFileAttachment attachment)
     {
@@ -92,12 +94,14 @@ namespace MailgunSharp.Messages
     /// Add a file information to be read at a later time and added as a message attachment.
     /// </summary>
     /// <param name="attachment">The file info of the file to be attached.</param>
+    /// <exception cref="ArgumentNullException">The attachment cannot be null or empty.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The maximum message size cannot exceed 25 MB in size.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder AddAttachment(FileInfo attachment)
     {
       if (attachment == null)
       {
-        throw new ArgumentNullException("Attachment cannot be null!");
+        throw new ArgumentNullException(nameof(attachment), "Attachment cannot be null!");
       }
 
       if (this.message.Attachments == null)
@@ -123,6 +127,7 @@ namespace MailgunSharp.Messages
     /// Add a valid email address to be added to the "blind carbon copy" header.
     /// </summary>
     /// <param name="bcc">A valid email address to be added to the bcc list.</param>
+    /// <exception cref="ArgumentNullException">The bcc cannot be null or empty.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder AddBcc(MailAddress bcc)
     {
@@ -144,6 +149,7 @@ namespace MailgunSharp.Messages
     /// Add a valid email address to be added to the "carbon copy" header.
     /// </summary>
     /// <param name="cc">A valid email address to be added to the cc list.</param>
+    /// <exception cref="ArgumentNullException">The cc cannot be null or empty.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder AddCc(MailAddress cc)
     {
@@ -165,6 +171,8 @@ namespace MailgunSharp.Messages
     /// Add the in-line image file information to be written into the this.message.
     /// </summary>
     /// <param name="image"></param>
+    /// <exception cref="ArgumentNullException">The inline image cannot be null or empty.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The maximum message size cannot of 25 MB cannot be exceeded.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder AddInlineImage(FileInfo image)
     {
@@ -196,6 +204,8 @@ namespace MailgunSharp.Messages
     /// Add the in-line image file attachment to be written into the this.message.
     /// </summary>
     /// <param name="image">The file attachment object with the file contents and filename.</param>
+    /// <exception cref="ArgumentNullException">Image cannot be null or empty.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The maximum message size cannot of 25 MB cannot be exceeded.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder AddInlineImage(IFileAttachment image)
     {
@@ -227,6 +237,8 @@ namespace MailgunSharp.Messages
     /// Add a recipient to the list of recipients for the "to" header.
     /// </summary>
     /// <param name="recipient">A valid recipient with a valid email address.</param>
+    /// <exception cref="ArgumentNullException">Recipient cannot be null or empty.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The maximum number of recipients cannot exceed 1,000.  Also, recipients must match recipient variables, if provided.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder AddRecipient(IRecipient recipient)
     {
@@ -274,6 +286,8 @@ namespace MailgunSharp.Messages
     /// Add a list of recipients for the "to" header, will all contain valid email address for each recipient.
     /// </summary>
     /// <param name="recipients">The list of recipients to send the message to.</param>
+    /// <exception cref="ArgumentNullException">Recipients cannot be null or empty.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The maximum number of recipients cannot exceed 1,000.  Also, recipients must match recipient variables, if provided.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder AddRecipients(ICollection<IRecipient> recipients)
     {
@@ -321,15 +335,11 @@ namespace MailgunSharp.Messages
     /// Set the email address for the "from" header.
     /// </summary>
     /// <param name="sender">The valid email address of the sender.</param>
+    /// <exception cref="ArgumentNullException">The sender cannot be null or empty.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder SetFrom(MailAddress sender)
     {
-      if (sender == null)
-      {
-        throw new ArgumentNullException(nameof(sender), "From cannot be null!");
-      }
-
-      this.message.From = sender;
+      this.message.From = sender ?? throw new ArgumentNullException(nameof(sender), "From cannot be null!");
 
       return this;
     }
@@ -338,12 +348,14 @@ namespace MailgunSharp.Messages
     /// Set the html content of the this.message.
     /// </summary>
     /// <param name="html">A string containing html content.</param>
+    /// <exception cref="ArgumentNullException">Html message body cannot be empty or null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Message size cannot exceed 25 MBs.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder SetHtmlContentBody(string html)
     {
       if (html.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException("HTML Body cannot be null!");
+        throw new ArgumentNullException(nameof(html), "HTML Body cannot be null!");
       }
 
       var sizeInBytes = (long)(html.Length * sizeof(char));
@@ -364,6 +376,8 @@ namespace MailgunSharp.Messages
     /// Set the subject of the this.message.
     /// </summary>
     /// <param name="subject"></param>
+    /// <exception cref="ArgumentNullException">Subject cannot be null or empty.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Message cannot exceed a maximum size of 25 MB.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder SetSubject(string subject)
     {
@@ -400,6 +414,7 @@ namespace MailgunSharp.Messages
     /// Set the text content of the this.message.
     /// </summary>
     /// <param name="text">A string of plain text.</param>
+    /// <exception cref="ArgumentNullException">The message body text cannot be null, empty, or whitespace.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder SetTextContentBody(string text)
     {
@@ -417,6 +432,7 @@ namespace MailgunSharp.Messages
     /// Add a tag to the message to be used to organize the messages that are sent.
     /// </summary>
     /// <param name="tag">The tag name.</param>
+    /// <exception cref="ArgumentNullException">The tag name cannot be null or empty.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder AddTag(string tag)
     {
@@ -488,6 +504,7 @@ namespace MailgunSharp.Messages
     /// </summary>
     /// <param name="headerName">The name of the header.</param>
     /// <param name="value">The value of the header parameter.</param>
+    /// <exception cref="ArgumentNullException">Custom header name and value cannot be null or empty.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder AddCustomHeader(string headerName, string value)
     {
@@ -548,6 +565,7 @@ namespace MailgunSharp.Messages
     /// </summary>
     /// <param name="datetime">The datetime of the delivery as a UTC time.</param>
     /// <param name="tzInfo">Set the timezone you perfer to use.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Delivery date cannot exceed maximum 3 days into the future.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder SetDeliveryTime(DateTime datetime, TimeZoneInfo tzInfo = null)
     {
@@ -572,6 +590,7 @@ namespace MailgunSharp.Messages
     /// </summary>
     /// <param name="name">The name of the variable.</param>
     /// <param name="value">The value of the variable.</param>
+    /// <exception cref="ArgumentNullException">Name and Value cannot be null or empty.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder AddCustomData(string name, JObject value)
     {
@@ -599,6 +618,7 @@ namespace MailgunSharp.Messages
     /// Add the Reply-To address as a custom header.
     /// </summary>
     /// <param name="replyTo">A valid email address to be used for the recipients to reply to.</param>
+    /// <exception cref="ArgumentNullException">Reply to cannot be null or empty.</exception>
     /// <returns>The instance of the builder.</returns>
     public IMessageBuilder SetReplyTo(MailAddress replyTo)
     {
@@ -621,10 +641,7 @@ namespace MailgunSharp.Messages
     /// Get the instance of the message that was built.
     /// </summary>
     /// <returns>The instance of the message that was built.</returns>
-    public IMessage Build()
-    {
-      return this.message;
-    }
+    public IMessage Build() => this.message;
 
     /// <summary>
     /// Does the message exceed the 25MB size limit?

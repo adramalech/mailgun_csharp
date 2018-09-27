@@ -1022,6 +1022,7 @@ namespace MailgunSharp
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="skip">Number of records to skip.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentOutOfRangeException">The limit has to be a value greater than 0, and skip cannot be a value less than 0.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetDomains(int limit = 100, int skip = 0, CancellationToken ct = default(CancellationToken))
     {
@@ -1043,6 +1044,8 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="domainName">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Domain name cannot be null or empty.</exception>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetDomain(string domainName, CancellationToken ct = default(CancellationToken))
     {
@@ -1066,6 +1069,8 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="domainName">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Domain name cannot be null or empty.</exception>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetAndVerifyDomain(string domainName, CancellationToken ct = default(CancellationToken))
     {
@@ -1087,6 +1092,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="domain">The domain object to be created.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Domain name cannot be null or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> AddDomain(IDomainRequest domain, CancellationToken ct = default(CancellationToken))
     {
@@ -1105,6 +1111,8 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="domainName">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Domain name cannot be null or empty.</exception>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> DeleteDomain(string domainName, CancellationToken ct = default(CancellationToken))
     {
@@ -1128,6 +1136,9 @@ namespace MailgunSharp
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="skip">Number of records to skip.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Domain name cannot be null or empty.</exception>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The limit value cannot be less than 1, and skip cannot be less than 0.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetDomainCredentials(string domainName, int limit = 100, int skip = 0, CancellationToken ct = default(CancellationToken))
     {
@@ -1160,6 +1171,8 @@ namespace MailgunSharp
     /// <param name="domainName">The domain name.</param>
     /// <param name="credential">The SMTP credentials to be added to the specified domain.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The Domain name and domain credential cannot be null or empty.</exception>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> AddDomainCredential(string domainName, IDomainCredentialRequest credential, CancellationToken ct = default(CancellationToken))
     {
@@ -1190,6 +1203,8 @@ namespace MailgunSharp
     /// <param name="username">The username to find the domain credentials with.</param>
     /// <param name="password">The password to change.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The Domain name, username, and password cannot be null or empty.</exception>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.  The password has a minimum required lenght of 5 and a maximum length of 32.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> UpdateDomainCredentialPassword(string domainName, string username, string password, CancellationToken ct = default(CancellationToken))
     {
@@ -1246,6 +1261,8 @@ namespace MailgunSharp
     /// <param name="domainName">The domain name.</param>
     /// <param name="username">The username of the credentials to be removed.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The Domain name cannot be null or empty.</exception>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> DeleteDomainCredential(string domainName, string username, CancellationToken ct = default(CancellationToken))
     {
@@ -1267,6 +1284,8 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="domainName">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The Domain name cannot be null or empty.</exception>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetDomainDeliveryConnectionSettings(string domainName, CancellationToken ct = default(CancellationToken))
     {
@@ -1296,6 +1315,8 @@ namespace MailgunSharp
     /// False, Mailgun will verify certificate and hostname. If either one cannot be verified, a TLS connection will not be established.
     /// </param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The Domain name cannot be null or empty.</exception>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> UpdateDomainDeliveryConnectionSettings(string domainName, bool requireTLS = false, bool skipVerification = false, CancellationToken ct = default(CancellationToken))
     {
@@ -1325,6 +1346,8 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="domainName">The domain name.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The Domain name cannot be null or empty.</exception>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetDomainTrackingSettings(string domainName, CancellationToken ct = default(CancellationToken))
     {
@@ -1347,6 +1370,8 @@ namespace MailgunSharp
     /// <param name="domainName">The domain name.</param>
     /// <param name="active">True, enable; false, disable.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The Domain name cannot be null or empty.</exception>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> UpdateDomainOpenTrackingSettings(string domainName, bool active, CancellationToken ct = default(CancellationToken))
     {
@@ -1376,6 +1401,8 @@ namespace MailgunSharp
     /// <param name="domainName">The domain name.</param>
     /// <param name="active">True, enable; false, disable.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The Domain name cannot be null or empty.</exception>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> UpdateDomainClickTrackingSettings(string domainName, DomainClickTrackingActive active, CancellationToken ct = default(CancellationToken))
     {
@@ -1409,6 +1436,8 @@ namespace MailgunSharp
     /// <param name="customHtmlFooter">Custom HTML version of unsubscribe footer.</param>
     /// <param name="customTextFooter">Custom text version of the unsubscribe footer.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The Domain name cannot be null or empty.</exception>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> UpdateDomainUnsubscribeTrackingSettings(string domainName, bool active, string customHtmlFooter, string customTextFooter, CancellationToken ct = default(CancellationToken))
     {
@@ -1443,6 +1472,8 @@ namespace MailgunSharp
     /// false, will be the same DKIM Authority as the root domain registered.
     /// </param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="FormatException">The Domain name must be correctly formatted, use with RFC 2396 and RFC 2732 for reference.</exception>
+    /// <exception cref="ArgumentNullException">The domain name is required and cannot be null.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> ChangeDomainDKIMAuthority(string domainName, bool self, CancellationToken ct = default(CancellationToken))
     {
@@ -1471,6 +1502,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="statsRequest">The request params for grabbing filtered stats items.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The stats request is required and cannot be null.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetStatsTotal(IStatsRequest statsRequest, CancellationToken ct = default(CancellationToken))
     {
@@ -1487,6 +1519,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="eventRequest">The event request params for grabbing filtered set of event records.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The event request is required and cannot be null.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetEvents(IEventRequest eventRequest, CancellationToken ct = default(CancellationToken))
     {
@@ -1503,6 +1536,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="uri">The url of the page to retreive the data from.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">URI of the page requested is required and cannot be null.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetPage(Uri uri, CancellationToken ct = default(CancellationToken))
     {
@@ -1522,6 +1556,7 @@ namespace MailgunSharp
     /// <param name="limit">Number of entries to return.</param>
     /// <param name="skip">Number of records to skip.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentOutOfRangeException">If skip value is less than zero, or the limit of records returned is less than one, throw an exception.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetRoutes(int limit = 100, int skip = 0, CancellationToken ct = default(CancellationToken))
     {
@@ -1543,6 +1578,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="id">ID of the route.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The route id cannot be null, empty, or whitespace.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetRoute(string id, CancellationToken ct = default(CancellationToken))
     {
@@ -1559,6 +1595,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="route">The route to be created.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">The route to be added cannot be null.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> AddRoute(IRoute route, CancellationToken ct = default(CancellationToken))
     {
@@ -1580,6 +1617,7 @@ namespace MailgunSharp
     /// <param name="id">ID of the route.</param>
     /// <param name="route">The route to be updated.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Route ID and the route cannot be null, or empty.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> UpdateRoute(string id, IRoute route, CancellationToken ct = default(CancellationToken))
     {
@@ -1605,6 +1643,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="id">ID of the route.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Route ID cannot be null, empty, or whitespace.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> DeleteRoute(string id, CancellationToken ct = default(CancellationToken))
     {
@@ -1631,6 +1670,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="name">The name of the webhook.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Webhook cannot be null, empty, or whitespace.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> GetWebhookDetails(string name, CancellationToken ct = default(CancellationToken))
     {
@@ -1647,6 +1687,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="webhook">The new webhook to be created.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Webhook cannot be null, empty, or whitespace.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> CreateWebhook(IWebhook webhook, CancellationToken ct = default(CancellationToken))
     {
@@ -1668,6 +1709,8 @@ namespace MailgunSharp
     /// <param name="type">The webhook's type to be updated.</param>
     /// <param name="urls">The webhook's list of urls to be updated.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Webhook URLs cannot be null, or empty.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The Webhook URLs cannot exceed the maximum value of 3 URLs.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> UpdateWebhook(WebHookType type, ICollection<Uri> urls, CancellationToken ct = default(CancellationToken))
     {
@@ -1700,6 +1743,7 @@ namespace MailgunSharp
     /// </summary>
     /// <param name="name">The name of the webhook.</param>
     /// <param name="ct">The async task's cancellation token that will become aware of the caller cancelling the task and will terminate.</param>
+    /// <exception cref="ArgumentNullException">Webhook name is required and cannot be null, empty, or whitespace.</exception>
     /// <returns>An async Task with the http response message.</returns>
     public Task<HttpResponseMessage> DeleteWebhook(string name, CancellationToken ct = default(CancellationToken))
     {

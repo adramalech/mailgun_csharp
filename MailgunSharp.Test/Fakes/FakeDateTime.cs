@@ -5,20 +5,20 @@ namespace MailgunSharp.Test.Fakes
 {
   public class FakeDateTime : IDateTimeProvider
   {
-    public DateTime Now
+    private DateTimeKind? kind;
+
+    public FakeDateTime()
     {
-      get
-      {
-        return new DateTime(1970, 1, 1, 0, 0 , 0);
-      }
+      this.kind = null;
     }
 
-    public DateTime UtcNow
+    public FakeDateTime(DateTimeKind kind)
     {
-      get
-      {
-        return new DateTime(1970, 1, 1, 0, 0, 0, 0);
-      }
+      this.kind = kind;
     }
+
+    public DateTime Now => (this.kind.HasValue) ? new DateTime(1970, 1, 1, 0, 0, 0, this.kind.Value) : new DateTime(1970, 1, 1, 0, 0, 0);
+
+    public DateTime UtcNow => new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
   }
 }

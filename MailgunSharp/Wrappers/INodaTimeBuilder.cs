@@ -6,9 +6,6 @@ namespace MailgunSharp.Wrappers
   {
     DateTime Build();
 
-    INodaTimeBuilder SetDateTimeUtc(int year, int month, int day, int hour, int minute, int second);
-    INodaTimeBuilder SetDateTimeUtc(DateTime datetime);
-
     INodaTimeBuilder AddDays(int days);
     INodaTimeBuilder SubtractDays(int days);
 

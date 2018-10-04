@@ -1,7 +1,7 @@
-using System;
 using System.Net.Mail;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using NodaTime;
 
 namespace MailgunSharp.Supression
 {
@@ -16,8 +16,8 @@ namespace MailgunSharp.Supression
     /// <summary>
     /// Timestamp of a complaint event.
     /// </summary>
-    /// <value>DateTime</value>
-    DateTime CreatedAt { get; }
+    /// <value>NodaTime.Instant</value>
+    Instant? CreatedAt { get; }
 
     /// <summary>
     /// Get Complaint Request object represented as json object for http request.

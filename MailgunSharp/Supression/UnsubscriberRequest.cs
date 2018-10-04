@@ -3,6 +3,8 @@ using System.Net.Mail;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using MailgunSharp.Extensions;
+using NodaTime;
 
 namespace MailgunSharp.Supression
 {
@@ -26,13 +28,13 @@ namespace MailgunSharp.Supression
     /// <value>string</value>
     public string Tag => this.tag;
 
-    private readonly DateTime createdAt;
+    private readonly Instant? createdAt;
 
     /// <summary>
     /// Timestamp of an unsubscribe event.
     /// </summary>
     /// <value>DateTime</value>
-    public DateTime CreatedAt => this.createdAt;
+    public Instant? CreatedAt => this.createdAt;
 
     /// <summary>
     /// Create an instance of unsubscriber request class.
@@ -40,21 +42,12 @@ namespace MailgunSharp.Supression
     /// <param name="address">A valid email address.</param>
     /// <param name="tag">A specific tag to unsubscribe from, will default to "*" which will unsubscribe an address from all domain's correspondence.</param>
     /// <param name="createdAt">Timestamp of an unsubscribe event.</param>
-    /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
     /// <exception cref="ArgumentNullException">The address is a required parameter.</exception>
-    public UnsubscriberRequest(MailAddress address, string tag = "*", DateTime? createdAt = null, TimeZoneInfo tzInfo = null)
+    public UnsubscriberRequest(MailAddress address, string tag = "*", Instant? createdAt = null)
     {
       this.address = address ?? throw new ArgumentNullException(nameof(address), "Address cannot be null or empty!");
       this.tag = tag;
-
-      if (createdAt.HasValue)
-      {
-        this.createdAt = (tzInfo == null) ? createdAt.Value.ToUniversalTime() : TimeZoneInfo.ConvertTimeToUtc(createdAt.Value.ToUniversalTime(), tzInfo);
-      }
-      else
-      {
-        this.createdAt = (tzInfo == null) ? DateTime.UtcNow : TimeZoneInfo.ConvertTimeToUtc(DateTime.UtcNow, tzInfo);
-      }
+      this.createdAt = (createdAt.HasValue) ? this.createdAt : null;
     }
 
     /// <summary>
@@ -66,9 +59,13 @@ namespace MailgunSharp.Supression
       var jsonObject = new JObject
       {
         ["address"] = this.address.Address,
-        ["tag"] = this.tag,
-        ["created_at"] = (((DateTimeOffset) DateTime.UtcNow).ToUnixTimeSeconds()).ToString()
+        ["tag"] = this.tag
       };
+
+      if (this.createdAt.HasValue)
+      {
+        jsonObject.Add("created_at", this.createdAt.Value.ToRfc2822DateFormat());
+      }
 
       return jsonObject;
     }
@@ -82,9 +79,13 @@ namespace MailgunSharp.Supression
       var content = new Collection<KeyValuePair<string, string>>()
       {
         new KeyValuePair<string, string>("address", this.address.Address),
-        new KeyValuePair<string, string>("tag", this.tag),
-        new KeyValuePair<string, string>("created_at", (((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds()).ToString())
+        new KeyValuePair<string, string>("tag", this.tag)
       };
+
+      if (this.createdAt.HasValue)
+      {
+        content.Add("created_at", this.createdAt.Value.ToRfc2822DateFormat());
+      }
 
       return content;
     }

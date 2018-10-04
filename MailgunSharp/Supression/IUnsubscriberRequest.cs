@@ -1,4 +1,4 @@
-using System;
+using NodaTime;
 using System.Net.Mail;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
@@ -22,8 +22,8 @@ namespace MailgunSharp.Supression
     /// <summary>
     /// Timestamp of an unsubscribe event.
     /// </summary>
-    /// <value>DateTime</value>
-    DateTime CreatedAt { get; }
+    /// <value>NodaTime.Instant</value>
+    Instant? CreatedAt { get; }
 
     /// <summary>
     /// Get Unsubscriber request object represented as a json object for http request.

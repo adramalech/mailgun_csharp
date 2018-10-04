@@ -19,12 +19,14 @@ namespace MailgunSharp.Test.Wrappers
     {
       var builder = new NodaTimeBuilder(1970, 1, 1, 0, 0, 0);
 
-      var dt = builder
+      var instant = builder
                   .AddDays(1)
                   .AddHours(1)
                   .AddMinutes(1)
                   .AddSeconds(1)
                   .Build();
+
+      var dt = instant.ToDateTimeUtc();
 
       Assert.Equal(DateTimeKind.Utc, dt.Kind);
       Assert.Equal(1970, dt.Year);
@@ -41,12 +43,14 @@ namespace MailgunSharp.Test.Wrappers
     {
       var builder = new NodaTimeBuilder(this.clock);
 
-      var dt = builder
+      var instant = builder
                   .AddDays(1)
                   .AddHours(1)
                   .AddMinutes(1)
                   .AddSeconds(1)
                   .Build();
+
+      var dt = instant.ToDateTimeUtc();
 
       Assert.Equal(DateTimeKind.Utc, dt.Kind);
       Assert.Equal(1970, dt.Year);
@@ -71,10 +75,12 @@ namespace MailgunSharp.Test.Wrappers
     [Fact]
     public void NodaTimeBuilder_If_Add_Add_Subtract_Same_Value_Days_Should_Not_Change_Date()
     {
-      var dt = new NodaTimeBuilder(this.clock)
+      var instant = new NodaTimeBuilder(this.clock)
                           .AddDays(1)
                           .SubtractDays(1)
                           .Build();
+
+      var dt = instant.ToDateTimeUtc();
 
       Assert.Equal(DateTimeKind.Utc, dt.Kind);
       Assert.Equal(1970, dt.Year);
@@ -90,9 +96,11 @@ namespace MailgunSharp.Test.Wrappers
     public void NodaTimeBuilder_Initialize_UTC_Datetime_Now_Subtract_Day_Should_Rollback_To_LastDay_Previous_Year()
     {
       //1970-01-01 00:00:00.000 to 1969-12-31 00:00:00.000.
-      var dt = new NodaTimeBuilder(new FakeDateTime().UtcNow)
+      var instant = new NodaTimeBuilder(new FakeDateTime().UtcNow)
                   .SubtractDays(1)
                   .Build();
+
+      var dt = instant.ToDateTimeUtc();
 
       Assert.Equal(1969, dt.Year);
       Assert.Equal(12, dt.Month);

@@ -93,7 +93,7 @@ namespace MailgunSharp.Wrappers
     /// Build the Nodatime instance based on order of operations.
     /// </summary>
     /// <returns>System.DateTime value in UTC.</returns>
-    public DateTime Build()
+    public Instant Build()
     {
       //initialize the clock if provided.
       if (this.clock != null)
@@ -119,7 +119,7 @@ namespace MailgunSharp.Wrappers
       }
 
       //return the datetime in utc.
-      return this.now.ToDateTimeUtc();
+      return this.now;
     }
   }
 }

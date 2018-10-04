@@ -1,10 +1,10 @@
-using System;
+using NodaTime;
 
 namespace MailgunSharp.Wrappers
 {
   public interface INodaTimeBuilder
   {
-    DateTime Build();
+    Instant Build();
 
     INodaTimeBuilder AddDays(int days);
     INodaTimeBuilder SubtractDays(int days);

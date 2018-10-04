@@ -1,4 +1,4 @@
-using System;
+using NodaTime;
 using System.Net.Mail;
 using System.IO;
 using System.Collections.Generic;
@@ -82,9 +82,8 @@ namespace MailgunSharp.Messages
     /// Set the delivery time of the message to be sent, will use UTC time.
     /// </summary>
     /// <param name="datetime">The datetime of the delivery as a UTC time.</param>
-    /// <param name="tzInfo">Set the timezone you perfer to use.</param>
     /// <returns>The instance of the builder.</returns>
-    IMessageBuilder SetDeliveryTime(DateTime datetime, TimeZoneInfo tzInfo = null);
+    IMessageBuilder SetDeliveryTime(Instant datetime);
 
     /// <summary>
     /// Add a file to be attached to the message.

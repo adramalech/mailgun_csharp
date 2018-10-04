@@ -1,4 +1,4 @@
-using System;
+using NodaTime;
 using System.IO;
 using System.Net.Mail;
 using System.Net.Http;
@@ -90,8 +90,8 @@ namespace MailgunSharp.Messages
     /// <summary>
     /// What is the desired time of delivery.
     /// </summary>
-    /// <value>DateTime</value>
-    DateTime? DeliveryTime { get; set; }
+    /// <value>NodaTime.Instant</value>
+    Instant? DeliveryTime { get; set; }
 
     /// <summary>
     /// Enables sending in test mode.

@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using MailgunSharp.Extensions;
+using MailgunSharp.Wrappers;
+using NodaTime;
 
 namespace MailgunSharp.Messages
 {
@@ -14,6 +16,8 @@ namespace MailgunSharp.Messages
     /// The message to be built.
     /// </summary>
     private IMessage message;
+
+    private NodaTimeProvider provider;
 
     /// <summary>
     /// The maximum size of a message in bytes, or 25MB.
@@ -55,6 +59,7 @@ namespace MailgunSharp.Messages
       this.messageSize = 0;
       this.recipientCount = 0;
       this.recipientVarCount = 0;
+      this.provider = new NodaTimeProvider();
     }
 
     /// <summary>
@@ -564,23 +569,20 @@ namespace MailgunSharp.Messages
     /// Set the delivery time of the message to be sent, will use UTC time.
     /// </summary>
     /// <param name="datetime">The datetime of the delivery as a UTC time.</param>
-    /// <param name="tzInfo">Set the timezone you perfer to use.</param>
     /// <exception cref="ArgumentOutOfRangeException">Delivery date cannot exceed maximum 3 days into the future.</exception>
     /// <returns>The instance of the builder.</returns>
-    public IMessageBuilder SetDeliveryTime(DateTime datetime, TimeZoneInfo tzInfo = null)
+    public IMessageBuilder SetDeliveryTime(Instant datetime)
     {
-      var now = DateTime.UtcNow;
+      var now = this.provider.Now();
 
-      var localUtcDateTime = (tzInfo == null) ? datetime.ToUniversalTime() : TimeZoneInfo.ConvertTimeToUtc(datetime.ToUniversalTime(), tzInfo);
-
-      var difference = localUtcDateTime.Subtract(now);
+      var difference = now.Minus(datetime);
 
       if (difference.Days > 3)
       {
         throw new ArgumentOutOfRangeException(nameof(datetime), datetime, "Delivery DateTime cannot exceed 3 days into the future!");
       }
 
-      this.message.DeliveryTime = localUtcDateTime;
+      this.message.DeliveryTime = datetime;
 
       return this;
     }

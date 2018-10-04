@@ -8,6 +8,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using MailgunSharp.Extensions;
+using NodaTime;
 
 namespace MailgunSharp.Messages
 {
@@ -94,8 +95,8 @@ namespace MailgunSharp.Messages
     /// <summary>
     /// What is the desired time of delivery.  Delivery times can only be scheduled a maximum of three days in advance.
     /// </summary>
-    /// <value>DateTime</value>
-    public DateTime? DeliveryTime { get; set; }
+    /// <value>NodaTime.Instant</value>
+    public Instant? DeliveryTime { get; set; }
 
     /// <summary>
     /// Enables sending in test mode.
@@ -345,7 +346,7 @@ namespace MailgunSharp.Messages
 
       if (this.DeliveryTime.HasValue)
       {
-        content.Add("o:deliverytime", ((DateTimeOffset)this.DeliveryTime.Value).ToUnixTimeSeconds().ToString());
+        content.Add("o:deliverytime", this.DeliveryTime.Value.ToRfc2822DateFormat());
       }
 
       return content;

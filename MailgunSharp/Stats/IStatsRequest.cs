@@ -1,4 +1,4 @@
-using System;
+using NodaTime;
 using System.Collections.Generic;
 using MailgunSharp.Enums;
 
@@ -37,13 +37,13 @@ namespace MailgunSharp.Stats
     /// The starting time.
     /// </summary>
     /// <value>DateTime UTC.</value>
-    DateTime Start { get; set; }
+    Instant? Start { get; set; }
 
     /// <summary>
     /// The end date.
     /// </summary>
     /// <value>DateTime UTC.</value>
-    DateTime End { get; set; }
+    Instant? End { get; set; }
 
     /// <summary>
     /// Returns the properties as a query string to be used in an HTTP request.

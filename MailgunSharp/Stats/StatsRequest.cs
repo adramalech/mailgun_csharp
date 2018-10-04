@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MailgunSharp.Enums;
+using MailgunSharp.Extensions;
 using MailgunSharp.Request;
+using MailgunSharp.Wrappers;
+using NodaTime;
 
 namespace MailgunSharp.Stats
 {
@@ -33,14 +36,16 @@ namespace MailgunSharp.Stats
     /// Defaults to 7 days, one week, from the current datetime.
     /// </summary>
     /// <value>DateTime UTC.</value>
-    public DateTime Start { get; set; }
+    public Instant? Start { get; set; }
 
     /// <summary>
     /// The end date.
     /// Defaults to current datetime UTC.
     /// </summary>
     /// <value>DateTime UTC.</value>
-    public DateTime End { get; set; }
+    public Instant? End { get; set; }
+
+    private NodaTimeProvider provider;
 
     /// <summary>
     /// Create a new instance of stats request object.
@@ -52,20 +57,35 @@ namespace MailgunSharp.Stats
     public StatsRequest()
     {
       this.Resolution = TimeResolution.DAY;
-      this.End = DateTime.UtcNow;
-      this.Start = this.End.AddDays(-7);
       this.EventTypes = new Collection<EventType>();
+      this.provider = new NodaTimeProvider();
     }
 
-    /// <summary>
-    /// Returns the properties as a query string to be used in an HTTP request.
+    ///  <summary>
+    ///  Returns the properties as a query string to be used in an HTTP request.
     ///
-    /// Datetime fields start and end window ranges will be converted into unix epoch format.
-    /// </summary>
+    ///  Datetime fields start and end window ranges will be converted into unix epoch format.
+    ///  </summary>
+    /// <exception cref="ArgumentOutOfRangeException">Starting Date cannot be after ending date for datetime range.</exception>
     /// <returns>string value as a http query string.</returns>
     public string ToQueryString()
     {
       var queryStringBuilder = new QueryStringBuilder();
+
+      if (!this.End.HasValue )
+      {
+        this.End = this.provider.Now();
+      }
+
+      if (!this.Start.HasValue)
+      {
+        this.Start = this.provider.Now().Minus(NodaTime.Duration.FromDays(7));
+      }
+
+      if (this.Start.Value.CompareTo(this.End.Value) > 0)
+      {
+        throw new ArgumentOutOfRangeException(nameof(this.Start), "The starting date range window cannot be after the ending date range.");
+      }
 
       if (this.Duration.HasValue && this.Resolution.HasValue)
       {
@@ -74,8 +94,8 @@ namespace MailgunSharp.Stats
       else
       {
         queryStringBuilder
-          .Append("start", ((DateTimeOffset)this.Start).ToUnixTimeSeconds().ToString())
-          .Append("end", ((DateTimeOffset)this.End).ToUnixTimeSeconds().ToString());
+          .Append("start", this.Start.Value.ToRfc2822DateFormat())
+          .Append("end", this.End.Value.ToRfc2822DateFormat());
       }
 
       if (this.EventTypes != null && this.EventTypes.Count > 0)

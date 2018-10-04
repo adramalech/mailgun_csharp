@@ -12,6 +12,10 @@ namespace MailgunSharp.Wrappers
     private Instant now;
     private Queue<Tuple<Duration, MathOperation>> operations;
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="clock"></param>
     public NodaTimeBuilder(IClock clock)
     {
       this.operations = new Queue<Tuple<Duration, MathOperation>>();

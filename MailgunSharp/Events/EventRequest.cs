@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using MailgunSharp.Enums;
 using MailgunSharp.Extensions;
 using MailgunSharp.Request;
+using NodaTime;
 
 namespace MailgunSharp.Events
 {
@@ -19,14 +20,14 @@ namespace MailgunSharp.Events
     /// <summary>
     /// The beginning of the search time range.
     /// </summary>
-    /// <value>DateTime</value>
-    public DateTime? Begin { get; set; }
+    /// <value>NodaTime.Instant</value>
+    public Instant? Begin { get; set; }
 
     /// <summary>
     /// The end of the search time range.
     /// </summary>
-    /// <value>DateTime</value>
-    public DateTime? End { get; set; }
+    /// <value>NodaTime.Instant</value>
+    public Instant? End { get; set; }
 
     /// <summary>
     /// Defines the direction of the search time range and must be provided if the range end time is not specified.
@@ -135,12 +136,12 @@ namespace MailgunSharp.Events
 
       if (this.Begin.HasValue)
       {
-        queryStringBuilder.Append("begin", ((DateTimeOffset)this.Begin.Value).ToUnixTimeSeconds().ToString());
+        queryStringBuilder.Append("begin", this.Begin.Value.ToRfc2822DateFormat());
       }
 
       if (this.End.HasValue)
       {
-        queryStringBuilder.Append("end", ((DateTimeOffset)this.End.Value).ToUnixTimeSeconds().ToString());
+        queryStringBuilder.Append("end", this.End.Value.ToRfc2822DateFormat());
       }
 
       if (this.Ascending.HasValue)

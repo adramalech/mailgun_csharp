@@ -1,4 +1,4 @@
-using System;
+using NodaTime;
 using System.Net.Mail;
 using System.Collections.Generic;
 using MailgunSharp.Enums;
@@ -10,14 +10,14 @@ namespace MailgunSharp.Events
     /// <summary>
     /// The beginning of the search time range.
     /// </summary>
-    /// <value>DateTime</value>
-    DateTime? Begin { get; set; }
+    /// <value>NodaTime.Instant</value>
+    Instant? Begin { get; set; }
 
     /// <summary>
     /// The end of the search time range.
     /// </summary>
-    /// <value>DateTime</value>
-    DateTime? End { get; set; }
+    /// <value>NodaTime.Instant</value>
+    Instant? End { get; set; }
 
     /// <summary>
     /// Defines the direction of the search time range and must be provided if the range end time is not specified.

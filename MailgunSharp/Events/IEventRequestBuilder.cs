@@ -1,4 +1,4 @@
-using System;
+using NodaTime;
 using System.Net.Mail;
 using MailgunSharp.Enums;
 
@@ -10,17 +10,15 @@ namespace MailgunSharp.Events
     /// Set the beginning search time range to filter results by.
     /// </summary>
     /// <param name="dateTime">The beginning time range value.</param>
-    /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
     /// <returns>The instance of the builder.</returns>
-    IEventRequestBuilder SetStartTimeRange(DateTime dateTime, TimeZoneInfo tzInfo = null);
+    IEventRequestBuilder SetStartTimeRange(Instant dateTime);
 
     /// <summary>
     /// Set the end search time range to filter results by.
     /// </summary>
     /// <param name="dateTime">The end time range value.</param>
-    /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
     /// <returns>The instance of the builder.</returns>
-    IEventRequestBuilder SetEndTimeRange(DateTime dateTime, TimeZoneInfo tzInfo = null);
+    IEventRequestBuilder SetEndTimeRange(Instant dateTime);
 
     /// <summary>
     /// Set the direction of the search time range.

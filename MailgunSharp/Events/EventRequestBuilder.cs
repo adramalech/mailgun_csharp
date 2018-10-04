@@ -3,6 +3,7 @@ using System.Net.Mail;
 using System.Collections.ObjectModel;
 using MailgunSharp.Enums;
 using MailgunSharp.Extensions;
+using NodaTime;
 
 namespace MailgunSharp.Events
 {
@@ -32,11 +33,10 @@ namespace MailgunSharp.Events
     /// Set the beginning search time range to filter results by.
     /// </summary>
     /// <param name="dateTime">The beginning time range value.</param>
-    /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
     /// <returns>The instance of the builder.</returns>
-    public IEventRequestBuilder SetStartTimeRange(DateTime dateTime, TimeZoneInfo tzInfo = null)
+    public IEventRequestBuilder SetStartTimeRange(Instant dateTime)
     {
-      this.eventRequest.Begin = (tzInfo == null) ? dateTime.ToUniversalTime() : TimeZoneInfo.ConvertTimeToUtc(dateTime.ToUniversalTime(), tzInfo);
+      this.eventRequest.Begin = dateTime;
 
       return this;
     }
@@ -45,11 +45,10 @@ namespace MailgunSharp.Events
     /// Set the end search time range to filter results by.
     /// </summary>
     /// <param name="dateTime">The end time range value.</param>
-    /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
     /// <returns>The instance of the builder.</returns>
-    public IEventRequestBuilder SetEndTimeRange(DateTime dateTime, TimeZoneInfo tzInfo = null)
+    public IEventRequestBuilder SetEndTimeRange(Instant dateTime)
     {
-      this.eventRequest.End = (tzInfo == null) ? dateTime.ToUniversalTime() : TimeZoneInfo.ConvertTimeToUtc(dateTime.ToUniversalTime(), tzInfo);
+      this.eventRequest.End = dateTime;
 
       return this;
     }
@@ -70,7 +69,7 @@ namespace MailgunSharp.Events
 
     /// <summary>
     /// Set the result entries limit.
-    /// 
+    ///
     /// The maximum limit cannot be greater than 300 and must be greater than 0.
     /// </summary>
     /// <param name="limit">Integer value to limit entires by, must be a postive integer value greater than zero.</param>

@@ -2,10 +2,11 @@ using System;
 using System.Net.Mail;
 using System.Collections.Generic;
 using Xunit;
-using Newtonsoft.Json;
 using MailgunSharp.Supression;
 using MailgunSharp.Enums;
 using System.Collections;
+using MailgunSharp.Test.Fakes;
+using NodaTime;
 
 namespace MailgunSharp.Test.Supression
 {
@@ -14,7 +15,9 @@ namespace MailgunSharp.Test.Supression
     [Fact]
     public void Initialized_BounceRequest_Check_Default_Values()
     {
-      var bounceRequest = new BounceRequest(new MailAddress(@"john.doe@example.com"));
+      var mailAddress = new MailAddress(@"john.doe@example.com");
+
+      var bounceRequest = new BounceRequest(mailAddress);
 
       Assert.Equal(@"john.doe@example.com", bounceRequest.EmailAddress.Address);
 
@@ -25,9 +28,11 @@ namespace MailgunSharp.Test.Supression
 
     [Theory]
     [ClassData(typeof(BounceRequestGenerator))]
-    public void BounceRequest_Should_Set_Optional_Params(string emailAddress, SmtpErrorCode code, string error, DateTime createdAt, TimeZoneInfo tzInfo)
+    public void BounceRequest_Should_Set_Optional_Params(string emailAddress, SmtpErrorCode code, string error, Instant createdAt)
     {
-      var bounceRequest = new BounceRequest(new MailAddress(emailAddress), code, error, createdAt, tzInfo);
+      var mailAddress = new MailAddress(emailAddress);
+
+      var bounceRequest = new BounceRequest(mailAddress, code, error, createdAt);
 
       Assert.Equal(emailAddress, bounceRequest.EmailAddress.Address);
 
@@ -38,9 +43,11 @@ namespace MailgunSharp.Test.Supression
 
     [Theory]
     [ClassData(typeof(BounceRequestGenerator))]
-    public void BounceRequest_When_Converted_To_FormContent_Should_Not_Be_Empty(string emailAddress, SmtpErrorCode code, string error, DateTime createdAt, TimeZoneInfo tzInfo)
+    public void BounceRequest_When_Converted_To_FormContent_Should_Not_Be_Empty(string emailAddress, SmtpErrorCode code, string error, Instant createdAt)
     {
-      var bounceRequest = new BounceRequest(new MailAddress(emailAddress), code, error, createdAt, tzInfo);
+      var mailAddress = new MailAddress(emailAddress);
+
+      var bounceRequest = new BounceRequest(mailAddress, code, error, createdAt);
 
       var formContent = bounceRequest.ToFormContent();
 
@@ -49,9 +56,11 @@ namespace MailgunSharp.Test.Supression
 
     [Theory]
     [ClassData(typeof(BounceRequestGenerator))]
-    public void BounceRequest_When_Converted_To_JsonObject_Should_Not_Be_Empty(string emailAddress, SmtpErrorCode code, string error, DateTime createdAt, TimeZoneInfo tzInfo)
+    public void BounceRequest_When_Converted_To_JsonObject_Should_Not_Be_Empty(string emailAddress, SmtpErrorCode code, string error, Instant createdAt)
     {
-      var bounceRequest = new BounceRequest(new MailAddress(emailAddress), code, error, createdAt, tzInfo);
+      var mailAddress = new MailAddress(emailAddress);
+
+      var bounceRequest = new BounceRequest(mailAddress, code, error, createdAt);
 
       var json = bounceRequest.ToJson();
 
@@ -63,8 +72,8 @@ namespace MailgunSharp.Test.Supression
   {
     private static readonly List<object[]> bounceRequests = new List<object[]>
     {
-      new object [] { @"john.doe@example.com", SmtpErrorCode.EXCEEDS_STORAGE_ALLOCATION, "error occured", DateTime.UtcNow, null },
-      new object [] { @"john.doe@example.com", SmtpErrorCode.COMMAND_NOT_IMPLEMENTED, "error occured", null, null }
+      new object [] { @"john.doe@example.com", SmtpErrorCode.EXCEEDS_STORAGE_ALLOCATION, "error occured", new FakeClock().GetCurrentInstant() },
+      new object [] { @"john.doe@example.com", SmtpErrorCode.COMMAND_NOT_IMPLEMENTED, "error occured", null }
     };
 
     public IEnumerator<object[]> GetEnumerator() => bounceRequests.GetEnumerator();

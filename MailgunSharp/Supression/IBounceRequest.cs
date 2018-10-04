@@ -3,6 +3,7 @@ using System.Net.Mail;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using MailgunSharp.Enums;
+using NodaTime;
 
 namespace MailgunSharp.Supression
 {
@@ -30,7 +31,7 @@ namespace MailgunSharp.Supression
     /// Timestamp of a bounce event.
     /// </summary>
     /// <value>DateTime</value>
-    DateTime CreatedAt { get; }
+    Instant? CreatedAt { get; }
 
     /// <summary>
     /// Get the Bounce request object as json to be used in an http request.

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Net.Mail;
 using Newtonsoft.Json.Linq;
 using MailgunSharp.Enums;
-using MailgunSharp.Wrappers;
+using MailgunSharp.Extensions;
 using NodaTime;
 
 namespace MailgunSharp.Supression
@@ -35,13 +35,13 @@ namespace MailgunSharp.Supression
     /// <value>string</value>
     public string Error => this.error;
 
-    private readonly DateTime createdAt;
+    private readonly Instant? createdAt;
 
     /// <summary>
     /// Timestamp of a bounce event.
     /// </summary>
     /// <value>DateTime</value>
-    public DateTime CreatedAt => this.createdAt;
+    public Instant? CreatedAt => this.createdAt;
 
     /// <summary>
     /// Create an instance of the bounce request class.
@@ -50,9 +50,8 @@ namespace MailgunSharp.Supression
     /// <param name="code">The STMP Error status code.  Defaults to 550, Mailbox Unavailable.</param>
     /// <param name="error">The error description. Defaults to empty string.</param>
     /// <param name="createdAt">Timestamp of the bounced event. Defaults to current time UTC.</param>
-    /// <param name="tzInfo">The optional timezone information for specific timezone awareness in the date.</param>
     /// <exception cref="ArgumentNullException">The email address is a required parameter.</exception>
-    public BounceRequest(MailAddress emailAddress, SmtpErrorCode code = SmtpErrorCode.MAILBOX_UNAVAILABLE, string error = "", DateTime? createdAt = null, TimeZoneInfo tzInfo = null)
+    public BounceRequest(MailAddress emailAddress, SmtpErrorCode code = SmtpErrorCode.MAILBOX_UNAVAILABLE, string error = "", Instant? createdAt = null)
     {
       this.emailAddress = emailAddress ?? throw new ArgumentNullException(nameof(emailAddress), "Address cannot be null or empty!");
       this.code = code;
@@ -60,11 +59,7 @@ namespace MailgunSharp.Supression
 
       if (createdAt.HasValue)
       {
-        this.createdAt = (tzInfo == null) ? createdAt.Value.ToUniversalTime() : TimeZoneInfo.ConvertTimeToUtc(createdAt.Value.ToUniversalTime(), tzInfo);
-      }
-      else
-      {
-        this.createdAt = (tzInfo == null) ? DateTime.UtcNow : TimeZoneInfo.ConvertTimeToUtc(DateTime.UtcNow, tzInfo);
+        this.createdAt = createdAt.Value;
       }
     }
 
@@ -78,9 +73,14 @@ namespace MailgunSharp.Supression
       {
         ["address"] = this.emailAddress.Address,
         ["code"] = ((int) this.code).ToString(),
-        ["error"] = this.error,
-        ["created_at"] = (((DateTimeOffset) DateTime.UtcNow).ToUnixTimeSeconds()).ToString()
+        ["error"] = this.error
       };
+
+      //add the optional created_at datetime value if provided.
+      if (this.createdAt.HasValue)
+      {
+        jsonObject.Add("created_at", this.createdAt.Value.ToRfc2822DateFormat());
+      }
 
       return jsonObject;
     }
@@ -95,9 +95,14 @@ namespace MailgunSharp.Supression
       {
         new KeyValuePair<string, string>("address", this.emailAddress.ToString()),
         new KeyValuePair<string, string>("code", ((int)this.code).ToString()),
-        new KeyValuePair<string, string>("error", this.error),
-        new KeyValuePair<string, string>("created_at", (((DateTimeOffset)DateTime.UtcNow).ToUnixTimeSeconds()).ToString())
+        new KeyValuePair<string, string>("error", this.error)
       };
+
+      //add the optional created_at datetime value if provided.
+      if (this.createdAt.HasValue)
+      {
+        content.Add(new KeyValuePair<string, string>("created_at", this.createdAt.Value.ToRfc2822DateFormat()));
+      }
 
       return content;
     }

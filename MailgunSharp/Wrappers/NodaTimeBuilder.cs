@@ -8,14 +8,25 @@ namespace MailgunSharp.Wrappers
 {
   public sealed class NodaTimeBuilder : INodaTimeBuilder
   {
+    /// <summary>
+    /// The instance of the clock to derive the instance of time from.
+    /// </summary>
     private readonly IClock clock;
+
+    /// <summary>
+    /// The current time of now.
+    /// </summary>
     private Instant now;
+
+    /// <summary>
+    /// The queue of operations to be applied in order of called.
+    /// </summary>
     private Queue<Tuple<Duration, MathOperation>> operations;
 
     /// <summary>
-    ///
+    /// Constructor that uses a injected system clock to be used in generating the instant.
     /// </summary>
-    /// <param name="clock"></param>
+    /// <param name="clock">The system clock be used.</param>
     public NodaTimeBuilder(IClock clock)
     {
       this.operations = new Queue<Tuple<Duration, MathOperation>>();
@@ -23,6 +34,10 @@ namespace MailgunSharp.Wrappers
       this.clock = clock;
     }
 
+    /// <summary>
+    /// Pass in a datetime that is UTC.
+    /// </summary>
+    /// <param name="datetime">A datetime in UTC.</param>
     public NodaTimeBuilder(DateTime datetime)
     {
       this.operations = new Queue<Tuple<Duration, MathOperation>>();
@@ -30,6 +45,15 @@ namespace MailgunSharp.Wrappers
       this.now = Instant.FromDateTimeUtc(datetime);
     }
 
+    /// <summary>
+    /// Generate an instance of the builder with a custom date.
+    /// </summary>
+    /// <param name="year">The year.</param>
+    /// <param name="month">The month.</param>
+    /// <param name="day">The day.</param>
+    /// <param name="hour">The hour.</param>
+    /// <param name="minute">The minute.</param>
+    /// <param name="second">The second.</param>
     public NodaTimeBuilder(int year, int month, int day, int hour, int minute, int second)
     {
       this.operations = new Queue<Tuple<Duration, MathOperation>>();
@@ -37,6 +61,11 @@ namespace MailgunSharp.Wrappers
       this.now = Instant.FromUtc(year, month, day, hour, minute, second);
     }
 
+    /// <summary>
+    /// Add N number of days.
+    /// </summary>
+    /// <param name="days">The value of days to be added.</param>
+    /// <returns>The instance of the builder.</returns>
     public INodaTimeBuilder AddDays(int days)
     {
       this.operations.Enqueue(new Tuple<Duration, MathOperation>(Duration.FromDays(days), MathOperation.ADD));
@@ -44,6 +73,11 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
+    /// <summary>
+    /// Subtract N number of days.
+    /// </summary>
+    /// <param name="days">The days to be subtracted.</param>
+    /// <returns>The instance of the builder.</returns>
     public INodaTimeBuilder SubtractDays(int days)
     {
       this.operations.Enqueue(new Tuple<Duration, MathOperation>(Duration.FromDays(days), MathOperation.SUBTRACT));
@@ -51,6 +85,11 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
+    /// <summary>
+    /// Add N number of hours.
+    /// </summary>
+    /// <param name="hours">The hours to be added.</param>
+    /// <returns>The instance of the builder.</returns>
     public INodaTimeBuilder AddHours(int hours)
     {
       this.operations.Enqueue(new Tuple<Duration, MathOperation>(Duration.FromHours(hours), MathOperation.ADD));
@@ -58,6 +97,11 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
+    /// <summary>
+    /// Subtract N number of hours.
+    /// </summary>
+    /// <param name="hours">The hours to be subtracted.</param>
+    /// <returns>The instance of the builder.</returns>
     public INodaTimeBuilder SubtractHours(int hours)
     {
       this.operations.Enqueue(new Tuple<Duration, MathOperation>(Duration.FromHours(hours), MathOperation.SUBTRACT));
@@ -65,6 +109,11 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
+    /// <summary>
+    /// Add N number of minutes.
+    /// </summary>
+    /// <param name="minutes">The minutes to be added.</param>
+    /// <returns>The instance of the builder.</returns>
     public INodaTimeBuilder AddMinutes(int minutes)
     {
       this.operations.Enqueue(new Tuple<Duration, MathOperation>(Duration.FromMinutes(minutes), MathOperation.ADD));
@@ -72,6 +121,11 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
+    /// <summary>
+    /// Subtract N number of minutes.
+    /// </summary>
+    /// <param name="minutes">The minutes to be subtracted.</param>
+    /// <returns>The instance of the builder.</returns>
     public INodaTimeBuilder SubtractMinutes(int minutes)
     {
       this.operations.Enqueue(new Tuple<Duration, MathOperation>(Duration.FromMinutes(minutes), MathOperation.SUBTRACT));
@@ -79,6 +133,11 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
+    /// <summary>
+    /// Add N number of seconds.
+    /// </summary>
+    /// <param name="seconds">The seconds to be added.</param>
+    /// <returns>The instance of the builder.</returns>
     public INodaTimeBuilder AddSeconds(int seconds)
     {
       this.operations.Enqueue(new Tuple<Duration, MathOperation>(Duration.FromSeconds(seconds), MathOperation.ADD));
@@ -86,6 +145,11 @@ namespace MailgunSharp.Wrappers
       return this;
     }
 
+    /// <summary>
+    /// Subtract N number of seconds.
+    /// </summary>
+    /// <param name="seconds">The seconds to be subtracted.</param>
+    /// <returns>The instance of the builder.</returns>
     public INodaTimeBuilder SubtractSeconds(int seconds)
     {
       this.operations.Enqueue(new Tuple<Duration, MathOperation>(Duration.FromSeconds(seconds), MathOperation.SUBTRACT));
@@ -94,9 +158,9 @@ namespace MailgunSharp.Wrappers
     }
 
     /// <summary>
-    /// Build the Nodatime instance based on order of operations.
+    /// Build the NodaTime instance based on order of operations.
     /// </summary>
-    /// <returns>System.DateTime value in UTC.</returns>
+    /// <returns>The resulting NodaTime instant which represents a datetime value in UTC.</returns>
     public Instant Build()
     {
       //initialize the clock if provided.

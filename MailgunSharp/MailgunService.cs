@@ -134,7 +134,7 @@ namespace MailgunSharp
 
     ///  <summary>
     ///  Given a arbitrary email address, validates address based off defined checks.
-    /// 
+    ///
     ///  Uses the private api call, using the private auth api key, and will not be subject to rate limits of the public api calls.
     ///  </summary>
     ///  <param name="address">The email address to be validated.</param>
@@ -154,7 +154,7 @@ namespace MailgunSharp
 
     ///  <summary>
     ///  Parses a single email address. Will determine if the address is syntactically valid, and optionally pass DNS and ESP specific grammar checks.
-    /// 
+    ///
     ///  Uses the private api call, using the private auth api key, and will not be subject to rate limits of the public api calls.
     ///  </summary>
     ///  <param name="address">The email address to check.</param>
@@ -174,7 +174,7 @@ namespace MailgunSharp
 
     ///  <summary>
     ///  Parses a list of email addresses. Will determine if the addresses are syntactically valid, and optionally pass DNs and ESP specific grammar checks.
-    /// 
+    ///
     ///  Uses the private api call, using the private auth api key, and will not be subject to rate limits of the public api calls.
     ///  </summary>
     ///  <param name="addresses">The list of addresses to check.</param>
@@ -196,7 +196,7 @@ namespace MailgunSharp
 
     ///  <summary>
     ///  Make the request to parse a list of email addresses that are comma delimited.
-    /// 
+    ///
     ///  Maximum allowed character of email address list of 8,000 characters.
     ///  </summary>
     ///  <param name="addressList">List of email addresses to be parsed.</param>
@@ -266,7 +266,10 @@ namespace MailgunSharp
         throw new FormatException("IP V4 Address is incorrectly formatted, must be in the format ###.###.###.###!");
       }
 
-      var contents = new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>("ip", ipV4Address) };
+      var contents = new List<KeyValuePair<string, string>>()
+      {
+        new KeyValuePair<string, string>("ip", ipV4Address)
+      };
 
       var formContent = new FormUrlEncodedContent(contents);
 
@@ -351,7 +354,10 @@ namespace MailgunSharp
         throw new FormatException("Tag must be ASCII characters with a length no greater than 128 ASCII characters!");
       }
 
-      var content = new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>("description", description) };
+      var content = new List<KeyValuePair<string, string>>()
+      {
+        new KeyValuePair<string, string>("description", description)
+      };
 
       var formContent = new FormUrlEncodedContent(content);
 

@@ -11,6 +11,7 @@ namespace MailgunSharp.Wrappers
     private readonly IClock clock;
     private Instant now;
     private Queue<Tuple<Duration, MathOperation>> operations;
+    private Offset offset;
 
     public NodaTimeBuilder(IClock clock)
     {
@@ -118,7 +119,6 @@ namespace MailgunSharp.Wrappers
         }
       }
 
-      //return the datetime in utc.
       return this.now;
     }
   }

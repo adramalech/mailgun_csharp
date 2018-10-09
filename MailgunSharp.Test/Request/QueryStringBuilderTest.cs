@@ -51,9 +51,8 @@ namespace MailgunSharp.Test.Request
     {
       var queryStringBuilder = new QueryStringBuilder();
 
-      var queryString = queryStringBuilder
-                          .Append("var1", "val1")
-                          .Build();
+      var queryString = queryStringBuilder.Append("var1", "val1")
+                                          .Build();
 
       Assert.StartsWith("?", queryString);
     }
@@ -63,11 +62,10 @@ namespace MailgunSharp.Test.Request
     {
       var queryStringBuilder = new QueryStringBuilder();
 
-      var queryString = queryStringBuilder
-                          .Append("var1", "val1")
-                          .Append("var2", "val2")
-                          .Append("var3", "val3")
-                          .ToString();
+      var queryString = queryStringBuilder.Append("var1", "val1")
+                                          .Append("var2", "val2")
+                                          .Append("var3", "val3")
+                                          .ToString();
 
       var countEqualSymbol = queryString.Count(q => q == '=');
 
@@ -79,11 +77,10 @@ namespace MailgunSharp.Test.Request
     {
       var queryStringBuilder = new QueryStringBuilder();
 
-      var queryString = queryStringBuilder
-                          .Append("var1", "val1")
-                          .Append("var2", "val2")
-                          .Append("var3", "val3")
-                          .ToString();
+      var queryString = queryStringBuilder.Append("var1", "val1")
+                                          .Append("var2", "val2")
+                                          .Append("var3", "val3")
+                                          .ToString();
 
       var countAmpersandSymbol = queryString.Count(q => q == '&');
 

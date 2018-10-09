@@ -93,9 +93,8 @@ namespace MailgunSharp.Stats
       }
       else
       {
-        queryStringBuilder
-          .Append("start", this.Start.Value.ToRfc2822DateFormat())
-          .Append("end", this.End.Value.ToRfc2822DateFormat());
+        queryStringBuilder.Append("start", this.Start.Value.ToRfc2822DateFormat())
+                          .Append("end", this.End.Value.ToRfc2822DateFormat());
       }
 
       if (this.EventTypes != null && this.EventTypes.Count > 0)

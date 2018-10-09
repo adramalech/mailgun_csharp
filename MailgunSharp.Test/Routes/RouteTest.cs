@@ -25,12 +25,11 @@ namespace MailgunSharp.Test.Routes
 
       Assert.Throws<InvalidOperationException>(() =>
       {
-        route
-          .SetDescription("test")
-          .SetPriority(1)
-          .MatchRecipient(new Regex(@"^@gmail.com$"))
-          .MatchHeader("from", new Regex(@"^@postmaster.example.com$"))
-          .CatchAll();
+        route.SetDescription("test")
+             .SetPriority(1)
+             .MatchRecipient(new Regex(@"^@gmail.com$"))
+             .MatchHeader("from", new Regex(@"^@postmaster.example.com$"))
+             .CatchAll();
       });
     }
 
@@ -40,11 +39,10 @@ namespace MailgunSharp.Test.Routes
     {
       var route = new Route();
 
-      route
-        .SetDescription(description)
-        .SetPriority(priority)
-        .MatchHeader(headerName, new Regex(pattern))
-        .Stop();
+      route.SetDescription(description)
+           .SetPriority(priority)
+           .MatchHeader(headerName, new Regex(pattern))
+           .Stop();
 
       Assert.Equal(description, route.Description);
       Assert.NotNull(route.Expression);
@@ -58,12 +56,11 @@ namespace MailgunSharp.Test.Routes
     {
       var route = new Route();
 
-      route
-        .SetDescription(description)
-        .SetPriority(priority)
-        .MatchHeader(headerName, new Regex(pattern))
-        .Forward(new Uri(url))
-        .Stop();
+      route.SetDescription(description)
+           .SetPriority(priority)
+           .MatchHeader(headerName, new Regex(pattern))
+           .Forward(new Uri(url))
+           .Stop();
 
       Assert.Equal(description, route.Description);
       Assert.NotNull(route.Expression);
@@ -90,10 +87,9 @@ namespace MailgunSharp.Test.Routes
       var route = new Route();
 
       Assert.Throws<InvalidOperationException>(() => {
-        route
-          .SetDescription("Failed attempt")
-          .MatchHeader("headerName", new Regex(@"^test$"))
-          .ToFormContent();
+        route.SetDescription("Failed attempt")
+             .MatchHeader("headerName", new Regex(@"^test$"))
+             .ToFormContent();
       });
     }
 
@@ -103,10 +99,9 @@ namespace MailgunSharp.Test.Routes
       var route = new Route();
 
       Assert.Throws<InvalidOperationException>(() => {
-        route
-          .SetDescription("Failed attempt")
-          .Forward(new Uri("https://forward.example.com"))
-          .ToFormContent();
+        route.SetDescription("Failed attempt")
+             .Forward(new Uri("https://forward.example.com"))
+             .ToFormContent();
       });
     }
   }

@@ -23,11 +23,10 @@ namespace MailgunSharp.Test.Webhooks
       var webhook = new Webhook();
 
       Assert.Throws<InvalidOperationException>(() => {
-        webhook
-          .AppendUrl(new Uri(@"https://example1.sample.com"))
-          .AppendUrl(new Uri(@"https://example2.sample.com"))
-          .AppendUrl(new Uri(@"https://example3.sample.com"))
-          .AppendUrl(new Uri(@"https://example4.sample.com"));
+        webhook.AppendUrl(new Uri(@"https://example1.sample.com"))
+               .AppendUrl(new Uri(@"https://example2.sample.com"))
+               .AppendUrl(new Uri(@"https://example3.sample.com"))
+               .AppendUrl(new Uri(@"https://example4.sample.com"));
       });
     }
 

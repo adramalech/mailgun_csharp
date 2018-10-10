@@ -86,7 +86,8 @@ namespace MailgunSharp.Test.Routes
     {
       var route = new Route();
 
-      Assert.Throws<InvalidOperationException>(() => {
+      Assert.Throws<InvalidOperationException>(() =>
+      {
         route.SetDescription("Failed attempt")
              .MatchHeader("headerName", new Regex(@"^test$"))
              .ToFormContent();
@@ -98,7 +99,8 @@ namespace MailgunSharp.Test.Routes
     {
       var route = new Route();
 
-      Assert.Throws<InvalidOperationException>(() => {
+      Assert.Throws<InvalidOperationException>(() =>
+      {
         route.SetDescription("Failed attempt")
              .Forward(new Uri("https://forward.example.com"))
              .ToFormContent();

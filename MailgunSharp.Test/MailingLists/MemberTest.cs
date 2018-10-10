@@ -9,7 +9,8 @@ namespace MailgunSharp.Test.MailingLists
     [Fact]
     public void Initialized_Member_With_Null_Address_Should_Throw_Exception()
     {
-      Assert.Throws<ArgumentNullException>(() => {
+      Assert.Throws<ArgumentNullException>(() =>
+      {
         var member = new Member(null);
       });
     }

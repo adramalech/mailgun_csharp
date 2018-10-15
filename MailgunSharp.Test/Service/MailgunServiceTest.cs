@@ -1,11 +1,9 @@
 using System;
+using System.Net;
 using System.Net.Http;
-using System.Security.Cryptography;
-using MailgunSharp;
 using MailgunSharp.Test.Fakes;
 using Moq;
 using Xunit;
-using Xunit.Sdk;
 
 namespace MailgunSharp.Test.Service
 {
@@ -13,18 +11,15 @@ namespace MailgunSharp.Test.Service
   {
     private readonly string apikey;
     private readonly string companyDomain;
-    private Mock<FakeHttpResponseHandler> fakeHttpResponseHandler;
-    private HttpClient httpClient;
-    private IMailgunService service;
-
+    //private Mock<FakeHttpResponseHandler> fakeHttpResponseHandler;
+    //private HttpClient httpClient;
 
     public MailgunServiceTest()
     {
       this.apikey = "apikeyhere";
       this.companyDomain = @"https://companydomainnamehere.com";
-      this.fakeHttpResponseHandler = new Mock<FakeHttpResponseHandler>() { CallBase = true };
-      this.httpClient = new HttpClient(this.fakeHttpResponseHandler.Object);
-      this.service = new MailgunService(this.companyDomain, this.apikey, this.httpClient);
+      //this.fakeHttpResponseHandler = new Mock<FakeHttpResponseHandler>() { CallBase = true };
+      //this.httpClient = new HttpClient(this.fakeHttpResponseHandler.Object);
     }
 
     [Theory]
@@ -35,7 +30,7 @@ namespace MailgunSharp.Test.Service
     {
       Assert.Throws<ArgumentNullException>(() =>
       {
-        var service = new MailgunService(companyDomainName, this.apikey, this.httpClient);
+        var service = new MailgunService(companyDomainName, this.apikey);
       });
     }
 
@@ -47,7 +42,7 @@ namespace MailgunSharp.Test.Service
     {
       Assert.Throws<ArgumentNullException>(() =>
       {
-        var service = new MailgunService(this.companyDomain, apikey, this.httpClient);
+        var service = new MailgunService(this.companyDomain, apikey);
       });
     }
 
@@ -58,10 +53,8 @@ namespace MailgunSharp.Test.Service
     {
       Assert.Throws<FormatException>(() =>
       {
-        var service = new MailgunService(companyDomainName, this.apikey, this.httpClient);
+        var service = new MailgunService(companyDomainName, this.apikey);
       });
     }
-
-
   }
 }

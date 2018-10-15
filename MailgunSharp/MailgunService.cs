@@ -93,12 +93,12 @@ namespace MailgunSharp
     {
       if (companyDomain.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException(nameof(companyDomain), "Company domain cannot be null!");
+        throw new ArgumentNullException(nameof(companyDomain), "Company domain cannot be null, empty, or whitespace!");
       }
 
       if (apiKey.IsNullEmptyWhitespace())
       {
-        throw new ArgumentNullException(nameof(apiKey), "Api key cannot be null!");
+        throw new ArgumentNullException(nameof(apiKey), "Api key cannot be null, empty, or whitespace!");
       }
 
       if (!this.isHostnameValid(companyDomain))

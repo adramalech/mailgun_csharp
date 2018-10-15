@@ -54,7 +54,7 @@ namespace MailgunSharp.Test.Service
     [Theory]
     [InlineData("example")]
     [InlineData("example.c")]
-    public void Service_Incorrect_Formatt_CompanyDomainName_Should_Throw_Exception(string companyDomainName)
+    public void Service_Incorrect_Format_CompanyDomainName_Should_Throw_Exception(string companyDomainName)
     {
       Assert.Throws<FormatException>(() =>
       {
